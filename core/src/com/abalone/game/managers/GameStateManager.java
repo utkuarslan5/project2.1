@@ -39,9 +39,4 @@ public class GameStateManager extends InputAdapter {
         return this;
     }
 
-    public void set(State state){
-        currentState.pop();
-        state.init();
-        currentState.push(state);
-    }
 }
