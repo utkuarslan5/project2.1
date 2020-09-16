@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class Board {
     private Image board;
+    private HexGrid grid;
+
     public Board(){
         Texture img = new Texture("abalone.png");
         board = new Image(img);

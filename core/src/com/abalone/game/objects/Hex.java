@@ -1,22 +1,21 @@
 package com.abalone.game.objects;
 
 public class Hex {
-    private int[] coords;
+    private int x;
+    private int z;
 
-    public Hex(int x,int y,int z){
-        this.coords = new int[]{x,y,z};
+    public Hex(int x,int z){
+        this.x = x;
+        this.z = z;
     }
 
     public int getY() {
-        return coords[1];
+        return -x-z;
     }
     public int getX(){
-        return coords[0];
+        return x;
     }
     public int getZ(){
-        return coords[2];
-    }
-    public int[] getCoords() {
-        return coords;
+        return z;
     }
 }
