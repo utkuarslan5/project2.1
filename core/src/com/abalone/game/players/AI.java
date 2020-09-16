@@ -1,4 +1,4 @@
 package com.abalone.game.players;
 
-public class AI {
+public class AI extends Player {
 }
