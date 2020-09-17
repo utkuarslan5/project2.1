@@ -2,15 +2,20 @@ package com.abalone.game.states;
 
 import com.abalone.game.AbaloneGame;
 import com.abalone.game.managers.GameStateManager;
+import com.abalone.game.objects.Ball;
 import com.abalone.game.objects.Board;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -20,6 +25,7 @@ public class PlayState extends State {
     private Image background;
     private BitmapFont gameFont;
     private Board board;
+    private ImageButton[] balls;
 
     protected PlayState(GameStateManager ourGsm) {
         super(ourGsm);
@@ -43,6 +49,37 @@ public class PlayState extends State {
         background = new Image(img);
         background.setWidth(AbaloneGame.width);
         background.setHeight(AbaloneGame.height);
+
+        // TODO: adapt the loop and conditions to the the hexgrid (and not the temporary array)
+        Ball[] grid = board.getGrid();
+        balls = new ImageButton[61];
+        for(int iBall = 0; iBall < grid.length; iBall++) {
+            Texture ballTexture;
+            Texture ballTexturePressed;
+            TextureRegionDrawable ballTextureRegionDrawable;
+            TextureRegionDrawable ballTexturePressedRegionDrawable;
+            if(grid[iBall] != null && grid[iBall].getColor().isBlack()) {
+                ballTexture = new Texture(Gdx.files.internal("abalone_red.png"));
+                ballTexturePressed = new Texture(Gdx.files.internal("abalone_grey.png"));
+            }
+            else if(grid[iBall] != null && grid[iBall].getColor().isWhite()) {
+                ballTexture = new Texture(Gdx.files.internal("abalone_blue.png"));
+                ballTexturePressed = new Texture(Gdx.files.internal("abalone_grey.png"));
+            }
+            else {
+                ballTexture = new Texture(Gdx.files.internal("abalone_grey.png"));
+                ballTexturePressed = new Texture(Gdx.files.internal("abalone_grey.png"));
+            }
+            ballTextureRegionDrawable = (new TextureRegionDrawable(new TextureRegion(ballTexture)));
+            ballTexturePressedRegionDrawable = new TextureRegionDrawable(new TextureRegion(ballTexturePressed));
+            ImageButton ball = new ImageButton(
+                    ballTextureRegionDrawable,
+                    ballTexturePressedRegionDrawable
+            );
+            ballTextureRegionDrawable.setMinSize(50, 50);
+            ballTexturePressedRegionDrawable.setMinSize(50, 50);
+            balls[iBall] = ball;
+        }
     }
 
     @Override
@@ -55,6 +92,26 @@ public class PlayState extends State {
         stage.addActor(background);
         stage.addActor(board.getBoardImage());
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+
+        int iBall = 0;
+        for(int iLine = 0; iLine < 9; iLine++) {
+            Table table = new Table();
+            // table.debug();
+
+            table.row().pad(5);
+            int iColumnMax = (iLine < 5 ? 5 + iLine : 9 - iLine + 4);
+            for(int iColumn = 0; iColumn < iColumnMax; iColumn++) {
+                table.add(balls[iBall]).width(43).height(43);
+                iBall++;
+            }
+            table.setFillParent(true);
+            table.setTransform(true);
+            table.padTop(iLine * 96 - 386);
+            table.padRight(3.4f);
+
+            stage.addActor(table);
+        }
+
         stage.draw();
     }
 
