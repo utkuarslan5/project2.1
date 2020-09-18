@@ -34,4 +34,8 @@ public class Board {
     public Ball[] getGrid() {
         return this.balls;
     }
+
+    public void selectBall(Ball ball) {
+
+    }
 }

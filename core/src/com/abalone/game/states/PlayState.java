@@ -11,13 +11,18 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.EventListener;
 
 public class PlayState extends State {
     private SpriteBatch spriteBatch;
@@ -54,6 +59,8 @@ public class PlayState extends State {
         Ball[] grid = board.getGrid();
         balls = new ImageButton[61];
         for(int iBall = 0; iBall < grid.length; iBall++) {
+            final int index = iBall;
+
             Texture ballTexture;
             Texture ballTexturePressed;
             TextureRegionDrawable ballTextureRegionDrawable;
@@ -76,6 +83,14 @@ public class PlayState extends State {
                     ballTextureRegionDrawable,
                     ballTexturePressedRegionDrawable
             );
+
+            ball.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y){
+                    System.out.println("Ball " + index + " clicked");
+                    board.selectBall(board.getGrid()[index]);
+                }
+            });
+
             ballTextureRegionDrawable.setMinSize(50, 50);
             ballTexturePressedRegionDrawable.setMinSize(50, 50);
             balls[iBall] = ball;
