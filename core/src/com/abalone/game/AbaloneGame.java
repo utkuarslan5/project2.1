@@ -4,10 +4,12 @@ import com.abalone.game.managers.GameStateManager;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.audio.Music;
 
 public class AbaloneGame extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -15,9 +17,15 @@ public class AbaloneGame extends ApplicationAdapter {
 	public static int height;
 	public static OrthographicCamera cam;
 	public static GameStateManager gsm;
-	
+	private Music music;
+
+
 	@Override
 	public void create () {
+		music = Gdx.audio.newMusic(Gdx.files.internal("AbaloneMusic.ogg"));
+		music.setLooping(true);
+		music.setVolume(0.25f);
+		music.play();
 		batch = new SpriteBatch();
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();

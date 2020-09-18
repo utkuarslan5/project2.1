@@ -66,16 +66,16 @@ public class PlayState extends State {
             TextureRegionDrawable ballTextureRegionDrawable;
             TextureRegionDrawable ballTexturePressedRegionDrawable;
             if(grid[iBall] != null && grid[iBall].getColor().isBlack()) {
-                ballTexture = new Texture(Gdx.files.internal("abalone_red.png"));
-                ballTexturePressed = new Texture(Gdx.files.internal("abalone_grey.png"));
+                ballTexture = new Texture(Gdx.files.internal("purple.png"));
+                ballTexturePressed = new Texture(Gdx.files.internal("blank.png"));
             }
             else if(grid[iBall] != null && grid[iBall].getColor().isWhite()) {
-                ballTexture = new Texture(Gdx.files.internal("abalone_blue.png"));
-                ballTexturePressed = new Texture(Gdx.files.internal("abalone_grey.png"));
+                ballTexture = new Texture(Gdx.files.internal("blue.png"));
+                ballTexturePressed = new Texture(Gdx.files.internal("blank.png"));
             }
             else {
-                ballTexture = new Texture(Gdx.files.internal("abalone_grey.png"));
-                ballTexturePressed = new Texture(Gdx.files.internal("abalone_grey.png"));
+                ballTexture = new Texture(Gdx.files.internal("blank.png"));
+                ballTexturePressed = new Texture(Gdx.files.internal("blank.png"));
             }
             ballTextureRegionDrawable = (new TextureRegionDrawable(new TextureRegion(ballTexture)));
             ballTexturePressedRegionDrawable = new TextureRegionDrawable(new TextureRegion(ballTexturePressed));
