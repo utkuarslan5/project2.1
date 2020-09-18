@@ -65,11 +65,11 @@ public class PlayState extends State {
             Texture ballTexturePressed;
             TextureRegionDrawable ballTextureRegionDrawable;
             TextureRegionDrawable ballTexturePressedRegionDrawable;
-            if(grid[iBall] != null && grid[iBall].getColor().isBlack()) {
+            if(grid[iBall] != null && grid[iBall].getColor().isBlue()) {
                 ballTexture = new Texture(Gdx.files.internal("purple.png"));
                 ballTexturePressed = new Texture(Gdx.files.internal("blank.png"));
             }
-            else if(grid[iBall] != null && grid[iBall].getColor().isWhite()) {
+            else if(grid[iBall] != null && grid[iBall].getColor().isPurple()) {
                 ballTexture = new Texture(Gdx.files.internal("blue.png"));
                 ballTexturePressed = new Texture(Gdx.files.internal("blank.png"));
             }

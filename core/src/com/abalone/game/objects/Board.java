@@ -19,10 +19,10 @@ public class Board {
         this.balls = new Ball[61];
         for(int iBall = 0; iBall < 61; iBall++) {
             if(iBall < 11 || (iBall >= 13 && iBall <= 15)) {
-                this.balls[iBall] = new Ball(Color.BLACK);
+                this.balls[iBall] = new Ball(Color.BLUE);
             }
             else if(iBall >= 50 || (iBall >= 45 && iBall <= 47)) {
-                this.balls[iBall] = new Ball(Color.WHITE);
+                this.balls[iBall] = new Ball(Color.PURPLE);
             }
         }
     }
