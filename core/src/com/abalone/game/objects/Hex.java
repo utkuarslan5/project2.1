@@ -6,7 +6,9 @@ import java.util.List;
 public class Hex {
     private int x;
     private int z;
-    private List<Hex> directions = new ArrayList<>();
+    private final List<Hex> directions = new ArrayList<>();
+    private Ball ball = null;
+
 
     public Hex(int x, int z) {
         this.x = x;
@@ -57,6 +59,20 @@ public class Hex {
 
     private float calculateDistance(Hex b) {
         return (Math.abs(this.x - b.x) + Math.abs(getY() - b.getY()) + Math.abs(this.z - b.z)) / 2;
+    }
+
+    public void setBall(Ball ball) {
+        this.ball = ball;
+    }
+
+    public Ball popBall() {
+        Ball b = this.ball;
+        this.ball = null;
+        return b;
+    }
+
+    public boolean isOccupied() {
+        return ball != null;
     }
 
     public int getY() {
