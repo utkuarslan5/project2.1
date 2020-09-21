@@ -6,16 +6,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class Ball {
     private Color color;
+    private int id;
 
-    public Ball(Color color) {
-
+    public Ball(Color color, int id) {
         this.color = color;
+        this.id = id;
     }
 
     public Color getColor() {
         return this.color;
     }
-
+    public int getId() {
+        return id;
+    }
     public void setColor(Color color) {
         this.color = color;
     }

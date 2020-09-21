@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.ArrayList;
 import java.util.EventListener;
 
 public class PlayState extends State {
@@ -81,15 +82,20 @@ public class PlayState extends State {
             ballTexturePressedRegionDrawable = new TextureRegionDrawable(new TextureRegion(ballTexturePressed));
             ImageButton ball = new ImageButton(
                     ballTextureRegionDrawable,
+                    ballTexturePressedRegionDrawable,
                     ballTexturePressedRegionDrawable
             );
 
             ball.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y){
                     System.out.println("Ball " + index + " clicked");
-                    board.selectBall(board.getGrid()[index]);
+                    // doesn't allow empty balls to be selected
+                    if(board.getGrid()[index]!=null) {
+                        board.selectBall(board.getGrid()[index]);
+                    }
                 }
             });
+
 
             ballTextureRegionDrawable.setMinSize(50, 50);
             ballTexturePressedRegionDrawable.setMinSize(50, 50);
@@ -99,6 +105,23 @@ public class PlayState extends State {
 
     @Override
     public void update(float dt) {
+        ArrayList<Ball> selectedList = board.getSelected();
+        //removes any ball that is not checked from the selected list
+        for(Ball ball : board.getGrid()) {
+            if (ball!=null && !balls[ball.getId()].isChecked()) {
+                board.removeBall(board.getGrid()[ball.getId()]);
+            }
+        }
+        assert selectedList!= null;
+
+        // doesn't allow more than 3 balls to be selected
+        if(selectedList.size()>3){
+            for (Ball ball : selectedList) {
+                balls[ball.getId()].setChecked(false);
+            }
+            selectedList.clear();
+
+        }
 
     }
 

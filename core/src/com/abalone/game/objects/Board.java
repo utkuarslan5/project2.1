@@ -5,11 +5,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Board {
     private final Image board;
     private HexGrid grid;
     private final Ball[] balls;
+    private ArrayList<Ball> selected;
 
     public Board() {
         Texture img = new Texture("abalone.png");
@@ -19,11 +21,12 @@ public class Board {
         this.balls = new Ball[61];
         for (int iBall = 0; iBall < 61; iBall++) {
             if (iBall < 11 || (iBall >= 13 && iBall <= 15)) {
-                this.balls[iBall] = new Ball(Color.BLUE);
+                this.balls[iBall] = new Ball(Color.BLUE,iBall);
             } else if (iBall >= 50 || (iBall >= 45 && iBall <= 47)) {
-                this.balls[iBall] = new Ball(Color.PURPLE);
+                this.balls[iBall] = new Ball(Color.PURPLE,iBall);
             }
         }
+        selected = new ArrayList<>();
     }
 
     public Image getBoardImage() {
@@ -43,8 +46,15 @@ public class Board {
     }
 
     public void selectBall(Ball ball) {
-
+        selected.add(ball);
     }
+    public void removeBall(Ball ball){
+        selected.remove(ball);
+    }
+    public ArrayList<Ball> getSelected() {
+        return selected;
+    }
+
 
     public Ball[] getBalls() {
         return balls;
