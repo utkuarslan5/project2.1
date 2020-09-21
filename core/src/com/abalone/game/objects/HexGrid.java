@@ -7,7 +7,7 @@ public class HexGrid {
     private ArrayList<Hex> hexList = new ArrayList<>();
 
     public HexGrid() {
-        //hexList = generateHex();
+        hexList = generateHex();
         System.out.println("hexGrid called");
     }
 
@@ -19,18 +19,23 @@ public class HexGrid {
 
     private ArrayList<Hex> generateHex() {
         ArrayList<Hex> temp = new ArrayList<>();
-        //TODO: write a for loop to create coordinate tuples of Hex'es (x,z)
         //61 balls +4,-4 on both axis, center being 0,0, radius 5
-//        int y;
-//        for(int x = -5; x < 5; x++){
-//            int x_temp = x;
-//            y = -x;
-//            for (int z = y; z > -5; z--){
-//               Hex hex = new Hex(x,z);
-//               System.out.println("Hex created. x:" + x + " z:" + z);
-//               temp.add(hex);
-//            }
-//        }
+        int size = 9;
+        int half = size / 2;
+        for (int row = 0; row < size; row++) {
+            int cols = size - Math.abs(row - half);
+            for (int col = 0; col < cols; col++) {
+                int x;
+                if (row < half) {
+                    x = col - row;
+                } else {
+                    x = col - half;
+                }
+                int z = row - half;
+                System.out.println("Hex created with x " + x + " and z " + z);
+                temp.add(new Hex(x, z));
+            }
+        }
         System.out.println(temp.size());
         return temp;
     }

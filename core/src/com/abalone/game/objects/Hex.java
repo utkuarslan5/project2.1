@@ -6,17 +6,16 @@ import java.util.List;
 public class Hex {
     private int x;
     private int z;
-    private final List<Hex> directions = new ArrayList<>();
+    private static List<Hex> directions = new ArrayList<>();
     private Ball ball = null;
 
 
     public Hex(int x, int z) {
         this.x = x;
         this.z = z;
-        generateDirections();
     }
 
-    public void generateDirections() {
+    public static void generateDirections() {
         directions.add(new Hex(0, 1));
         directions.add(new Hex(0, -1));
         directions.add(new Hex(1, 0));
@@ -30,16 +29,18 @@ public class Hex {
         this.z += b.z;
     }
 
-    public void subtract(Hex b) {
+    public void subtract(Hex b){
         this.x -= b.x;
         this.z -= b.z;
     }
 
     public List<Hex> getDirections() {
+        generateDirections();
         return directions;
     }
 
     private List<Hex> getNeighbors() {
+        generateDirections();
         List<Hex> neighbors = new ArrayList<>();
         for (Hex neighbor : directions) {
             neighbors.add(new Hex(this.x + neighbor.x, this.z + neighbor.z));

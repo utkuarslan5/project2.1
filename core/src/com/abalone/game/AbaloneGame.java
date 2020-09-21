@@ -24,7 +24,7 @@ public class AbaloneGame extends ApplicationAdapter {
 	public void create () {
 		music = Gdx.audio.newMusic(Gdx.files.internal("AbaloneMusic.ogg"));
 		music.setLooping(true);
-		music.setVolume(0.25f);
+		music.setVolume(0.18f);
 		music.play();
 		batch = new SpriteBatch();
 		width = Gdx.graphics.getWidth();
