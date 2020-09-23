@@ -1,10 +1,12 @@
 package com.abalone.game.objects;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
+import java.util.List;
 
 // TODO: add a configuration file of the board and game's initial conditions
 public class HexGrid {
-    private ArrayList<Hex> hexList = new ArrayList<>();
+    private List<Hex> hexList = new ArrayList<>();
 
     public HexGrid() {
         hexList = generateHex();
@@ -17,8 +19,8 @@ public class HexGrid {
         this.hexList = hexList;
     }
 
-    private ArrayList<Hex> generateHex() {
-        ArrayList<Hex> temp = new ArrayList<>();
+    private List<Hex> generateHex() {
+        List<Hex> temp = new ArrayList<>();
         //61 balls +4,-4 on both axis, center being 0,0, radius 5
         int size = 9;
         int half = size / 2;
@@ -36,15 +38,24 @@ public class HexGrid {
                 temp.add(new Hex(x, z));
             }
         }
+
+        //Neighbors functionality check
         System.out.println(temp.size());
+        List<Hex> neighbors = temp.get(30).getNeighbors();
+        for(int i = 0; i<neighbors.size();i++){
+            Hex tempHex = temp.get(30).getNeighbors().get(i);
+            System.out.println("The hex 30 has neighbors " + tempHex.getX() +
+                    tempHex.getZ() );
+        }
+
         return temp;
     }
 
-    public ArrayList<Hex> getHexList() {
+    public List<Hex> getHexList() {
         return hexList;
     }
 
-    public void setHexList(ArrayList<Hex> hexList) {
+    public void setHexList(List<Hex> hexList) {
         this.hexList = hexList;
     }
 }

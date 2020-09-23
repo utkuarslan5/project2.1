@@ -6,7 +6,7 @@ import java.util.List;
 public class Hex {
     private int x;
     private int z;
-    private static List<Hex> directions = new ArrayList<>();
+    private List<Hex> directions = new ArrayList<>();
     private Ball ball = null;
 
 
@@ -15,7 +15,7 @@ public class Hex {
         this.z = z;
     }
 
-    public static void generateDirections() {
+    public void generateDirections() {
         directions.add(new Hex(0, 1));
         directions.add(new Hex(0, -1));
         directions.add(new Hex(1, 0));
@@ -39,7 +39,7 @@ public class Hex {
         return directions;
     }
 
-    private List<Hex> getNeighbors() {
+    public List<Hex> getNeighbors() {
         generateDirections();
         List<Hex> neighbors = new ArrayList<>();
         for (Hex neighbor : directions) {

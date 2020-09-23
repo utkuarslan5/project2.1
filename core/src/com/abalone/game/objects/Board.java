@@ -62,7 +62,7 @@ public class Board {
 
     // a method to map Balls to Hexgrid
     public HexGrid mapBallsToHexgrid(Ball[] balls) {
-        ArrayList<Hex> temp = grid.getHexList();
+        List<Hex> temp = grid.getHexList();
         //check for Pigeon Hole Principle
         if (balls.length == temp.size()) {
             for (int i = 0; i < balls.length; i++) {
