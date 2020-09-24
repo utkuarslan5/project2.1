@@ -28,6 +28,9 @@ public class Board {
             } else if (iBall >= 50 || (iBall >= 45 && iBall <= 47)) {
                 this.balls[iBall] = new Ball(Color.PURPLE,iBall);
             }
+            else{
+                this.balls[iBall] = new Ball(Color.BLANK,iBall);
+            }
         }
         selected = new ArrayList<>();
     }
@@ -42,10 +45,9 @@ public class Board {
     }
 
     // a method to return HexGrid (see getGrid();)
-    public HexGrid getGrid(Ball[] balls) {
-        // TODO: we need to keep track of which time-step the grid and balls are at
-        this.grid = mapBallsToHexgrid(balls);
-        return this.grid;
+
+    public HexGrid getHexGrid() {
+        return grid;
     }
 
     public void selectBall(Ball ball) {
@@ -64,7 +66,7 @@ public class Board {
     }
 
     // a method to map Balls to Hexgrid
-    public HexGrid mapBallsToHexgrid(Ball[] balls) {
+    public void mapBallsToHexGrid(Ball[] balls) {
         List<Hex> temp = grid.getHexList();
         //check for Pigeon Hole Principle
         if (balls.length == temp.size()) {
@@ -75,7 +77,6 @@ public class Board {
         } else {
             throw new IllegalArgumentException("balls.length != temp.size()");
         }
-        return grid;
     }
 
     //  a method to return all occupied Hex's
@@ -94,6 +95,16 @@ public class Board {
             if (!h.isOccupied()) temp.add(h);
         }
         return temp;
+    }
+
+    public void move(Ball ballFrom,Ball ballTo){
+        int from = grid.getBallAt(ballFrom);
+        int to = grid.getBallAt(ballTo);
+        System.out.println(from + " to " + to);
+        Ball tempBall;
+        tempBall = balls[ballFrom.getId()];
+        balls[ballFrom.getId()] = balls[ballTo.getId()];
+        balls[ballTo.getId()] = tempBall;
     }
 
     public Boolean isModified() {

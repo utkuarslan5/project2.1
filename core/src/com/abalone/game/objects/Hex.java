@@ -72,6 +72,10 @@ public class Hex {
         return b;
     }
 
+    public Ball getBall() {
+        return ball;
+    }
+
     public boolean isOccupied() {
         return ball != null;
     }

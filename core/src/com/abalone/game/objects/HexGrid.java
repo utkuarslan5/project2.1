@@ -51,6 +51,16 @@ public class HexGrid {
         return temp;
     }
 
+    public int getBallAt(Ball ball){
+        int hexPos = 0;
+        for(int i = 0 ; i<hexList.size(); i++){
+            if(ball.getId() == hexList.get(i).getBall().getId()){
+                hexPos = i;
+            }
+        }
+        return hexPos;
+    }
+
     public List<Hex> getHexList() {
         return hexList;
     }

@@ -117,13 +117,20 @@ public class PlayState extends State {
                 public void clicked(InputEvent event, float x, float y){
                     System.out.println("Ball " + index + " clicked");
                     // doesn't allow empty balls to be selected
-                    if(board.getGrid()[index]!=null) {
+                    if(!board.getGrid()[index].getColor().isBlank()) {
                         if(board.getGrid()[index].getColor().isBlue()== (colorSelectPlayer.getCheckedIndex()==1) ||
                                 (board.getGrid()[index].getColor().isPurple()== (colorSelectPlayer.getCheckedIndex()==0)) ) {
                             board.selectBall(board.getGrid()[index]);
 
-                        }else{
+                        }
+                        else{
                             balls[index].setChecked(false);
+                        }
+                    }
+                    else{
+                        board.setIsModified();
+                        if (board.getSelected().size() > 0) {
+                            board.move(board.getSelected().get(0), board.getGrid()[index]);
                         }
                     }
                 }
@@ -186,10 +193,11 @@ public class PlayState extends State {
         }
 
          */
-        HexGrid gridOfBalls = board.getGrid(board.getBalls());
+        board.mapBallsToHexGrid(board.getBalls());
+        HexGrid gridOfBalls = board.getHexGrid();
         int c =1;
         float temp = -4;
-        if(board.isModified()) {
+
             for(int i =0;i<61; i++){
                 float x = gridOfBalls.getHexList().get(i).getX();
                 float y = gridOfBalls.getHexList().get(i).getZ();
@@ -197,12 +205,12 @@ public class PlayState extends State {
                     c++;
                 }
                 x+= c*0.5;
-                balls[i].setBounds((float) (x*53 +445),y*48 +380,43,43);
+                balls[i].setBounds((x*53 +445),y*48 +380,43,43);
                 stage.addActor(balls[i]);
                 temp = y;
             }
             board.setIsModified(false);
-        }
+
 
         stage.addActor(bluePlayer);
         stage.addActor(purplePlayer);
