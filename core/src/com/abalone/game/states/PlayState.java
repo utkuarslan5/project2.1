@@ -14,13 +14,13 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 
 import java.util.ArrayList;
 import java.util.EventListener;
@@ -28,10 +28,14 @@ import java.util.EventListener;
 public class PlayState extends State {
     private SpriteBatch spriteBatch;
     private Stage stage;
+    private Skin skin;
     private Image background;
     private BitmapFont gameFont;
     private Board board;
     private ImageButton[] balls;
+    private CheckBox bluePlayer;
+    private CheckBox purplePlayer;
+    private ButtonGroup<CheckBox> colorSelectPlayer;
 
     protected PlayState(GameStateManager ourGsm) {
         super(ourGsm);
@@ -39,6 +43,7 @@ public class PlayState extends State {
 
     @Override
     public void init() {
+        skin = new Skin(Gdx.files.internal("cloud-form/skin/cloud-form-ui.json"));
         spriteBatch = new SpriteBatch();
         board = new Board();
         board.getBoardImage().setPosition(AbaloneGame.width/2f-(board.getBoardImage().getWidth()/2),AbaloneGame.height/2f- (board.getBoardImage().getHeight()/2));
@@ -55,6 +60,28 @@ public class PlayState extends State {
         background = new Image(img);
         background.setWidth(AbaloneGame.width);
         background.setHeight(AbaloneGame.height);
+
+
+        bluePlayer = new CheckBox("Blue", skin,"radio");
+        bluePlayer.setPosition(1000,600);
+        bluePlayer.setTransform(true);
+        bluePlayer.setScale(1.5f);
+        bluePlayer.getLabel().setFontScale(0.5f);
+        bluePlayer.getStyle().fontColor = Color.WHITE;
+        bluePlayer.setChecked(true);
+
+        purplePlayer = new CheckBox("Purple", skin,"radio");
+        purplePlayer.setPosition(991,550);
+        purplePlayer.setTransform(true);
+        purplePlayer.setScale(1.5f);
+        purplePlayer.getLabel().setFontScale(0.5f);
+
+
+
+        colorSelectPlayer = new ButtonGroup<>(bluePlayer, purplePlayer);
+        colorSelectPlayer.setMaxCheckCount(1);
+        colorSelectPlayer.setMinCheckCount(1);
+
 
         // TODO: adapt the loop and conditions to the the hexgrid (and not the temporary array)
         Ball[] grid = board.getGrid();
@@ -82,7 +109,7 @@ public class PlayState extends State {
             ballTexturePressedRegionDrawable = new TextureRegionDrawable(new TextureRegion(ballTexturePressed));
             ImageButton ball = new ImageButton(
                     ballTextureRegionDrawable,
-                    ballTexturePressedRegionDrawable,
+                    ballTextureRegionDrawable,
                     ballTexturePressedRegionDrawable
             );
 
@@ -91,7 +118,13 @@ public class PlayState extends State {
                     System.out.println("Ball " + index + " clicked");
                     // doesn't allow empty balls to be selected
                     if(board.getGrid()[index]!=null) {
-                        board.selectBall(board.getGrid()[index]);
+                        if(board.getGrid()[index].getColor().isBlue()== (colorSelectPlayer.getCheckedIndex()==1) ||
+                                (board.getGrid()[index].getColor().isPurple()== (colorSelectPlayer.getCheckedIndex()==0)) ) {
+                            board.selectBall(board.getGrid()[index]);
+
+                        }else{
+                            balls[index].setChecked(false);
+                        }
                     }
                 }
             });
@@ -128,6 +161,7 @@ public class PlayState extends State {
     @Override
     public void draw() {
         stage.addActor(background);
+
         stage.addActor(board.getBoardImage());
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
@@ -149,6 +183,8 @@ public class PlayState extends State {
 
             stage.addActor(table);
         }
+        stage.addActor(bluePlayer);
+        stage.addActor(purplePlayer);
 
         stage.draw();
     }
