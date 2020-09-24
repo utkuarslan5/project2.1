@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.EventListener;
 
@@ -185,20 +186,24 @@ public class PlayState extends State {
         }
 
          */
-        HexGrid gridOfBalls =board.getGrid(board.getBalls());
+        HexGrid gridOfBalls = board.getGrid(board.getBalls());
         int c =1;
         float temp = -4;
-        for(int i =0;i<61; i++){
-            float x = gridOfBalls.getHexList().get(i).getX();
-            float y = gridOfBalls.getHexList().get(i).getZ();
-            if(temp!=y){
-                c++;
+        if(board.isModified()) {
+            for(int i =0;i<61; i++){
+                float x = gridOfBalls.getHexList().get(i).getX();
+                float y = gridOfBalls.getHexList().get(i).getZ();
+                if(temp!=y){
+                    c++;
+                }
+                x+= c*0.5;
+                balls[i].setBounds((float) (x*53 +445),y*48 +380,43,43);
+                stage.addActor(balls[i]);
+                temp = y;
             }
-            x+= c*0.5;
-            balls[i].setBounds((float) (x*53 +445),y*48 +380,43,43);
-            stage.addActor(balls[i]);
-            temp = y;
+            board.setIsModified(false);
         }
+
         stage.addActor(bluePlayer);
         stage.addActor(purplePlayer);
 

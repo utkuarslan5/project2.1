@@ -9,12 +9,15 @@ import java.util.List;
 
 public class Board {
     private final Image board;
+    private Boolean isModified;
     private HexGrid grid;
     private final Ball[] balls;
     private ArrayList<Ball> selected;
 
     public Board() {
         Texture img = new Texture("abalone.png");
+        // isModified initiated to true, so will be display in the UI
+        this.isModified = true;
         this.board = new Image(img);
         grid = new HexGrid();
         // TODO: adapt to the hexgrid
@@ -93,4 +96,15 @@ public class Board {
         return temp;
     }
 
+    public Boolean isModified() {
+        return this.isModified;
+    }
+
+    public void setIsModified(Boolean isModified) {
+        this.isModified = isModified;
+    }
+
+    public void setIsModified() {
+        this.setIsModified(true);
+    }
 }
