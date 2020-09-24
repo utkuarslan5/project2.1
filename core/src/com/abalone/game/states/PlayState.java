@@ -4,6 +4,7 @@ import com.abalone.game.AbaloneGame;
 import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.Ball;
 import com.abalone.game.objects.Board;
+import com.abalone.game.objects.HexGrid;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,11 +12,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -165,6 +164,7 @@ public class PlayState extends State {
         stage.addActor(board.getBoardImage());
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
+        /*
         int iBall = 0;
         for(int iLine = 0; iLine < 9; iLine++) {
             Table table = new Table();
@@ -182,6 +182,22 @@ public class PlayState extends State {
             table.padRight(3.4f);
 
             stage.addActor(table);
+        }
+
+         */
+        HexGrid gridOfBalls =board.getGrid(board.getBalls());
+        int c =1;
+        float temp = -4;
+        for(int i =0;i<61; i++){
+            float x = gridOfBalls.getHexList().get(i).getX();
+            float y = gridOfBalls.getHexList().get(i).getZ();
+            if(temp!=y){
+                c++;
+            }
+            x+= c*0.5;
+            balls[i].setBounds((float) (x*53 +445),y*48 +380,43,43);
+            stage.addActor(balls[i]);
+            temp = y;
         }
         stage.addActor(bluePlayer);
         stage.addActor(purplePlayer);
