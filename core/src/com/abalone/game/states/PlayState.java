@@ -160,7 +160,22 @@ public class PlayState extends State {
                 balls[ball.getId()].setChecked(false);
             }
             selectedList.clear();
+        }
 
+        Ball curr = null;
+        Ball first = null;
+        if(selectedList.size()!=0){
+            curr = selectedList.get(selectedList.size() - 1);
+            first = selectedList.get(0);
+        }
+
+        if(curr != first){
+            if (curr.getColor() != first.getColor()){
+                for (Ball ball : selectedList){
+                    balls[ball.getId()].setChecked(false);
+                }
+                selectedList.clear();
+            }
         }
 
     }
