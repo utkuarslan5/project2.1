@@ -11,6 +11,7 @@ public class Hex {
     private List<Turn> broadsideTurns = new ArrayList<>();
     private List<Turn> inlineTurns = new ArrayList<>();
 
+
     public Hex(int x, int z) {
         this.x = x;
         this.z = z;
