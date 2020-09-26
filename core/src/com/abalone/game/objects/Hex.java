@@ -72,6 +72,16 @@ public class Hex {
         int neighborId = 0;
 
         for(Hex h : neigbors) {
+            boolean broadsideAllowed = true;
+            boolean inlineAllowed = true;
+            int iNeighborId = 0;
+
+            if(neighborId-3 >= 0){
+                iNeighborId = neighborId-3;
+            }
+            else{
+                iNeighborId = neighborId+3;
+            }
 
             // All turns
             if (!onBoard(h)){
@@ -79,8 +89,6 @@ public class Hex {
             }
 
             // Broadside turns
-            boolean broadsideAllowed = true;
-
             if(h.isOccupied()){
                 broadsideAllowed = false;
             }
@@ -92,7 +100,41 @@ public class Hex {
             // TODO: Broadside turn with more then one ball
 
             // In-line turns
-            boolean inlineAllowed = true;
+            if(h.isOccupied() && h.getBall().getColor().equals(this.getBall().getColor())){
+                continue;
+            }
+
+            int force = 1;
+            Hex f1 = h;
+            Hex f2 = h.getNeighbors().get(neighborId);
+            Hex b1 = neigbors.get(iNeighborId);
+            Hex b2 = b1.getNeighbors().get(iNeighborId);
+            if(!f1.getBall().getColor().isBlank() && !f1.getBall().getColor().equals(this.getBall().getColor())){
+                force -= 1;
+            }
+            if(b1.getBall().getColor().equals(this.getBall().getColor())){
+                force += 1;
+                if(force > 0){
+                    inlineTurns.add(new Turn(this));
+                    inlineTurns.get(inlineTurns.size()-1).addMove(this,h);
+                    inlineTurns.get(inlineTurns.size()-1).addMove(b1,this);
+
+                }
+            }
+            if(!f2.getBall().getColor().isBlank() && !f2.getBall().getColor().equals(this.getBall().getColor())){
+                force -= 1;
+            }
+            if(b2.getBall().getColor().equals(this.getBall().getColor())){
+                force += 1;
+                if(force > 0){
+                    inlineTurns.add(new Turn(this));
+                    inlineTurns.get(inlineTurns.size()-1).addMove(this,h);
+                    inlineTurns.get(inlineTurns.size()-1).addMove(b1,this);
+                    inlineTurns.get(inlineTurns.size()-1).addMove(b2,b1);
+
+                }
+            }
+
 
 
             neighborId++;
