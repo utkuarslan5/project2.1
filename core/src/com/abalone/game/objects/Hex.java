@@ -8,7 +8,8 @@ public class Hex {
     private int z;
     private List<Hex> directions = new ArrayList<>();
     private Ball ball = null;
-
+    private List<Turn> broadsideTurns = new ArrayList<>();
+    private List<Turn> inlineTurns = new ArrayList<>();
 
     public Hex(int x, int z) {
         this.x = x;
