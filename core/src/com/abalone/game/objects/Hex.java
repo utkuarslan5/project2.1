@@ -1,5 +1,7 @@
 package com.abalone.game.objects;
 
+import com.abalone.game.utils.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +64,45 @@ public class Hex {
 
     private float calculateDistance(Hex b) {
         return (Math.abs(this.x - b.x) + Math.abs(getY() - b.getY()) + Math.abs(this.z - b.z)) / 2;
+    }
+
+    public void findTurns(){
+        Color color = ball.getColor();
+        List<Hex> neigbors = getNeighbors();
+        int neighborId = 0;
+
+        for(Hex h : neigbors) {
+
+            // All turns
+            if (!onBoard(h)){
+                continue;
+            }
+
+            // Broadside turns
+            boolean broadsideAllowed = true;
+
+            if(h.isOccupied()){
+                broadsideAllowed = false;
+            }
+            else{
+                broadsideTurns.add(new Turn(this));
+                broadsideTurns.get(broadsideTurns.size()-1).addMove(this,h);
+            }
+
+            // TODO: Broadside turn with more then one ball
+
+            // In-line turns
+            boolean inlineAllowed = true;
+
+
+            neighborId++;
+        }
+
+    }
+
+    private boolean onBoard(Hex h) {
+        // TODO: Check if a hex is on the board.
+        return true;
     }
 
     public void setBall(Ball ball) {
