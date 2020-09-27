@@ -56,11 +56,11 @@ public class PlayState extends State {
         gameFont.setColor(Color.LIGHT_GRAY);
         stage = new Stage(viewport, spriteBatch);
         Gdx.input.setInputProcessor(stage);
+
         Texture img = new Texture("pbg.jpg");
         background = new Image(img);
         background.setWidth(AbaloneGame.width);
         background.setHeight(AbaloneGame.height);
-
 
         bluePlayer = new CheckBox("Blue", skin,"radio");
         bluePlayer.setPosition(1000,600);
@@ -76,15 +76,12 @@ public class PlayState extends State {
         purplePlayer.setScale(1.5f);
         purplePlayer.getLabel().setFontScale(0.5f);
 
-
-
         colorSelectPlayer = new ButtonGroup<>(bluePlayer, purplePlayer);
         colorSelectPlayer.setMaxCheckCount(1);
         colorSelectPlayer.setMinCheckCount(1);
 
-
         // TODO: adapt the loop and conditions to the the hexgrid (and not the temporary array)
-        Ball[] grid = board.getGrid();
+        Ball[] grid = board.getBalls();
         balls = new ImageButton[61];
         for(int iBall = 0; iBall < grid.length; iBall++) {
             final int index = iBall;
@@ -93,6 +90,7 @@ public class PlayState extends State {
             Texture ballTexturePressed;
             TextureRegionDrawable ballTextureRegionDrawable;
             TextureRegionDrawable ballTexturePressedRegionDrawable;
+
             if(grid[iBall] != null && grid[iBall].getColor().isBlue()) {
                 ballTexture = new Texture(Gdx.files.internal("purple.png"));
                 ballTexturePressed = new Texture(Gdx.files.internal("purpleClicked.png"));
@@ -105,7 +103,8 @@ public class PlayState extends State {
                 ballTexture = new Texture(Gdx.files.internal("blank.png"));
                 ballTexturePressed = new Texture(Gdx.files.internal("blank.png"));
             }
-            ballTextureRegionDrawable = (new TextureRegionDrawable(new TextureRegion(ballTexture)));
+
+            ballTextureRegionDrawable = new TextureRegionDrawable(new TextureRegion(ballTexture));
             ballTexturePressedRegionDrawable = new TextureRegionDrawable(new TextureRegion(ballTexturePressed));
             ImageButton ball = new ImageButton(
                     ballTextureRegionDrawable,
@@ -117,25 +116,23 @@ public class PlayState extends State {
                 public void clicked(InputEvent event, float x, float y){
                     System.out.println("Ball " + index + " clicked");
                     // doesn't allow empty balls to be selected
-                    if(!board.getGrid()[index].getColor().isBlank()) {
-                        if(board.getGrid()[index].getColor().isBlue()== (colorSelectPlayer.getCheckedIndex()==1) ||
-                                (board.getGrid()[index].getColor().isPurple()== (colorSelectPlayer.getCheckedIndex()==0)) ) {
-                            board.selectBall(board.getGrid()[index]);
-
+                    if(!board.getBalls()[index].getColor().isBlank()) {
+                        if(board.getBalls()[index].getColor().isBlue() == (colorSelectPlayer.getCheckedIndex() == 1) ||
+                                (board.getBalls()[index].getColor().isPurple() == (colorSelectPlayer.getCheckedIndex() == 0)) ) {
+                            board.selectBall(board.getBalls()[index]);
                         }
-                        else{
+                        else {
                             balls[index].setChecked(false);
                         }
                     }
-                    else{
+                    else {
                         board.setIsModified();
-                        if (board.getSelected().size() > 0) {
-                            board.move(board.getSelected().get(0), board.getGrid()[index]);
+                        if(board.getSelected().size() > 0) {
+                            board.move(board.getSelected().get(0), board.getBalls()[index]);
                         }
                     }
                 }
             });
-
 
             ballTextureRegionDrawable.setMinSize(50, 50);
             ballTexturePressedRegionDrawable.setMinSize(50, 50);
@@ -145,11 +142,12 @@ public class PlayState extends State {
 
     @Override
     public void update(float dt) {
+        System.out.println("PlayState: Update");
         ArrayList<Ball> selectedList = board.getSelected();
         //removes any ball that is not checked from the selected list
-        for(Ball ball : board.getGrid()) {
-            if (ball!=null && !balls[ball.getId()].isChecked()) {
-                board.removeBall(board.getGrid()[ball.getId()]);
+        for(Ball ball : board.getBalls()) {
+            if (ball != null && !balls[ball.getId()].isChecked()) {
+                board.removeBall(board.getBalls()[ball.getId()]);
             }
         }
         assert selectedList!= null;
