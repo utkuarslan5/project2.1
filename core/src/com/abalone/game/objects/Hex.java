@@ -10,9 +10,6 @@ public class Hex {
     private int z;
     private List<Hex> directions = new ArrayList<>();
     private Ball ball = null;
-    private List<Turn> broadsideTurns = new ArrayList<>();
-    private List<Turn> inlineTurns = new ArrayList<>();
-
 
     public Hex(int x, int z) {
         this.x = x;
@@ -64,82 +61,6 @@ public class Hex {
 
     private float calculateDistance(Hex b) {
         return (Math.abs(this.x - b.x) + Math.abs(getY() - b.getY()) + Math.abs(this.z - b.z)) / 2;
-    }
-
-    public void findTurns(){
-        Color color = ball.getColor();
-        List<Hex> neigbors = getNeighbors();
-        int neighborId = 0;
-
-        for(Hex h : neigbors) {
-            boolean broadsideAllowed = true;
-            boolean inlineAllowed = true;
-            int iNeighborId = 0;
-
-            if(neighborId-3 >= 0){
-                iNeighborId = neighborId-3;
-            }
-            else{
-                iNeighborId = neighborId+3;
-            }
-
-            // All turns
-            if (!onBoard(h)){
-                continue;
-            }
-
-            // Broadside turns
-            if(h.isOccupied()){
-                broadsideAllowed = false;
-            }
-            else{
-                broadsideTurns.add(new Turn(this));
-                broadsideTurns.get(broadsideTurns.size()-1).addMove(this,h);
-            }
-
-            // TODO: Broadside turn with more then one ball
-
-            // In-line turns
-            if(h.isOccupied() && h.getBall().getColor().equals(this.getBall().getColor())){
-                continue;
-            }
-
-            int force = 1;
-            Hex f1 = h;
-            Hex f2 = h.getNeighbors().get(neighborId);
-            Hex b1 = neigbors.get(iNeighborId);
-            Hex b2 = b1.getNeighbors().get(iNeighborId);
-            if(!f1.getBall().getColor().isBlank() && !f1.getBall().getColor().equals(this.getBall().getColor())){
-                force -= 1;
-            }
-            if(b1.getBall().getColor().equals(this.getBall().getColor())){
-                force += 1;
-                if(force > 0){
-                    inlineTurns.add(new Turn(this));
-                    inlineTurns.get(inlineTurns.size()-1).addMove(this,h);
-                    inlineTurns.get(inlineTurns.size()-1).addMove(b1,this);
-
-                }
-            }
-            if(!f2.getBall().getColor().isBlank() && !f2.getBall().getColor().equals(this.getBall().getColor())){
-                force -= 1;
-            }
-            if(b2.getBall().getColor().equals(this.getBall().getColor())){
-                force += 1;
-                if(force > 0){
-                    inlineTurns.add(new Turn(this));
-                    inlineTurns.get(inlineTurns.size()-1).addMove(this,h);
-                    inlineTurns.get(inlineTurns.size()-1).addMove(b1,this);
-                    inlineTurns.get(inlineTurns.size()-1).addMove(b2,b1);
-
-                }
-            }
-
-
-
-            neighborId++;
-        }
-
     }
 
     private boolean onBoard(Hex h) {
