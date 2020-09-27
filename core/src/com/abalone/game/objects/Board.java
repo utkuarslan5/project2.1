@@ -15,10 +15,12 @@ public class Board {
     private ArrayList<Ball> selected;
 
     public Board() {
-        Texture img = new Texture("abalone.png");
         // isModified initiated to true, so will be display in the UI
         this.isModified = true;
+
+        Texture img = new Texture("abalone.png");
         this.board = new Image(img);
+
         grid = new HexGrid();
         // TODO: adapt to the hexgrid
         this.balls = new Ball[61];
@@ -39,13 +41,6 @@ public class Board {
         return board;
     }
 
-    // TODO: change and return Hexgrid with balls
-    public Ball[] getGrid() {
-        return this.balls;
-    }
-
-    // a method to return HexGrid (see getGrid();)
-
     public HexGrid getHexGrid() {
         return grid;
     }
@@ -53,6 +48,7 @@ public class Board {
     public void selectBall(Ball ball) {
         selected.add(ball);
     }
+
     public void removeBall(Ball ball){
         selected.remove(ball);
     }
@@ -60,7 +56,7 @@ public class Board {
         return selected;
     }
 
-
+    // TODO: change and return Hexgrid with balls
     public Ball[] getBalls() {
         return balls;
     }
@@ -101,6 +97,7 @@ public class Board {
         int from = grid.getBallAt(ballFrom);
         int to = grid.getBallAt(ballTo);
         System.out.println(from + " to " + to);
+
         Ball tempBall;
         tempBall = balls[ballFrom.getId()];
         balls[ballFrom.getId()] = balls[ballTo.getId()];

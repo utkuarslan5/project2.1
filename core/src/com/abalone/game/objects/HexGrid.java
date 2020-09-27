@@ -42,7 +42,7 @@ public class HexGrid {
         //Neighbors functionality check
         System.out.println(temp.size());
         List<Hex> neighbors = temp.get(30).getNeighbors();
-        for(int i = 0; i<neighbors.size();i++){
+        for(int i = 0; i < neighbors.size(); i++){
             Hex tempHex = temp.get(30).getNeighbors().get(i);
             System.out.println("The hex 30 has neighbors " + tempHex.getX() +
                     tempHex.getZ() );
