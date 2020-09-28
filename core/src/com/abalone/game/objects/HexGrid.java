@@ -70,7 +70,6 @@ public class HexGrid {
             System.out.println("The hex 30 has neighbors " + tempHex.getX() +
                     tempHex.getZ() );
         }
-
         return temp;
     }
 
@@ -82,6 +81,25 @@ public class HexGrid {
             }
         }
         return hexPos;
+    }
+
+    public boolean onBoard(Hex find){
+        for (Hex hex : hexList) {
+            if (find.getX() == hex.getX() && find.getZ() == hex.getZ()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //For find turns
+    public Hex getMatchedHex(Hex hex){
+        for (Hex temp : hexList){
+            if(temp.getX() == hex.getX() && temp.getZ() == hex.getZ()){
+                return temp;
+            }
+        }
+        return null;
     }
 
     public List<Hex> getHexList() {

@@ -167,6 +167,7 @@ public class PlayState extends State {
         ArrayList<Ball> selectedList = board.getSelected();
         assert selectedList != null;
 
+
         // doesn't allow more than 3 balls to be selected
         if(selectedList.size() > 3) {
             for (Ball ball : selectedList) {
@@ -174,6 +175,7 @@ public class PlayState extends State {
             }
             selectedList.clear();
         }
+        
 
         Ball curr = null;
         Ball first = null;

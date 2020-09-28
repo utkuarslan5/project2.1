@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import java.util.ArrayList;
 
 public class Board {
-    private final Image board;
+    private Image board;
     private Boolean isModified;
     private HexGrid hexGrid;
     private ArrayList<Ball> selected;
@@ -21,9 +21,17 @@ public class Board {
         hexGrid = new HexGrid();
         selected = new ArrayList<>();
     }
+        //For TESTING
+    public Board(int x) {
+        // isModified initiated to true, so will be display in the UI
+        this.isModified = true;
+        hexGrid = new HexGrid();
+        selected = new ArrayList<>();
+    }
+
 
     public Image getBoardImage() {
-        return board;
+       return board;
     }
 
     public HexGrid getHexGrid() {

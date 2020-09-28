@@ -63,10 +63,6 @@ public class Hex {
         return (Math.abs(this.x - b.x) + Math.abs(getY() - b.getY()) + Math.abs(this.z - b.z)) / 2;
     }
 
-    public boolean onBoard(Hex h) {
-        // TODO: Check if a hex is on the board.
-        return true;
-    }
 
     public void setBall(Ball ball) {
         this.ball = ball;

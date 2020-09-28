@@ -1,20 +1,23 @@
 package com.abalone.game.utils;
 
 import com.abalone.game.objects.Hex;
+import com.abalone.game.objects.HexGrid;
 import com.abalone.game.objects.Turn;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TurnsFinder {
+    private HexGrid grid;
     private List<Hex> hexes = new ArrayList<>();
     private List<List<Turn>> turns = new ArrayList<>();
     private int holdForceDouble;
     private int holdForceTripple;
     private Color currentColor;
 
-    public TurnsFinder(List<Hex> hexes){
-        this.hexes = hexes;
+    public TurnsFinder(HexGrid grid){
+        this.grid = grid;
+        this.hexes = grid.getHexList();
     }
 
     public TurnsFinder(Hex hex){
@@ -32,7 +35,7 @@ public class TurnsFinder {
             boolean inlineAllowed = true;
 
             /** All turns **/
-            if (!h.onBoard(h)){
+            if (!grid.onBoard(h)){
                 continue;
             }
 
@@ -93,72 +96,64 @@ public class TurnsFinder {
             return false;
         }
         Hex nHex = hex.getNeighbors().get(neighborId);
-        if(nHex.getBall().getColor().isBlank()){ // If the next space is empty
-            if(doub){
-                if(inverse){
-                    holdForceDouble -= force;
-                }
-                else{
-                    holdForceDouble += force;
-                }
-            }
-            else{
-                if(inverse){
-                    holdForceTripple -= force;
-                }
-                else{
-                    holdForceTripple += force;
-                }
-            }
-            return false;
-        }
-        if(inverse){ // If searching for enemy balls
-            if(!nHex.getBall().getColor().equals(currentColor)){ // If another enemy ball is found
-                findForce(force+1, nHex, neighborId, maxDepth, depth+1, doub, inverse);
-            }
-            else{ // If no more enemy balls are found
-                if(doub){
-                    if(inverse){
+        Hex useMe = grid.getMatchedHex(nHex);
+        if(useMe != null) {
+            if (useMe.getBall().getColor().isBlank()) { // If the next space is empty
+                if (doub) {
+                    if (inverse) {
                         holdForceDouble -= force;
-                    }
-                    else{
+                    } else {
                         holdForceDouble += force;
                     }
-                }
-                else{
-                    if(inverse){
+                } else {
+                    if (inverse) {
                         holdForceTripple -= force;
-                    }
-                    else{
+                    } else {
                         holdForceTripple += force;
                     }
                 }
                 return false;
             }
-        }
-        else{ // If searching for friendly balls
-            if(nHex.getBall().getColor().equals(currentColor)){ // If another friendly ball is found
-                findForce(force+1, nHex, neighborId, maxDepth, depth+1, doub, inverse);
-            }
-            else{ // If no more friendly balls are found
-                if(doub){
-                    if(inverse){
-                        holdForceDouble -= force;
+            if (inverse) { // If searching for enemy balls
+                if (!useMe.getBall().getColor().equals(currentColor)) { // If another enemy ball is found
+                    findForce(force + 1, nHex, neighborId, maxDepth, depth + 1, doub, inverse);
+                } else { // If no more enemy balls are found
+                    if (doub) {
+                        if (inverse) {
+                            holdForceDouble -= force;
+                        } else {
+                            holdForceDouble += force;
+                        }
+                    } else {
+                        if (inverse) {
+                            holdForceTripple -= force;
+                        } else {
+                            holdForceTripple += force;
+                        }
                     }
-                    else{
-                        holdForceDouble += force;
-                    }
+                    return false;
                 }
-                else{
-                    if(inverse){
-                        holdForceTripple -= force;
+            } else { // If searching for friendly balls
+                if (useMe.getBall().getColor().equals(currentColor)) { // If another friendly ball is found
+                    findForce(force + 1, nHex, neighborId, maxDepth, depth + 1, doub, inverse);
+                } else { // If no more friendly balls are found
+                    if (doub) {
+                        if (inverse) {
+                            holdForceDouble -= force;
+                        } else {
+                            holdForceDouble += force;
+                        }
+                    } else {
+                        if (inverse) {
+                            holdForceTripple -= force;
+                        } else {
+                            holdForceTripple += force;
+                        }
                     }
-                    else{
-                        holdForceTripple += force;
-                    }
+                    return false;
                 }
-                return false;
             }
+
         }
         return false;
     }
