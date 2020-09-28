@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -97,7 +96,6 @@ public class PlayState extends State {
         ballTexturePressedRegionDrawableBlank = new TextureRegionDrawable(new Texture(Gdx.files.internal("blank.png")));
 
         // TODO: adapt the loop and conditions to the the hexgrid (and not the temporary array)
-        // Ball[] balls = board.getBalls();
         ArrayList<Hex> hexList = (ArrayList<Hex>) board.getHexGrid().getHexList();
         ballButtons = new ImageButton[61];
         for(int iHex = 0; iHex < hexList.size(); iHex++) {
@@ -120,10 +118,10 @@ public class PlayState extends State {
             }
 
             ImageButton ballButton = new ImageButton(
-                    ballTextureRegionDrawable,
-                    ballTextureRegionDrawable,
-                    ballTexturePressedRegionDrawable
-                    );
+                ballTextureRegionDrawable,
+                ballTextureRegionDrawable,
+                ballTexturePressedRegionDrawable
+            );
 
             ballButton.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
@@ -132,8 +130,8 @@ public class PlayState extends State {
 
                     // doesn't allow empty balls to be selected
                     if(!ball.getColor().isBlank()) {
-                        if(ball.getColor().isBlue() == (colorSelectPlayer.getCheckedIndex() == 1) ||
-                                (ball.getColor().isPurple() == (colorSelectPlayer.getCheckedIndex() == 0)) ) {
+                        if(ball.getColor().isBlue() == (colorSelectPlayer.getCheckedIndex() == 0) ||
+                                (ball.getColor().isPurple() == (colorSelectPlayer.getCheckedIndex() == 1)) ) {
                             board.selectBall(ball);
                         }
                         else {
@@ -146,6 +144,12 @@ public class PlayState extends State {
                             board.move(board.getSelected().get(0), board.getHexGrid().getHexList().get(index).getBall());
                             for(int i = 0; i < 61 ; i++) {
                                 ballButtons[i].setChecked(false);
+                            }
+                            if(purplePlayer.isChecked()) {
+                                bluePlayer.setChecked(true);
+                            }
+                            else {
+                                purplePlayer.setChecked(true);
                             }
                         }
                     }
@@ -199,7 +203,6 @@ public class PlayState extends State {
         ArrayList<Hex> hexList = (ArrayList<Hex>) board.getHexGrid().getHexList();
         int c = 1;
         float temp = -4;
-        // board.mapBallsToHexGrid(board.getBalls());
 
         for(int i = 0; i < 61; i++) {
             Hex hex = hexList.get(i);
