@@ -4,6 +4,7 @@ import com.abalone.game.AbaloneGame;
 import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.Ball;
 import com.abalone.game.objects.Board;
+import com.abalone.game.objects.Hex;
 import com.abalone.game.objects.HexGrid;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -196,19 +198,35 @@ public class PlayState extends State {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
         board.mapBallsToHexGrid(board.getBalls());
-        HexGrid gridOfBalls = board.getHexGrid();
+        ArrayList<Hex> hexList = (ArrayList<Hex>) board.getHexGrid().getHexList();
         int c =1;
         float temp = -4;
 
         for(int i = 0; i < 61; i++) {
-            float x = gridOfBalls.getHexList().get(i).getX();
-            float y = gridOfBalls.getHexList().get(i).getZ();
+            Hex hex = hexList.get(i);
+            float x = hex.getX();
+            float y = hex.getZ();
             if(temp != y) {
                 c++;
             }
             x += c * 0.5;
             ballButtons[i].setBounds((x*53 +445),y*48 +380,43,43);
-            ballButtons[i].setBackground(ballTexturePressedRegionDrawableBlue);
+
+            if(hex.getBall() != null && hex.getBall().getColor().isBlue()) {
+                ballButtons[i].getStyle().imageUp = ballTextureRegionDrawableBlue;
+                ballButtons[i].getStyle().imageDown = ballTextureRegionDrawableBlue;
+                ballButtons[i].getStyle().imageChecked = ballTexturePressedRegionDrawableBlue;
+            }
+            else if(hex.getBall() != null && hex.getBall().getColor().isPurple()) {
+                ballButtons[i].getStyle().imageUp = ballTextureRegionDrawablePurple;
+                ballButtons[i].getStyle().imageDown = ballTextureRegionDrawablePurple;
+                ballButtons[i].getStyle().imageChecked = ballTexturePressedRegionDrawablePurple;
+            }
+            else {
+                ballButtons[i].getStyle().imageUp = ballTextureRegionDrawableBlank;
+                ballButtons[i].getStyle().imageDown = ballTextureRegionDrawableBlank;
+                ballButtons[i].getStyle().imageChecked = ballTextureRegionDrawableBlank;
+            }
             stage.addActor(ballButtons[i]);
             temp = y;
         }

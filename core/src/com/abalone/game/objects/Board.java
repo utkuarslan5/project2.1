@@ -94,16 +94,6 @@ public class Board {
     }
 
     public void move(Ball ballFrom,Ball ballTo) {
-        String log = "";
-        for(Ball ball: balls) {
-            switch (ball.getColor()) {
-                case BLUE: log += "1"; break;
-                case BLANK: log += "0"; break;
-                case PURPLE: log += "2"; break;
-            }
-        }
-        System.out.println(log);
-
         int from = grid.getBallAt(ballFrom);
         int to = grid.getBallAt(ballTo);
 
@@ -113,6 +103,16 @@ public class Board {
         tempBall = balls[ballFrom.getId()];
         balls[ballFrom.getId()] = balls[ballTo.getId()];
         balls[ballTo.getId()] = tempBall;
+
+        String log = "";
+        for(Ball ball: balls) {
+            switch (ball.getColor()) {
+                case BLUE: log += "1"; break;
+                case BLANK: log += "0"; break;
+                case PURPLE: log += "2"; break;
+            }
+        }
+        System.out.println(log);
     }
 
     public Boolean isModified() {
