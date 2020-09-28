@@ -77,7 +77,7 @@ public class MenuState extends State {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
         spriteBatch.begin();
-        gameFont.draw(spriteBatch,"Abalone", 385, 750);
+        gameFont.draw(spriteBatch,"Abalone", 400, 750);
         spriteBatch.end();
     }
 

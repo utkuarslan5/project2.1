@@ -17,7 +17,7 @@ public class AbaloneGame extends ApplicationAdapter {
 	public static int height;
 	public static OrthographicCamera cam;
 	public static GameStateManager gsm;
-	private Music music;
+	public static Music music;
 
 
 	@Override
