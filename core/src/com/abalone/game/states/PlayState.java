@@ -123,16 +123,18 @@ public class PlayState extends State {
                     ballTextureRegionDrawable,
                     ballTextureRegionDrawable,
                     ballTexturePressedRegionDrawable
-            );
+                    );
 
             ballButton.addListener(new ClickListener() {
-                public void clicked(InputEvent event, float x, float y){
+                public void clicked(InputEvent event, float x, float y) {
                     System.out.println("Ball " + index + " clicked");
+                    Ball ball = board.getHexGrid().getHexList().get(index).getBall();
+
                     // doesn't allow empty balls to be selected
-                    if(!board.getHexGrid().getHexList().get(index).getBall().getColor().isBlank()) {
-                        if(board.getHexGrid().getHexList().get(index).getBall().getColor().isBlue() == (colorSelectPlayer.getCheckedIndex() == 1) ||
-                                (board.getHexGrid().getHexList().get(index).getBall().getColor().isPurple() == (colorSelectPlayer.getCheckedIndex() == 0)) ) {
-                            board.selectBall(board.getHexGrid().getHexList().get(index).getBall());
+                    if(!ball.getColor().isBlank()) {
+                        if(ball.getColor().isBlue() == (colorSelectPlayer.getCheckedIndex() == 1) ||
+                                (ball.getColor().isPurple() == (colorSelectPlayer.getCheckedIndex() == 0)) ) {
+                            board.selectBall(ball);
                         }
                         else {
                             ballButtons[index].setChecked(false);
@@ -142,6 +144,9 @@ public class PlayState extends State {
                         board.setIsModified();
                         if(board.getSelected().size() > 0) {
                             board.move(board.getSelected().get(0), board.getHexGrid().getHexList().get(index).getBall());
+                            for(int i = 0; i < 61 ; i++) {
+                                ballButtons[i].setChecked(false);
+                            }
                         }
                     }
                 }
@@ -151,24 +156,11 @@ public class PlayState extends State {
             ballTexturePressedRegionDrawable.setMinSize(50, 50);
             ballButtons[iHex] = ballButton;
         }
-
-        // TODO : Louis
-        // board.mapBallsToHexGrid(board.getBalls());
     }
 
     @Override
     public void update(float dt) {
-        // System.out.println("PlayState: Update");
         ArrayList<Ball> selectedList = board.getSelected();
-        //removes any ball that is not checked from the selected list
-        // TODO : Louis
-        /*
-        for(Ball ball : board.getBalls()) {
-            if (ball != null && !ballButtons[ball.getId()].isChecked()) {
-                board.removeBall(board.getBalls()[ball.getId()]);
-            }
-        }
-        */
         assert selectedList != null;
 
         // doesn't allow more than 3 balls to be selected

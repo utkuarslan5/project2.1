@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Board {
     private final Image board;
@@ -32,7 +31,18 @@ public class Board {
     }
 
     public void selectBall(Ball ball) {
-        selected.add(ball);
+        if(selected.contains(ball)) {
+            removeBall(ball);
+        }
+        else {
+            selected.add(ball);
+        }
+
+        String log = "Selected: ";
+        for(Ball b: selected) {
+            log += b.getId() + " ";
+        }
+        System.out.println(log);
     }
 
     public void removeBall(Ball ball){
@@ -40,20 +50,6 @@ public class Board {
     }
     public ArrayList<Ball> getSelected() {
         return selected;
-    }
-
-    // a method to map Balls to Hexgrid
-    public void mapBallsToHexGrid(Ball[] balls) {
-        List<Hex> hexList = hexGrid.getHexList();
-        //check for Pigeon Hole Principle
-        if (balls.length == hexList.size()) {
-            for (int i = 0; i < balls.length; i++) {
-                hexList.get(i).setBall(balls[i]);
-            }
-            hexGrid.setHexList(hexList);
-        } else {
-            throw new IllegalArgumentException("balls.length != temp.size()");
-        }
     }
 
     //  a method to return all occupied Hex's
@@ -81,6 +77,8 @@ public class Board {
 
         hexGrid.getHexList().get(to).setBall(ballFrom);
         hexGrid.getHexList().get(from).setBall(ballTo);
+
+        selected.clear();
 
         String log = "";
         for(Hex hex: hexGrid.getHexList()) {
