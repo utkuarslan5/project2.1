@@ -21,9 +21,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.EventListener;
 
 public class PlayState extends State {
     private SpriteBatch spriteBatch;
@@ -32,7 +30,7 @@ public class PlayState extends State {
     private Image background;
     private BitmapFont gameFont;
     private Board board;
-    private ImageButton[] balls;
+    private ImageButton[] ballButtons;
     private CheckBox bluePlayer;
     private CheckBox purplePlayer;
     private ButtonGroup<CheckBox> colorSelectPlayer;
@@ -82,7 +80,7 @@ public class PlayState extends State {
 
         // TODO: adapt the loop and conditions to the the hexgrid (and not the temporary array)
         Ball[] grid = board.getBalls();
-        balls = new ImageButton[61];
+        ballButtons = new ImageButton[61];
         for(int iBall = 0; iBall < grid.length; iBall++) {
             final int index = iBall;
 
@@ -106,13 +104,13 @@ public class PlayState extends State {
 
             ballTextureRegionDrawable = new TextureRegionDrawable(new TextureRegion(ballTexture));
             ballTexturePressedRegionDrawable = new TextureRegionDrawable(new TextureRegion(ballTexturePressed));
-            ImageButton ball = new ImageButton(
+            ImageButton ballButton = new ImageButton(
                     ballTextureRegionDrawable,
                     ballTextureRegionDrawable,
                     ballTexturePressedRegionDrawable
             );
 
-            ball.addListener(new ClickListener() {
+            ballButton.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y){
                     System.out.println("Ball " + index + " clicked");
                     // doesn't allow empty balls to be selected
@@ -122,7 +120,7 @@ public class PlayState extends State {
                             board.selectBall(board.getBalls()[index]);
                         }
                         else {
-                            balls[index].setChecked(false);
+                            ballButtons[index].setChecked(false);
                         }
                     }
                     else {
@@ -136,17 +134,17 @@ public class PlayState extends State {
 
             ballTextureRegionDrawable.setMinSize(50, 50);
             ballTexturePressedRegionDrawable.setMinSize(50, 50);
-            balls[iBall] = ball;
+            ballButtons[iBall] = ballButton;
         }
     }
 
     @Override
     public void update(float dt) {
-        System.out.println("PlayState: Update");
+        // System.out.println("PlayState: Update");
         ArrayList<Ball> selectedList = board.getSelected();
         //removes any ball that is not checked from the selected list
         for(Ball ball : board.getBalls()) {
-            if (ball != null && !balls[ball.getId()].isChecked()) {
+            if (ball != null && !ballButtons[ball.getId()].isChecked()) {
                 board.removeBall(board.getBalls()[ball.getId()]);
             }
         }
@@ -155,7 +153,7 @@ public class PlayState extends State {
         // doesn't allow more than 3 balls to be selected
         if(selectedList.size()>3){
             for (Ball ball : selectedList) {
-                balls[ball.getId()].setChecked(false);
+                ballButtons[ball.getId()].setChecked(false);
             }
             selectedList.clear();
         }
@@ -170,7 +168,7 @@ public class PlayState extends State {
         if(curr != first){
             if (curr.getColor() != first.getColor()){
                 for (Ball ball : selectedList){
-                    balls[ball.getId()].setChecked(false);
+                    ballButtons[ball.getId()].setChecked(false);
                 }
                 selectedList.clear();
             }
@@ -185,45 +183,23 @@ public class PlayState extends State {
         stage.addActor(board.getBoardImage());
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
-        /*
-        int iBall = 0;
-        for(int iLine = 0; iLine < 9; iLine++) {
-            Table table = new Table();
-            // table.debug();
-
-            table.row().pad(5);
-            int iColumnMax = (iLine < 5 ? 5 + iLine : 9 - iLine + 4);
-            for(int iColumn = 0; iColumn < iColumnMax; iColumn++) {
-                table.add(balls[iBall]).width(43).height(43);
-                iBall++;
-            }
-            table.setFillParent(true);
-            table.setTransform(true);
-            table.padTop(iLine * 96 - 386);
-            table.padRight(3.4f);
-
-            stage.addActor(table);
-        }
-
-         */
         board.mapBallsToHexGrid(board.getBalls());
         HexGrid gridOfBalls = board.getHexGrid();
         int c =1;
         float temp = -4;
 
-            for(int i =0;i<61; i++){
-                float x = gridOfBalls.getHexList().get(i).getX();
-                float y = gridOfBalls.getHexList().get(i).getZ();
-                if(temp!=y){
-                    c++;
-                }
-                x+= c*0.5;
-                balls[i].setBounds((x*53 +445),y*48 +380,43,43);
-                stage.addActor(balls[i]);
-                temp = y;
+        for(int i =0;i < 61; i++) {
+            float x = gridOfBalls.getHexList().get(i).getX();
+            float y = gridOfBalls.getHexList().get(i).getZ();
+            if(temp!=y){
+                c++;
             }
-            board.setIsModified(false);
-
+            x += c * 0.5;
+            ballButtons[i].setBounds((x*53 +445),y*48 +380,43,43);
+            stage.addActor(ballButtons[i]);
+            temp = y;
+        }
+        board.setIsModified(false);
 
         stage.addActor(bluePlayer);
         stage.addActor(purplePlayer);

@@ -96,6 +96,8 @@ public class Board {
     public void move(Ball ballFrom,Ball ballTo){
         int from = grid.getBallAt(ballFrom);
         int to = grid.getBallAt(ballTo);
+
+        ballFrom.getColor();
         System.out.println(from + " to " + to);
 
         Ball tempBall;
