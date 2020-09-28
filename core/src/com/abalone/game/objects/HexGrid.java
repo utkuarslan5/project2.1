@@ -1,5 +1,7 @@
 package com.abalone.game.objects;
 
+import com.abalone.game.utils.Color;
+
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,16 @@ public class HexGrid {
 
     public HexGrid() {
         hexList = generateHex();
+        String log = "";
+        for(Hex hex: getHexList()) {
+            Ball ball = hex.getBall();
+            switch (ball.getColor()) {
+                case BLUE: log += "1"; break;
+                case BLANK: log += "0"; break;
+                case PURPLE: log += "2"; break;
+            }
+        }
+        System.out.println(log);
         System.out.println("hexGrid called");
     }
 
@@ -24,6 +36,7 @@ public class HexGrid {
         //61 balls +4,-4 on both axis, center being 0,0, radius 5
         int size = 9;
         int half = size / 2;
+        int iBall = 0;
         for (int row = 0; row < size; row++) {
             int cols = size - Math.abs(row - half);
             for (int col = 0; col < cols; col++) {
@@ -35,7 +48,17 @@ public class HexGrid {
                 }
                 int z = row - half;
                 System.out.println("Hex created with x " + x + " and z " + z);
-                temp.add(new Hex(x, z));
+                Hex newHex = new Hex(x, z);
+                if (iBall < 11 || (iBall >= 13 && iBall <= 15)) {
+                    newHex.setBall(new Ball(Color.BLUE,iBall));
+                } else if (iBall >= 50 || (iBall >= 45 && iBall <= 47)) {
+                    newHex.setBall(new Ball(Color.PURPLE,iBall));
+                }
+                else{
+                    newHex.setBall(new Ball(Color.BLANK,iBall));
+                }
+                temp.add(newHex);
+                iBall++;
             }
         }
 

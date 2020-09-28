@@ -1,6 +1,5 @@
 package com.abalone.game.objects;
 
-import com.abalone.game.utils.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -10,8 +9,7 @@ import java.util.List;
 public class Board {
     private final Image board;
     private Boolean isModified;
-    private HexGrid grid;
-    private final Ball[] balls;
+    private HexGrid hexGrid;
     private ArrayList<Ball> selected;
 
     public Board() {
@@ -21,19 +19,7 @@ public class Board {
         Texture img = new Texture("abalone.png");
         this.board = new Image(img);
 
-        grid = new HexGrid();
-        // TODO: adapt to the hexgrid
-        this.balls = new Ball[61];
-        for (int iBall = 0; iBall < 61; iBall++) {
-            if (iBall < 11 || (iBall >= 13 && iBall <= 15)) {
-                this.balls[iBall] = new Ball(Color.BLUE,iBall);
-            } else if (iBall >= 50 || (iBall >= 45 && iBall <= 47)) {
-                this.balls[iBall] = new Ball(Color.PURPLE,iBall);
-            }
-            else{
-                this.balls[iBall] = new Ball(Color.BLANK,iBall);
-            }
-        }
+        hexGrid = new HexGrid();
         selected = new ArrayList<>();
     }
 
@@ -42,7 +28,7 @@ public class Board {
     }
 
     public HexGrid getHexGrid() {
-        return grid;
+        return hexGrid;
     }
 
     public void selectBall(Ball ball) {
@@ -56,20 +42,15 @@ public class Board {
         return selected;
     }
 
-    // TODO: change and return Hexgrid with balls
-    public Ball[] getBalls() {
-        return balls;
-    }
-
     // a method to map Balls to Hexgrid
     public void mapBallsToHexGrid(Ball[] balls) {
-        List<Hex> temp = grid.getHexList();
+        List<Hex> hexList = hexGrid.getHexList();
         //check for Pigeon Hole Principle
-        if (balls.length == temp.size()) {
+        if (balls.length == hexList.size()) {
             for (int i = 0; i < balls.length; i++) {
-                temp.get(i).setBall(balls[i]);
+                hexList.get(i).setBall(balls[i]);
             }
-            grid.setHexList(temp);
+            hexGrid.setHexList(hexList);
         } else {
             throw new IllegalArgumentException("balls.length != temp.size()");
         }
@@ -78,7 +59,7 @@ public class Board {
     //  a method to return all occupied Hex's
     public ArrayList<Hex> getOccupiedHex() {
         ArrayList<Hex> temp = new ArrayList<>();
-        for (Hex h : grid.getHexList()) {
+        for (Hex h : hexGrid.getHexList()) {
             if (h.isOccupied()) temp.add(h);
         }
         return temp;
@@ -87,25 +68,23 @@ public class Board {
     // a method to return all unoccupied Hex's
     public ArrayList<Hex> getUnoccupiedHex() {
         ArrayList<Hex> temp = new ArrayList<>();
-        for (Hex h : grid.getHexList()) {
+        for (Hex h : hexGrid.getHexList()) {
             if (!h.isOccupied()) temp.add(h);
         }
         return temp;
     }
 
     public void move(Ball ballFrom,Ball ballTo) {
-        int from = grid.getBallAt(ballFrom);
-        int to = grid.getBallAt(ballTo);
-
+        int from = hexGrid.getBallAt(ballFrom);
+        int to = hexGrid.getBallAt(ballTo);
         System.out.println(from + " to " + to);
 
-        Ball tempBall;
-        tempBall = balls[ballFrom.getId()];
-        balls[ballFrom.getId()] = balls[ballTo.getId()];
-        balls[ballTo.getId()] = tempBall;
+        hexGrid.getHexList().get(to).setBall(ballFrom);
+        hexGrid.getHexList().get(from).setBall(ballTo);
 
         String log = "";
-        for(Ball ball: balls) {
+        for(Hex hex: hexGrid.getHexList()) {
+            Ball ball = hex.getBall();
             switch (ball.getColor()) {
                 case BLUE: log += "1"; break;
                 case BLANK: log += "0"; break;
