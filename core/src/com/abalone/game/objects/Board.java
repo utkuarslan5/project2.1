@@ -93,11 +93,20 @@ public class Board {
         return temp;
     }
 
-    public void move(Ball ballFrom,Ball ballTo){
+    public void move(Ball ballFrom,Ball ballTo) {
+        String log = "";
+        for(Ball ball: balls) {
+            switch (ball.getColor()) {
+                case BLUE: log += "1"; break;
+                case BLANK: log += "0"; break;
+                case PURPLE: log += "2"; break;
+            }
+        }
+        System.out.println(log);
+
         int from = grid.getBallAt(ballFrom);
         int to = grid.getBallAt(ballTo);
 
-        ballFrom.getColor();
         System.out.println(from + " to " + to);
 
         Ball tempBall;

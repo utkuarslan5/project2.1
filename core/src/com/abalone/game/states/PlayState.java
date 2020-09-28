@@ -35,6 +35,13 @@ public class PlayState extends State {
     private CheckBox purplePlayer;
     private ButtonGroup<CheckBox> colorSelectPlayer;
 
+    private TextureRegionDrawable ballTextureRegionDrawableBlue;
+    private TextureRegionDrawable ballTexturePressedRegionDrawableBlue;
+    private TextureRegionDrawable ballTextureRegionDrawablePurple;
+    private TextureRegionDrawable ballTexturePressedRegionDrawablePurple;
+    private TextureRegionDrawable ballTextureRegionDrawableBlank;
+    private TextureRegionDrawable ballTexturePressedRegionDrawableBlank;
+
     protected PlayState(GameStateManager ourGsm) {
         super(ourGsm);
     }
@@ -78,32 +85,37 @@ public class PlayState extends State {
         colorSelectPlayer.setMaxCheckCount(1);
         colorSelectPlayer.setMinCheckCount(1);
 
+        ballTextureRegionDrawableBlue = new TextureRegionDrawable(new Texture(Gdx.files.internal("blue.png")));
+        ballTexturePressedRegionDrawableBlue = new TextureRegionDrawable(new Texture(Gdx.files.internal("blueClicked.png")));
+
+        ballTextureRegionDrawablePurple = new TextureRegionDrawable(new Texture(Gdx.files.internal("purple.png")));
+        ballTexturePressedRegionDrawablePurple = new TextureRegionDrawable(new Texture(Gdx.files.internal("purpleClicked.png")));
+
+        ballTextureRegionDrawableBlank = new TextureRegionDrawable(new Texture(Gdx.files.internal("blank.png")));
+        ballTexturePressedRegionDrawableBlank = new TextureRegionDrawable(new Texture(Gdx.files.internal("blank.png")));
+
         // TODO: adapt the loop and conditions to the the hexgrid (and not the temporary array)
-        Ball[] grid = board.getBalls();
+        Ball[] balls = board.getBalls();
         ballButtons = new ImageButton[61];
-        for(int iBall = 0; iBall < grid.length; iBall++) {
+        for(int iBall = 0; iBall < balls.length; iBall++) {
             final int index = iBall;
 
-            Texture ballTexture;
-            Texture ballTexturePressed;
             TextureRegionDrawable ballTextureRegionDrawable;
             TextureRegionDrawable ballTexturePressedRegionDrawable;
 
-            if(grid[iBall] != null && grid[iBall].getColor().isBlue()) {
-                ballTexture = new Texture(Gdx.files.internal("purple.png"));
-                ballTexturePressed = new Texture(Gdx.files.internal("purpleClicked.png"));
+            if(balls[iBall] != null && balls[iBall].getColor().isBlue()) {
+                ballTextureRegionDrawable = ballTextureRegionDrawableBlue;
+                ballTexturePressedRegionDrawable = ballTexturePressedRegionDrawableBlue;
             }
-            else if(grid[iBall] != null && grid[iBall].getColor().isPurple()) {
-                ballTexture = new Texture(Gdx.files.internal("blue.png"));
-                ballTexturePressed = new Texture(Gdx.files.internal("blueClicked.png"));
+            else if(balls[iBall] != null && balls[iBall].getColor().isPurple()) {
+                ballTextureRegionDrawable = ballTextureRegionDrawablePurple;
+                ballTexturePressedRegionDrawable = ballTexturePressedRegionDrawablePurple;
             }
             else {
-                ballTexture = new Texture(Gdx.files.internal("blank.png"));
-                ballTexturePressed = new Texture(Gdx.files.internal("blank.png"));
+                ballTextureRegionDrawable = ballTextureRegionDrawableBlank;
+                ballTexturePressedRegionDrawable = ballTexturePressedRegionDrawableBlank;
             }
 
-            ballTextureRegionDrawable = new TextureRegionDrawable(new TextureRegion(ballTexture));
-            ballTexturePressedRegionDrawable = new TextureRegionDrawable(new TextureRegion(ballTexturePressed));
             ImageButton ballButton = new ImageButton(
                     ballTextureRegionDrawable,
                     ballTextureRegionDrawable,
@@ -188,14 +200,15 @@ public class PlayState extends State {
         int c =1;
         float temp = -4;
 
-        for(int i =0;i < 61; i++) {
+        for(int i = 0; i < 61; i++) {
             float x = gridOfBalls.getHexList().get(i).getX();
             float y = gridOfBalls.getHexList().get(i).getZ();
-            if(temp!=y){
+            if(temp != y) {
                 c++;
             }
             x += c * 0.5;
             ballButtons[i].setBounds((x*53 +445),y*48 +380,43,43);
+            ballButtons[i].setBackground(ballTexturePressedRegionDrawableBlue);
             stage.addActor(ballButtons[i]);
             temp = y;
         }
