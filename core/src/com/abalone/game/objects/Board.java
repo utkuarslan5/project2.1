@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class Board {
     private Image board;
     private Boolean isModified;
-    private HexGrid hexGrid;
-    private ArrayList<Ball> selected;
+    private final HexGrid hexGrid;
+    private final ArrayList<Ball> selected;
 
     public Board() {
         // isModified initiated to true, so will be display in the UI
@@ -53,7 +53,7 @@ public class Board {
         System.out.println(log);
     }
 
-    public void removeBall(Ball ball){
+    public void removeBall(Ball ball) {
         selected.remove(ball);
     }
     public ArrayList<Ball> getSelected() {

@@ -10,9 +10,9 @@ import java.util.List;
 public class TurnsFinder {
     private HexGrid grid;
     private List<Hex> hexes = new ArrayList<>();
-    private List<List<Turn>> turns = new ArrayList<>();
+    private final List<List<Turn>> turns = new ArrayList<>();
     private int holdForceDouble;
-    private int holdForceTripple;
+    private int holdForceTriple;
     private Color currentColor;
 
     public TurnsFinder(HexGrid grid){
@@ -26,21 +26,21 @@ public class TurnsFinder {
 
     public void findTurns(Hex hex){
         currentColor = hex.getBall().getColor();
-        List<Hex> neigbors = hex.getNeighbors();
+        List<Hex> neighbors = hex.getNeighbors();
         List<Turn> foundTurns = new ArrayList<>();
         int neighborId = 0;
 
         // Loop though all directions the ball can move in.
-        for(Hex h : neigbors) {
+        for (Hex h : neighbors) {
             boolean inlineAllowed = true;
 
             /** All turns **/
-            if (!grid.onBoard(h)){
+            if (!grid.onBoard(h)) {
                 continue;
             }
 
             /** Broadside turns **/
-            // TODO: Broadside turns
+            // TODO: Broadside turns, see below (in progress)
 
             /** In-line turns **/
 
@@ -51,23 +51,23 @@ public class TurnsFinder {
 
             // Find forces for two and three consecutive balls
             holdForceDouble = 0;
-            holdForceTripple = 0;
+            holdForceTriple = 0;
             findForce(1, hex, findInverseNeighborId(neighborId), 2, 2, true, false);
             findForce(0, hex, neighborId,3, 2, true, true);
             findForce(1, hex, findInverseNeighborId(neighborId), 3, 2, false, false);
             findForce(0, hex, neighborId,4, 2, false, true);
 
             // Get in-line turns from forces
-            if(holdForceDouble > 0){
+            if (holdForceDouble > 0) {
                 foundTurns.add(new Turn(hex)); // i h n = 1 1 0
-                foundTurns.get(foundTurns.size()-1).addMove(hex, neigbors.get(neighborId)); // i h n = 1 0 1
-                foundTurns.get(foundTurns.size()-1).addMove(neigbors.get(findInverseNeighborId(neighborId)), hex); // i h n = 0 1 1
+                foundTurns.get(foundTurns.size() - 1).addMove(hex, neighbors.get(neighborId)); // i h n = 1 0 1
+                foundTurns.get(foundTurns.size() - 1).addMove(neighbors.get(findInverseNeighborId(neighborId)), hex); // i h n = 0 1 1
             }
-            if(holdForceTripple > 0){
+            if (holdForceTriple > 0) {
                 foundTurns.add(new Turn(hex)); // ii i h n = 1 1 1 0
-                foundTurns.get(foundTurns.size()-1).addMove(hex, neigbors.get(neighborId)); // ii i h n = 1 1 0 1
-                foundTurns.get(foundTurns.size()-1).addMove(neigbors.get(findInverseNeighborId(neighborId)), hex); // ii i h n = 1 0 1 1
-                foundTurns.get(foundTurns.size()-1).addMove(neigbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId)), neigbors.get(findInverseNeighborId(neighborId))); // ii i h n = 0 1 1 1
+                foundTurns.get(foundTurns.size() - 1).addMove(hex, neighbors.get(neighborId)); // ii i h n = 1 1 0 1
+                foundTurns.get(foundTurns.size() - 1).addMove(neighbors.get(findInverseNeighborId(neighborId)), hex); // ii i h n = 1 0 1 1
+                foundTurns.get(foundTurns.size() - 1).addMove(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId)), neighbors.get(findInverseNeighborId(neighborId))); // ii i h n = 0 1 1 1
             }
 
             neighborId++;
@@ -87,10 +87,10 @@ public class TurnsFinder {
             }
             else{
                 if(inverse){
-                    holdForceTripple -= force;
+                    holdForceTriple -= force;
                 }
                 else{
-                    holdForceTripple += force;
+                    holdForceTriple += force;
                 }
             }
             return false;
@@ -107,9 +107,9 @@ public class TurnsFinder {
                     }
                 } else {
                     if (inverse) {
-                        holdForceTripple -= force;
+                        holdForceTriple -= force;
                     } else {
-                        holdForceTripple += force;
+                        holdForceTriple += force;
                     }
                 }
                 return false;
@@ -126,9 +126,9 @@ public class TurnsFinder {
                         }
                     } else {
                         if (inverse) {
-                            holdForceTripple -= force;
+                            holdForceTriple -= force;
                         } else {
-                            holdForceTripple += force;
+                            holdForceTriple += force;
                         }
                     }
                     return false;
@@ -145,9 +145,9 @@ public class TurnsFinder {
                         }
                     } else {
                         if (inverse) {
-                            holdForceTripple -= force;
+                            holdForceTriple -= force;
                         } else {
-                            holdForceTripple += force;
+                            holdForceTriple += force;
                         }
                     }
                     return false;
@@ -160,14 +160,45 @@ public class TurnsFinder {
 
     private int findInverseNeighborId(int id){
         if(id-3 >= 0){
-            return id-3;
-        }
-        else{
-            return id+3;
+            return id - 3;
+        } else {
+            return id + 3;
         }
     }
 
-    public void addHex(Hex hex){
+    public void addHex(Hex hex) {
         this.hexes.add(hex);
+    }
+
+    //TODO: add a method to check if selected balls are inline
+
+    //TODO: complete broadsideMove method, return broadsideTurn containing all legal broadside moves from given hexes
+    public void broadsideMove(List<Hex> hexes) {
+        Turn broadsideTurn = new Turn(hexes);
+        //split to 3 cases: single ball, two balls, three balls
+        Hex h1, h2, h3;
+        switch (hexes.size()) {
+            case 1:
+                h1 = hexes.get(0);
+                for (Hex h : h1.getNeighbors()) {
+                    if (!h.isOccupied()) broadsideTurn.addMove(h1, h);
+                }
+                //return broadsideTurn;
+            case 2:
+                h1 = hexes.get(0);
+                h2 = hexes.get(1);
+                //need to check if h1,h2 are neighbors
+                //after the check, find their line segment
+                //
+            case 3:
+                h1 = hexes.get(0);
+                h2 = hexes.get(1);
+                h3 = hexes.get(2);
+                //check h1,h2 and h2,h3 to be inline
+                //find line segment of two subgroups
+                //iterate over 4 possible line segments
+                //add moves if segment is not occupied
+        }
+
     }
 }
