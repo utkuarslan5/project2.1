@@ -43,6 +43,8 @@ public class PlayState extends State {
     private TextureRegionDrawable ballTextureRegionDrawableBlank;
     private TextureRegionDrawable ballTexturePressedRegionDrawableBlank;
 
+    private ImageButton returnButton;
+
     protected PlayState(GameStateManager ourGsm) {
         super(ourGsm);
     }
@@ -62,6 +64,12 @@ public class PlayState extends State {
         gameFont.setColor(Color.LIGHT_GRAY);
         stage = new Stage(viewport, spriteBatch);
         Gdx.input.setInputProcessor(stage);
+
+        returnButton = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("returnArrow.png"))),
+                new TextureRegionDrawable(new Texture(Gdx.files.internal("returnArrowPressed.png"))));
+        returnButton.getImage().setScale(1/18f);
+        returnButton.setScale(0.5f);
+        returnButton.setPosition(15, 730);
 
         Texture img = new Texture("pbg.jpg");
         background = new Image(img);
@@ -193,6 +201,13 @@ public class PlayState extends State {
             }
         }
 
+        if (returnButton.isChecked()){
+            State MenuState = new MenuState(gsm);
+            gsm.pop();
+            gsm.push(MenuState);
+        }
+
+
     }
 
     @Override
@@ -239,7 +254,7 @@ public class PlayState extends State {
 
         stage.addActor(bluePlayer);
         stage.addActor(purplePlayer);
-
+        stage.addActor(returnButton);
         stage.draw();
     }
 

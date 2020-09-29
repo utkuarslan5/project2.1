@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.audio.Music;
 
 public class AbaloneGame extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -17,7 +16,7 @@ public class AbaloneGame extends ApplicationAdapter {
 	public static int height;
 	public static OrthographicCamera cam;
 	public static GameStateManager gsm;
-	public static Music music;
+	public Music music;
 
 
 	@Override

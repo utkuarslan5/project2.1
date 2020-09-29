@@ -1,6 +1,7 @@
 package com.abalone.game.managers;
 
 import com.abalone.game.states.MenuState;
+import com.abalone.game.states.SettingsState;
 import com.abalone.game.states.State;
 import com.badlogic.gdx.InputAdapter;
 
