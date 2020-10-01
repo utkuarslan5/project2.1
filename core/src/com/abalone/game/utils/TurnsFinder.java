@@ -27,15 +27,24 @@ public class TurnsFinder {
     public void findTurns(Hex hex){
         currentColor = hex.getBall().getColor();
         List<Hex> neighbors = hex.getNeighbors();
+        System.out.println("secure size of neighbors "+hex.getNeighbors().size());
         List<Turn> foundTurns = new ArrayList<>();
-        int neighborId = 0;
+        int neighborId = -1;
+
+        System.out.println("neighbors size:"+neighbors.size());
 
         // Loop though all directions the ball can move in.
-        for (Hex h : neighbors) {
+        for (Hex nh : neighbors) {
+            Hex h = grid.getMatchedHex(nh);
+            neighborId++;
+
+            System.out.println(neighborId+"/i"+findInverseNeighborId(neighborId));
+
             boolean inlineAllowed = true;
 
             /** All turns **/
             if (!grid.onBoard(h)) {
+                System.out.println("Not on board");
                 continue;
             }
 
@@ -46,12 +55,14 @@ public class TurnsFinder {
 
             // If the movement is blocked by a friendly ball
             if(h.isOccupied() && h.getBall().getColor().equals(hex.getBall().getColor())){
+                System.out.println("Friendly ball block");
                 continue;
             }
 
             // Find forces for two and three consecutive balls
             holdForceDouble = 0;
             holdForceTriple = 0;
+
             findForce(1, hex, findInverseNeighborId(neighborId), 2, 2, true, false);
             findForce(0, hex, neighborId,3, 2, true, true);
             findForce(1, hex, findInverseNeighborId(neighborId), 3, 2, false, false);
@@ -70,7 +81,6 @@ public class TurnsFinder {
                 foundTurns.get(foundTurns.size() - 1).addMove(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId)), neighbors.get(findInverseNeighborId(neighborId))); // ii i h n = 0 1 1 1
             }
 
-            neighborId++;
         }
 
     }
@@ -200,5 +210,9 @@ public class TurnsFinder {
                 //add moves if segment is not occupied
         }
 
+    }
+
+    public List<List<Turn>> getTurns() {
+        return turns;
     }
 }

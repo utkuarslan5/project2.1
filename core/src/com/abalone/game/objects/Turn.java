@@ -37,6 +37,15 @@ public class Turn {
         return movesList.remove(new Move(start, destination));
     }
 
+    @Override
+    public String toString() {
+        String r = "Moves: ";
+        for(Move m : movesList){
+            r += ";"+m.toString()+" ";
+        }
+        return r;
+    }
+
     public Color getColor() {
         return color;
     }

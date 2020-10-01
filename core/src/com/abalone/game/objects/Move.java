@@ -9,6 +9,11 @@ public class Move {
         this.destination = destination;
     }
 
+    @Override
+    public String toString() {
+        return "From "+start.toString()+" to "+destination.toString();
+    }
+
     public Hex getStart() {
         return start;
     }
