@@ -80,7 +80,12 @@ public class Board {
 
     //TODO: make the first ball in the selected list the one in front
     public void organizeSelected(){
-    }
+        if(selected.size() > 1 && selected.get(0).getColor().isPurple()){
+            Ball tempBall;
+
+            }
+        }
+
 
     //TODO: push other balls if they get hit
     public void pushBall(){
@@ -89,6 +94,7 @@ public class Board {
 
     //TODO: rewrite the move ball so it takes in account the whole list of selected balls
     public void move(Ball ballTo) {
+        organizeSelected();
         int from = hexGrid.getBallAt(selected.get(0));
         int to = hexGrid.getBallAt(ballTo);
         System.out.println(from + " to " + to);

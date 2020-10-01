@@ -8,21 +8,17 @@ import java.util.List;
 public class Hex {
     private int x;
     private int z;
-    private List<Hex> directions = new ArrayList<>();
+    private static final List<Hex> directions = new ArrayList<Hex>(){{add(new Hex(0, 1));
+        add(new Hex(0, -1));
+        add(new Hex(1, 0));
+        add(new Hex(-1, 0));
+        add(new Hex(-1, 1));
+    add(new Hex(1, -1));}};
     private Ball ball = null;
 
     public Hex(int x, int z) {
         this.x = x;
         this.z = z;
-    }
-
-    public void generateDirections() {
-        directions.add(new Hex(0, 1));
-        directions.add(new Hex(0, -1));
-        directions.add(new Hex(1, 0));
-        directions.add(new Hex(-1, 0));
-        directions.add(new Hex(-1, 1));
-        directions.add(new Hex(1, -1));
     }
 
     public void add(Hex b) {
@@ -36,12 +32,10 @@ public class Hex {
     }
 
     public List<Hex> getDirections() {
-        generateDirections();
         return directions;
     }
 
     public List<Hex> getNeighbors() {
-        generateDirections();
         List<Hex> neighbors = new ArrayList<>();
         for (Hex neighbor : directions) {
             neighbors.add(new Hex(this.x + neighbor.x, this.z + neighbor.z));
