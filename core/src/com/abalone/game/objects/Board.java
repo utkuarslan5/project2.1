@@ -78,12 +78,22 @@ public class Board {
         return temp;
     }
 
-    public void move(Ball ballFrom,Ball ballTo) {
-        int from = hexGrid.getBallAt(ballFrom);
+    //TODO: make the first ball in the selected list the one in front
+    public void organizeSelected(){
+    }
+
+    //TODO: push other balls if they get hit
+    public void pushBall(){
+
+    }
+
+    //TODO: rewrite the move ball so it takes in account the whole list of selected balls
+    public void move(Ball ballTo) {
+        int from = hexGrid.getBallAt(selected.get(0));
         int to = hexGrid.getBallAt(ballTo);
         System.out.println(from + " to " + to);
 
-        hexGrid.getHexList().get(to).setBall(ballFrom);
+        hexGrid.getHexList().get(to).setBall(selected.get(0));
         hexGrid.getHexList().get(from).setBall(ballTo);
 
         selected.clear();

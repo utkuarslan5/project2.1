@@ -149,7 +149,7 @@ public class PlayState extends State {
                     else {
                         board.setIsModified();
                         if(board.getSelected().size() > 0) {
-                            board.move(board.getSelected().get(0), board.getHexGrid().getHexList().get(index).getBall());
+                            board.move(board.getHexGrid().getHexList().get(index).getBall());
                             for(int i = 0; i < 61 ; i++) {
                                 ballButtons[i].setChecked(false);
                             }
