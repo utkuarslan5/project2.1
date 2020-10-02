@@ -4,12 +4,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Board {
     private Image board;
     private Boolean isModified;
-    private final HexGrid hexGrid;
-    private final ArrayList<Ball> selected;
+    private HexGrid hexGrid;
+    private ArrayList<Ball> selected;
 
     public Board() {
         // isModified initiated to true, so will be display in the UI
@@ -21,7 +22,8 @@ public class Board {
         hexGrid = new HexGrid();
         selected = new ArrayList<>();
     }
-        //For TESTING
+
+    //For TESTING
     public Board(int x) {
         // isModified initiated to true, so will be display in the UI
         this.isModified = true;
@@ -31,7 +33,7 @@ public class Board {
 
 
     public Image getBoardImage() {
-       return board;
+        return board;
     }
 
     public HexGrid getHexGrid() {
@@ -39,15 +41,14 @@ public class Board {
     }
 
     public void selectBall(Ball ball) {
-        if(selected.contains(ball)) {
+        if (selected.contains(ball)) {
             removeBall(ball);
-        }
-        else {
+        } else {
             selected.add(ball);
         }
 
         String log = "Selected: ";
-        for(Ball b: selected) {
+        for (Ball b : selected) {
             log += b.getId() + " ";
         }
         System.out.println(log);
@@ -56,6 +57,7 @@ public class Board {
     public void removeBall(Ball ball) {
         selected.remove(ball);
     }
+
     public ArrayList<Ball> getSelected() {
         return selected;
     }
@@ -78,42 +80,91 @@ public class Board {
         return temp;
     }
 
-    //TODO: make the first ball in the selected list the one in front
-    public void organizeSelected(){
-        if(selected.size() > 1 && selected.get(0).getColor().isPurple()){
-            Ball tempBall;
-
+    //TODO: optimize
+    public void organizeSelected() {
+        if (selected.size() > 1 && selected.get(0).getColor().isPurple()) {
+            List<Hex> tempList = new ArrayList<>();
+            for (int i = 0; i < selected.size(); i++) {
+                tempList.add(hexGrid.getHexList().get(selected.get(i).getId()));
+            }
+            if(tempList.get(0).getZ() != tempList.get(1).getZ()){
+                Hex tempHex;
+                for (int i = 0; i < tempList.size(); i++) {
+                    for (int j = 0; j < tempList.size() - i - 1; j++) {
+                        if (tempList.get(j).getZ() < tempList.get(j+1).getZ()) {
+                            tempHex = tempList.get(j);
+                            tempList.set(j,tempList.get(j+1));
+                            tempList.set(j+1, tempHex);
+                        }
+                    }
+                }
+                for(int i = 0 ; i < tempList.size();i++){
+                    selected.set(i,tempList.get(i).getBall());
+                }
             }
         }
+        if (selected.size() > 1 && selected.get(0).getColor().isBlue()) {
+            List<Hex> tempList = new ArrayList<>();
+            for (int i = 0; i < selected.size(); i++) {
+                tempList.add(hexGrid.getHexList().get(selected.get(i).getId()));
+            }
+            if(tempList.get(0).getZ() != tempList.get(1).getZ()){
+                Hex tempHex;
+                for (int i = 0; i < tempList.size(); i++) {
+                    for (int j = 0; j < tempList.size() - i - 1; j++) {
+                        if (tempList.get(j).getZ() > tempList.get(j+1).getZ()) {
+                            tempHex = tempList.get(j);
+                            tempList.set(j,tempList.get(j+1));
+                            tempList.set(j+1, tempHex);
+                        }
+                    }
+                }
+                for(int i = 0 ; i < tempList.size();i++){
+                    selected.set(i,tempList.get(i).getBall());
+                    System.out.println(selected.get(i).getId());
+                }
+            }
+        }
+    }
 
 
     //TODO: push other balls if they get hit
-    public void pushBall(){
+    public void pushBall() {
 
     }
 
     //TODO: rewrite the move ball so it takes in account the whole list of selected balls
     public void move(Ball ballTo) {
+
         organizeSelected();
         int from = hexGrid.getBallAt(selected.get(0));
         int to = hexGrid.getBallAt(ballTo);
         System.out.println(from + " to " + to);
 
-        hexGrid.getHexList().get(to).setBall(selected.get(0));
-        hexGrid.getHexList().get(from).setBall(ballTo);
+        if (selected.size() == 1) {
+            System.out.println("blabla");
+            hexGrid.getHexList().get(to).setBall(selected.get(0));
+            hexGrid.getHexList().get(from).setBall(ballTo);
+        } else if (selected.size() == 2) {
+            int from2 = hexGrid.getBallAt(selected.get(1));
+                if(hexGrid.getHexList().get(from).getZ() != hexGrid.getHexList().get(from2).getZ()){
+                    hexGrid.getHexList().get(to).setBall(selected.get(0));
+                    hexGrid.getHexList().get(from).setBall(selected.get(1));
+                    hexGrid.getHexList().get(from2).setBall(ballTo);
+                }
+        } else if (selected.size() == 3){
+            int from2 = hexGrid.getBallAt(selected.get(1));
+            int from3 = hexGrid.getBallAt(selected.get(2));
+            if(hexGrid.getHexList().get(from).getZ() != hexGrid.getHexList().get(from2).getZ()){
+                hexGrid.getHexList().get(to).setBall(selected.get(0));
+                hexGrid.getHexList().get(from).setBall(selected.get(1));
+                hexGrid.getHexList().get(from2).setBall(selected.get(2));
+                hexGrid.getHexList().get(from3).setBall(ballTo);
+            }
+        }
 
         selected.clear();
 
-        String log = "";
-        for(Hex hex: hexGrid.getHexList()) {
-            Ball ball = hex.getBall();
-            switch (ball.getColor()) {
-                case BLUE: log += "1"; break;
-                case BLANK: log += "0"; break;
-                case PURPLE: log += "2"; break;
-            }
-        }
-        System.out.println(log);
     }
 
     public Boolean isModified() {
