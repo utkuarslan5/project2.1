@@ -19,12 +19,13 @@ public class SettingsState extends State {
     private Stage stage;
     private Skin skin;
     private Image background;
-    private BitmapFont gameFont;
+    private BitmapFont gameFontSetting;
     private BitmapFont gameFontMusic;
+    private BitmapFont gameFontSubPoints;
     private ImageButton returnButton;
-    private ImageButton MusicChecked;
+    private ImageButton Music1Checked;
+    private ImageButton Music2Checked;
     private ImageButton AiChecked;
-    private static boolean musicBoolean = true;
 
     protected SettingsState(GameStateManager ourGsm) {
         super(ourGsm);
@@ -36,17 +37,23 @@ public class SettingsState extends State {
         Viewport viewport = new FitViewport(AbaloneGame.width, AbaloneGame.height, AbaloneGame.cam);
         viewport.apply();
         FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("Prime-Regular.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 120;
-        gameFont = gen.generateFont(parameter);
-        gameFont.setColor(Color.LIGHT_GRAY);
         stage = new Stage(viewport, spriteBatch);
         Gdx.input.setInputProcessor(stage);
+
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 120;
+        gameFontSetting = gen.generateFont(parameter);
+        gameFontSetting.setColor(Color.LIGHT_GRAY);
 
         FreeTypeFontGenerator.FreeTypeFontParameter parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter2.size = 50;
         gameFontMusic = gen.generateFont(parameter2);
         gameFontMusic.setColor(Color.WHITE);
+
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter3 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter3.size = 25;
+        gameFontSubPoints = gen.generateFont(parameter3);
+        gameFontSubPoints.setColor(Color.WHITE);
 
         skin = new Skin(Gdx.files.internal("cloud-form/skin/cloud-form-ui.json"));
         stage = new Stage(viewport, spriteBatch);
@@ -60,19 +67,27 @@ public class SettingsState extends State {
         returnButton.setScale(0.5f);
         returnButton.setPosition(15, 730);
 
-        MusicChecked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
+        Music1Checked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
-        MusicChecked.getImage().setScale(1/10f);
-        MusicChecked.setScale(0.1f);
-        MusicChecked.setPosition(700, 450);
+        Music1Checked.getImage().setScale(1/20f);
+        Music1Checked.setScale(0.1f);
+        Music1Checked.setPosition(300, 380);
+
+        Music2Checked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
+                new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
+                new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
+        Music2Checked.getImage().setScale(1/20f);
+        Music2Checked.setScale(0.1f);
+        Music2Checked.setPosition(300, 310);
+        Music2Checked.setChecked(true);
 
         AiChecked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
-        AiChecked.getImage().setScale(1/10f);
+        AiChecked.getImage().setScale(1/20f);
         AiChecked.setScale(0.1f);
-        AiChecked.setPosition(700, 280);
+        AiChecked.setPosition(790, 380);
 
     }
 
@@ -92,27 +107,37 @@ public class SettingsState extends State {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.addActor(background);
         stage.addActor(returnButton);
-        stage.addActor(MusicChecked);
+        stage.addActor(Music1Checked);
+        stage.addActor(Music2Checked);
         stage.addActor(AiChecked);
 
         stage.draw();
         spriteBatch.begin();
-        gameFont.draw(spriteBatch,"Settings", 430, 750);
-        gameFontMusic.draw(spriteBatch,"Music:",470,490);
-        gameFontMusic.draw(spriteBatch,"AI:",470,320);
+        gameFontSetting.draw(spriteBatch,"Settings", 390, 750);
+        gameFontMusic.draw(spriteBatch,"Music:",280,490);
+        gameFontMusic.draw(spriteBatch,"AI:",740,490);
+        gameFontSubPoints.draw(spriteBatch, "Theme 1", 360, 405);
+        gameFontSubPoints.draw(spriteBatch, "Theme 2", 360, 335);
+        gameFontSubPoints.draw(spriteBatch, "On/Off", 850, 405);
         spriteBatch.end();
     }
 
     @Override
     public void handleInput() {
-        if(MusicChecked.isChecked() && AbaloneGame.music.isPlaying()){
-            musicBoolean = !musicBoolean;
-            System.out.println(musicBoolean);
-            AbaloneGame.music.pause();
-        }else if(!MusicChecked.isChecked() && !AbaloneGame.music.isPlaying()){
-            musicBoolean = !musicBoolean;
-            System.out.println(musicBoolean);
-            AbaloneGame.music.play();
+        if(Music1Checked.isChecked() && AbaloneGame.music1.isPlaying()){
+            AbaloneGame.music1.pause();
+            Music2Checked.setChecked(false);
+        }else if(!Music1Checked.isChecked() && !AbaloneGame.music1.isPlaying()){
+            AbaloneGame.music1.play();
+            Music2Checked.setChecked(true);
+        }
+
+        if(Music2Checked.isChecked() && AbaloneGame.music2.isPlaying()){
+            AbaloneGame.music2.pause();
+            Music1Checked.setChecked(false);
+        } else if(!Music2Checked.isChecked() && !AbaloneGame.music2.isPlaying()){
+            AbaloneGame.music2.play();
+            Music1Checked.setChecked(true);
         }
     }
 

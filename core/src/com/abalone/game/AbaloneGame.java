@@ -16,15 +16,19 @@ public class AbaloneGame extends ApplicationAdapter {
 	public static int height;
 	public static OrthographicCamera cam;
 	public static GameStateManager gsm;
-	public static Music music;
+	public static Music music1;
+	public static Music music2;
 
 
 	@Override
 	public void create () {
-		music = Gdx.audio.newMusic(Gdx.files.internal("AbaloneMusic.ogg"));
-		music.setLooping(true);
-		music.setVolume(0.18f);
-		music.play();
+		music1 = Gdx.audio.newMusic(Gdx.files.internal("AbaloneMusic.ogg"));
+		music1.setLooping(true);
+		music1.setVolume(0.18f);
+		music1.play();
+		music2 = Gdx.audio.newMusic(Gdx.files.internal("ElectroAbalone.ogg"));
+		music2.setLooping(true);
+		music2.setVolume(0.18f);
 		batch = new SpriteBatch();
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
