@@ -6,6 +6,7 @@ import com.abalone.game.objects.HexGrid;
 import com.abalone.game.objects.Turn;
 import com.badlogic.gdx.math.Interpolation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TurnsFinderTest {
@@ -41,13 +42,25 @@ public class TurnsFinderTest {
         // Print all turns
         List<List<Turn>> turns = turnsFinder.getTurns();
         int i = 1;
+        List<Integer> noTurns = new ArrayList<>();
         for(List<Turn> h : turns) {
-            System.out.println("Turns for hex " + (i + 1));
-            for (Turn t : h) {
-                System.out.println(t.toString());
+            if(h.size()>0) {
+                System.out.println("Turns for hex " + (i + 1));
+                for (Turn t : h) {
+                    System.out.println(t.toString());
+                }
             }
+            else{
+                noTurns.add(i+1);
+            }
+
             i++;
         }
+        System.out.print("Hexes without turns: ");
+        for(Integer n : noTurns){
+            System.out.print(n+" ");
+        }
+        System.out.println();
     }
 
 }

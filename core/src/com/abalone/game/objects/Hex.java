@@ -87,4 +87,13 @@ public class Hex {
     public int getZ() {
         return z;
     }
+
+    @Override
+    public String toString() {
+        return "Hex{" +
+                "x" + x +
+                " z" + z +
+                " " + ball.getColor() +
+                '}';
+    }
 }

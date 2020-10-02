@@ -11,7 +11,9 @@ public class Move {
 
     @Override
     public String toString() {
-        return "From "+start.toString()+" to "+destination.toString();
+        String r = "From "+start.toString();
+        r += " to "+destination.toString();
+        return r;
     }
 
     public Hex getStart() {

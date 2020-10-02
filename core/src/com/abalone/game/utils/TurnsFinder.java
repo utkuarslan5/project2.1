@@ -27,7 +27,6 @@ public class TurnsFinder {
     public void findTurns(Hex hex){
         currentColor = hex.getBall().getColor();
         List<Hex> neighbors = hex.getNeighbors();
-        System.out.println("secure size of neighbors "+hex.getNeighbors().size());
         List<Turn> foundTurns = new ArrayList<>();
         int neighborId = -1;
 
@@ -35,18 +34,19 @@ public class TurnsFinder {
 
         // Loop though all directions the ball can move in.
         for (Hex nh : neighbors) {
-            Hex h = grid.getMatchedHex(nh);
             neighborId++;
+
+            /** All turns **/
+            if (!grid.onBoard(nh)) {
+                //System.out.println("Not on board");
+                continue;
+            }
+
+            Hex h = grid.getMatchedHex(nh);
 
             System.out.println(neighborId+"/i"+findInverseNeighborId(neighborId));
 
             boolean inlineAllowed = true;
-
-            /** All turns **/
-            if (!grid.onBoard(h)) {
-                System.out.println("Not on board");
-                continue;
-            }
 
             /** Broadside turns **/
             // TODO: Broadside turns, see below (in progress)
@@ -55,9 +55,11 @@ public class TurnsFinder {
 
             // If the movement is blocked by a friendly ball
             if(h.isOccupied() && h.getBall().getColor().equals(hex.getBall().getColor())){
-                System.out.println("Friendly ball block");
+                //System.out.println("Friendly ball block");
                 continue;
             }
+
+            System.out.println("I GOT PAST!!!");
 
             // Find forces for two and three consecutive balls
             holdForceDouble = 0;
@@ -69,19 +71,24 @@ public class TurnsFinder {
             findForce(0, hex, neighborId,4, 2, false, true);
 
             // Get in-line turns from forces
-            if (holdForceDouble > 0) {
+            if (holdForceDouble > 0 && grid.onBoard(neighbors.get(findInverseNeighborId(neighborId)))) {
                 foundTurns.add(new Turn(hex)); // i h n = 1 1 0
-                foundTurns.get(foundTurns.size() - 1).addMove(hex, neighbors.get(neighborId)); // i h n = 1 0 1
-                foundTurns.get(foundTurns.size() - 1).addMove(neighbors.get(findInverseNeighborId(neighborId)), hex); // i h n = 0 1 1
+                foundTurns.get(foundTurns.size() - 1).addMove(hex, grid.getMatchedHex(neighbors.get(neighborId))); // i h n = 1 0 1
+                foundTurns.get(foundTurns.size() - 1).addMove(grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))), hex); // i h n = 0 1 1
+                System.out.println(foundTurns.get(foundTurns.size()-1).toString());
             }
-            if (holdForceTriple > 0) {
+
+            if (holdForceTriple > 0 && grid.onBoard(neighbors.get(findInverseNeighborId(neighborId))) && grid.onBoard(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId)))) {
                 foundTurns.add(new Turn(hex)); // ii i h n = 1 1 1 0
-                foundTurns.get(foundTurns.size() - 1).addMove(hex, neighbors.get(neighborId)); // ii i h n = 1 1 0 1
-                foundTurns.get(foundTurns.size() - 1).addMove(neighbors.get(findInverseNeighborId(neighborId)), hex); // ii i h n = 1 0 1 1
-                foundTurns.get(foundTurns.size() - 1).addMove(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId)), neighbors.get(findInverseNeighborId(neighborId))); // ii i h n = 0 1 1 1
+                foundTurns.get(foundTurns.size() - 1).addMove(hex, grid.getMatchedHex(neighbors.get(neighborId))); // ii i h n = 1 1 0 1
+                foundTurns.get(foundTurns.size() - 1).addMove(grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))), hex); // ii i h n = 1 0 1 1
+                foundTurns.get(foundTurns.size() - 1).addMove(grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId))), grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId)))); // ii i h n = 0 1 1 1
+                System.out.println(foundTurns.get(foundTurns.size()-1).toString());
             }
 
         }
+
+        turns.add(foundTurns);
 
     }
 
@@ -106,6 +113,25 @@ public class TurnsFinder {
             return false;
         }
         Hex nHex = hex.getNeighbors().get(neighborId);
+        if(!grid.onBoard(nHex)){
+            if(doub){
+                if(inverse){
+                    holdForceDouble -= force;
+                }
+                else{
+                    holdForceDouble += force;
+                }
+            }
+            else{
+                if(inverse){
+                    holdForceTriple -= force;
+                }
+                else{
+                    holdForceTriple += force;
+                }
+            }
+            return false;
+        }
         Hex useMe = grid.getMatchedHex(nHex);
         if(useMe != null) {
             if (useMe.getBall().getColor().isBlank()) { // If the next space is empty

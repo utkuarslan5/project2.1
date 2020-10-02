@@ -39,7 +39,7 @@ public class Turn {
 
     @Override
     public String toString() {
-        String r = "Moves: ";
+        String r = "Moves ";
         for(Move m : movesList){
             r += ";"+m.toString()+" ";
         }

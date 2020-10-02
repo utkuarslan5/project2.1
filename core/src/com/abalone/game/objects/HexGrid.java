@@ -6,6 +6,8 @@ import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.abalone.game.utils.Color.BLANK;
+
 // TODO: add a configuration file of the board and game's initial conditions
 public class HexGrid {
     private List<Hex> hexList = new ArrayList<>();
@@ -55,7 +57,7 @@ public class HexGrid {
                     newHex.setBall(new Ball(Color.BLUE,iBall));
                 }
                 else{
-                    newHex.setBall(new Ball(Color.BLANK,iBall));
+                    newHex.setBall(new Ball(BLANK,iBall));
                 }
                 temp.add(newHex);
                 iBall++;
@@ -99,6 +101,7 @@ public class HexGrid {
                 return temp;
             }
         }
+        System.out.println("null return");
         return null;
     }
 
