@@ -3,6 +3,7 @@ package com.abalone.game.states;
 import com.abalone.game.AbaloneGame;
 import com.abalone.game.managers.GameStateManager;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -25,6 +26,7 @@ public class SettingsState extends State {
     private ImageButton returnButton;
     private ImageButton Music1Checked;
     private ImageButton Music2Checked;
+    private ImageButton MusicOnOff;
     private ImageButton AiChecked;
 
     protected SettingsState(GameStateManager ourGsm) {
@@ -82,6 +84,14 @@ public class SettingsState extends State {
         Music2Checked.setPosition(300, 310);
         Music2Checked.setChecked(true);
 
+        MusicOnOff = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
+                new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
+                new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
+        MusicOnOff.getImage().setScale(1/20f);
+        MusicOnOff.setScale(0.1f);
+        MusicOnOff.setPosition(300, 240);
+        MusicOnOff.setChecked(true);
+
         AiChecked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
@@ -109,6 +119,7 @@ public class SettingsState extends State {
         stage.addActor(returnButton);
         stage.addActor(Music1Checked);
         stage.addActor(Music2Checked);
+        stage.addActor(MusicOnOff);
         stage.addActor(AiChecked);
 
         stage.draw();
@@ -119,26 +130,41 @@ public class SettingsState extends State {
         gameFontSubPoints.draw(spriteBatch, "Theme 1", 360, 405);
         gameFontSubPoints.draw(spriteBatch, "Theme 2", 360, 335);
         gameFontSubPoints.draw(spriteBatch, "On/Off", 850, 405);
+        gameFontSubPoints.draw(spriteBatch, "On/Off", 360, 265);
         spriteBatch.end();
     }
 
     @Override
     public void handleInput() {
+
+        if(!MusicOnOff.isChecked() && (!Music1Checked.isChecked() || !Music2Checked.isChecked()) &&
+                (AbaloneGame.music1.isPlaying() || AbaloneGame.music2.isPlaying())){
+            AbaloneGame.music1.pause();
+            AbaloneGame.music2.pause();
+            Music2Checked.setChecked(true);
+            Music1Checked.setChecked(true);
+        }
+
         if(Music1Checked.isChecked() && AbaloneGame.music1.isPlaying()){
             AbaloneGame.music1.pause();
             Music2Checked.setChecked(false);
+            MusicOnOff.setChecked(true);
         }else if(!Music1Checked.isChecked() && !AbaloneGame.music1.isPlaying()){
             AbaloneGame.music1.play();
             Music2Checked.setChecked(true);
+            MusicOnOff.setChecked(true);
         }
 
         if(Music2Checked.isChecked() && AbaloneGame.music2.isPlaying()){
             AbaloneGame.music2.pause();
             Music1Checked.setChecked(false);
+            MusicOnOff.setChecked(true);
         } else if(!Music2Checked.isChecked() && !AbaloneGame.music2.isPlaying()){
             AbaloneGame.music2.play();
             Music1Checked.setChecked(true);
+            MusicOnOff.setChecked(true);
         }
+
     }
 
     @Override
