@@ -44,9 +44,13 @@ public class TurnsFinder {
 
             Hex h = grid.getMatchedHex(nh);
 
-            System.out.println(neighborId+"/i"+findInverseNeighborId(neighborId));
+            //System.out.println(neighborId+"/i"+findInverseNeighborId(neighborId));
 
-            boolean inlineAllowed = true;
+            /** Onestep Moves **/
+            if(h.getBall().getColor().isBlank()){
+                foundTurns.add(new Turn(hex));
+                foundTurns.get(foundTurns.size()-1).addMove(hex,h);
+            }
 
             /** Broadside turns **/
             // TODO: Broadside turns, see below (in progress)
@@ -58,8 +62,6 @@ public class TurnsFinder {
                 //System.out.println("Friendly ball block");
                 continue;
             }
-
-            System.out.println("I GOT PAST!!!");
 
             // Find forces for two and three consecutive balls
             holdForceDouble = 0;
@@ -75,7 +77,6 @@ public class TurnsFinder {
                 foundTurns.add(new Turn(hex)); // i h n = 1 1 0
                 foundTurns.get(foundTurns.size() - 1).addMove(hex, grid.getMatchedHex(neighbors.get(neighborId))); // i h n = 1 0 1
                 foundTurns.get(foundTurns.size() - 1).addMove(grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))), hex); // i h n = 0 1 1
-                System.out.println(foundTurns.get(foundTurns.size()-1).toString());
             }
 
             if (holdForceTriple > 0 && grid.onBoard(neighbors.get(findInverseNeighborId(neighborId))) && grid.onBoard(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId)))) {
@@ -83,7 +84,6 @@ public class TurnsFinder {
                 foundTurns.get(foundTurns.size() - 1).addMove(hex, grid.getMatchedHex(neighbors.get(neighborId))); // ii i h n = 1 1 0 1
                 foundTurns.get(foundTurns.size() - 1).addMove(grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))), hex); // ii i h n = 1 0 1 1
                 foundTurns.get(foundTurns.size() - 1).addMove(grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId))), grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId)))); // ii i h n = 0 1 1 1
-                System.out.println(foundTurns.get(foundTurns.size()-1).toString());
             }
 
         }
