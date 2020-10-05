@@ -25,6 +25,11 @@ public class TurnsFinder {
     }
 
     public void findTurns(Hex hex){
+
+        if(hex.getBall().getColor().isBlank()){
+            return;
+        }
+
         currentColor = hex.getBall().getColor();
         List<Hex> neighbors = hex.getNeighbors();
         List<Turn> foundTurns = new ArrayList<>();
