@@ -93,8 +93,8 @@ public class TurnsFinder {
                                 if (grid.onBoard(nhhh)) {
                                     Hex hhh = grid.getMatchedHex(nhhh);
                                     Hex nlayerThreeTarget = hhh.getNeighbors().get(pos);
-                                    // Check if third layer target is on board
-                                    if(grid.onBoard(nlayerThreeTarget)){
+                                    // Check if third layer target is on board, and the third layer isn't blank
+                                    if(grid.onBoard(nlayerThreeTarget) && !hhh.getBall().getColor().isBlank()){
                                         Hex layerThreeTarget = grid.getMatchedHex(nlayerThreeTarget);
                                         // Check if third layer ball isn't  blocked
                                         if (layerThreeTarget.getBall().getColor().isBlank()) {
