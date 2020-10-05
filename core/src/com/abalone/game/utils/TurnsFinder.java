@@ -35,8 +35,6 @@ public class TurnsFinder {
         List<Turn> foundTurns = new ArrayList<>();
         int neighborId = -1;
 
-        System.out.println("neighbors size:"+neighbors.size());
-
         // Loop though all directions the ball can move in.
         for (Hex nh : neighbors) {
             neighborId++;
@@ -49,8 +47,6 @@ public class TurnsFinder {
 
             Hex h = grid.getMatchedHex(nh);
 
-            //System.out.println(neighborId+"/i"+findInverseNeighborId(neighborId));
-
             /** Onestep Moves **/
             if(h.getBall().getColor().isBlank()){
                 foundTurns.add(new Turn(hex));
@@ -58,7 +54,62 @@ public class TurnsFinder {
             }
 
             /** Broadside turns **/
-            // TODO: Broadside turns, see below (in progress)
+
+            // Find balls that qualify for broadside move
+            List<Hex> candidates = new ArrayList<>();
+            candidates.add(hex);
+            if(h.getBall().getColor().equals(hex.getBall().getColor())){
+                candidates.add(h);
+                Hex nhh = h.getNeighbors().get(neighborId);
+                if(grid.onBoard(nhh)){
+                    Hex hh = grid.getMatchedHex(nhh);
+                    if(hh.getBall().getColor().equals(hex.getBall().getColor())){
+                        candidates.add(hh);
+                    }
+                }
+            }
+
+            // Check if candidates aren't blocked
+            if(candidates.size() > 1){
+                List<Hex> secondLayerNeigbors = candidates.get(1).getNeighbors();
+                // For all legal positions
+                for(int pos = 0; pos <= 5; pos++) {
+                    // If the position is not reserverd for an in-line move
+                    if(pos != neighborId && pos != findInverseNeighborId(neighborId)) {
+                        Hex nlayerOneTarget = neighbors.get(pos);
+                        Hex nlayerTwoTarget = secondLayerNeigbors.get(pos);
+                        // Check if targets are on board
+                        if(grid.onBoard(nlayerOneTarget) && grid.onBoard(nlayerTwoTarget)){
+                            Hex layerOneTarget = grid.getMatchedHex(nlayerOneTarget);
+                            Hex layerTwoTarget = grid.getMatchedHex(nlayerTwoTarget);
+                            // Check if targets are empty
+                            if (layerOneTarget.getBall().getColor().isBlank() && layerTwoTarget.getBall().getColor().isBlank()) {
+                                foundTurns.add(new Turn(hex));
+                                foundTurns.get(foundTurns.size() - 1).addMove(hex, layerOneTarget);
+                                foundTurns.get(foundTurns.size() - 1).addMove(candidates.get(1), layerTwoTarget);
+
+                                // Check third layer
+                                Hex nhhh = candidates.get(1).getNeighbors().get(neighborId);
+                                if (grid.onBoard(nhhh)) {
+                                    Hex hhh = grid.getMatchedHex(nhhh);
+                                    Hex nlayerThreeTarget = hhh.getNeighbors().get(pos);
+                                    // Check if third layer target is on board
+                                    if(grid.onBoard(nlayerThreeTarget)){
+                                        Hex layerThreeTarget = grid.getMatchedHex(nlayerThreeTarget);
+                                        // Check if third layer ball isn't  blocked
+                                        if (layerThreeTarget.getBall().getColor().isBlank()) {
+                                            foundTurns.add(new Turn(hex));
+                                            foundTurns.get(foundTurns.size() - 1).addMove(hex, layerOneTarget);
+                                            foundTurns.get(foundTurns.size() - 1).addMove(candidates.get(1), layerTwoTarget);
+                                            foundTurns.get(foundTurns.size() - 1).addMove(hhh, layerThreeTarget);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             /** In-line turns **/
 
@@ -209,38 +260,6 @@ public class TurnsFinder {
 
     public void addHex(Hex hex) {
         this.hexes.add(hex);
-    }
-
-    //TODO: add a method to check if selected balls are inline
-
-    //TODO: complete broadsideMove method, return broadsideTurn containing all legal broadside moves from given hexes
-    public void broadsideMove(List<Hex> hexes) {
-        Turn broadsideTurn = new Turn(hexes);
-        //split to 3 cases: single ball, two balls, three balls
-        Hex h1, h2, h3;
-        switch (hexes.size()) {
-            case 1:
-                h1 = hexes.get(0);
-                for (Hex h : h1.getNeighbors()) {
-                    if (!h.isOccupied()) broadsideTurn.addMove(h1, h);
-                }
-                //return broadsideTurn;
-            case 2:
-                h1 = hexes.get(0);
-                h2 = hexes.get(1);
-                //need to check if h1,h2 are neighbors
-                //after the check, find their line segment
-                //
-            case 3:
-                h1 = hexes.get(0);
-                h2 = hexes.get(1);
-                h3 = hexes.get(2);
-                //check h1,h2 and h2,h3 to be inline
-                //find line segment of two subgroups
-                //iterate over 4 possible line segments
-                //add moves if segment is not occupied
-        }
-
     }
 
     public List<List<Turn>> getTurns() {

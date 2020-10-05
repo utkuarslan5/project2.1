@@ -25,8 +25,6 @@ public class TurnsFinderTest {
         for (int i = 0; i < hexGrid.getHexList().size(); i++) {
             Hex tempHex = hexGrid.getHexList().get(i);
             List<Hex> neighbors = tempHex.getNeighbors();
-            System.out.println("Hex " + (i+1) + " has neighbors");
-            System.out.println(neighbors.size());
             for (Hex neighbor : neighbors) {
                 //System.out.println("X: " + neighbor.getX() + " /// " + " Z: " + neighbor.getZ());
                 //System.out.println(neighbor.isOccupied());
@@ -40,6 +38,8 @@ public class TurnsFinderTest {
             }
 
         // Print all turns
+        System.out.println();
+        System.out.println("=== All Legal Turns for every Hex ===");
         List<List<Turn>> turns = turnsFinder.getTurns();
         int i = 1;
         List<Integer> noTurns = new ArrayList<>();
