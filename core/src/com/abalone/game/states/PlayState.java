@@ -108,6 +108,7 @@ public class PlayState extends State {
         ballButtons = new ImageButton[61];
         for(int iHex = 0; iHex < hexList.size(); iHex++) {
             final int index = iHex;
+            final Hex hex = hexList.get(iHex);
 
             TextureRegionDrawable ballTextureRegionDrawable;
             TextureRegionDrawable ballTexturePressedRegionDrawable;
@@ -133,9 +134,8 @@ public class PlayState extends State {
 
             ballButton.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
-                    System.out.println("Ball " + index + " clicked");
                     Ball ball = board.getHexGrid().getHexList().get(index).getBall();
-
+                    System.out.println("Ball " + index + " clicked " + ball.getColor() + " x:" + hex.getX() + " y:" + hex.getY() + " z:" + hex.getZ());
                     // doesn't allow empty balls to be selected
                     if(!ball.getColor().isBlank()) {
                         if(ball.getColor().isBlue() == (colorSelectPlayer.getCheckedIndex() == 0) ||
@@ -149,16 +149,8 @@ public class PlayState extends State {
                     else {
                         board.setIsModified();
                         if(board.getSelected().size() > 0) {
-                            board.move(board.getHexGrid().getHexList().get(index).getBall());
-                            for(int i = 0; i < 61 ; i++) {
-                                ballButtons[i].setChecked(false);
-                            }
-                            if(purplePlayer.isChecked()) {
-                                bluePlayer.setChecked(true);
-                            }
-                            else {
-                                purplePlayer.setChecked(true);
-                            }
+                            board.move(ball);
+                            switchTurnPlayer();
                         }
                     }
                 }
@@ -175,7 +167,6 @@ public class PlayState extends State {
         ArrayList<Ball> selectedList = board.getSelected();
         assert selectedList != null;
 
-
         // doesn't allow more than 3 balls to be selected
         if(selectedList.size() > 3) {
             for (Ball ball : selectedList) {
@@ -183,7 +174,6 @@ public class PlayState extends State {
             }
             selectedList.clear();
         }
-        
 
         Ball curr = null;
         Ball first = null;
@@ -266,5 +256,17 @@ public class PlayState extends State {
     @Override
     public void dispose() {
 
+    }
+
+    public void switchTurnPlayer() {
+        for(int i = 0; i < 61 ; i++) {
+            ballButtons[i].setChecked(false);
+        }
+        if(purplePlayer.isChecked()) {
+            bluePlayer.setChecked(true);
+        }
+        else {
+            purplePlayer.setChecked(true);
+        }
     }
 }
