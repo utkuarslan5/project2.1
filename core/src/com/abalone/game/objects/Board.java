@@ -103,7 +103,7 @@ public class Board {
                 }
             }
         }
-        if (selected.size() > 1 && selected.get(0).getColor().isBlue()) {
+        else if (selected.size() > 1 && selected.get(0).getColor().isBlue()) {
             List<Hex> tempList = new ArrayList<>();
             for (int i = 0; i < selected.size(); i++) {
                 tempList.add(hexGrid.getHexList().get(selected.get(i).getId()));
