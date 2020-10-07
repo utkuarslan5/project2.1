@@ -115,20 +115,41 @@ public class Board {
             hexGrid.getHexList().get(from).setBall(ballTo);
         } else if (selected.size() == 2) {
             int from2 = hexGrid.getBallAt(selected.get(1));
-            // if(hexGrid.getHexList().get(from).getZ() != hexGrid.getHexList().get(from2).getZ()){
-                hexGrid.getHexList().get(to).setBall(selected.get(1));
-                hexGrid.getHexList().get(from2).setBall(selected.get(0));
-                hexGrid.getHexList().get(from).setBall(ballTo);
-            // }
+                if(hexGrid.getHexList().get(to).getZ() > hexGrid.getHexList().get(from).getZ() &&
+                    hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from2).getZ()){
+                        Hex tempHex = hexGrid.getHexList().get(to);
+                        Hex tempHex2 = hexGrid.getMatchedHex(new Hex(tempHex.getX() + 1,tempHex.getZ()));
+                        int to2 = hexGrid.getBallAt(tempHex2.getBall());
+                        Ball tempBall = tempHex2.getBall();
+                        hexGrid.getHexList().get(to).setBall(selected.get(0));
+                        hexGrid.getHexList().get(to2).setBall(selected.get(1));
+                        hexGrid.getHexList().get(from).setBall(ballTo);
+                        hexGrid.getHexList().get(from2).setBall(tempBall);
+                }
+                else if(hexGrid.getHexList().get(to).getZ() < hexGrid.getHexList().get(from).getZ() &&
+                        hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from2).getZ()){
+                    Hex tempHex = hexGrid.getHexList().get(to);
+                    Hex tempHex2 = hexGrid.getMatchedHex(new Hex(tempHex.getX() - 1,tempHex.getZ()));
+                    int to2 = hexGrid.getBallAt(tempHex2.getBall());
+                    Ball tempBall = tempHex2.getBall();
+                    hexGrid.getHexList().get(to).setBall(selected.get(0));
+                    hexGrid.getHexList().get(to2).setBall(selected.get(1));
+                    hexGrid.getHexList().get(from).setBall(ballTo);
+                    hexGrid.getHexList().get(from2).setBall(tempBall);
+                }
+                else {
+                    hexGrid.getHexList().get(to).setBall(selected.get(0));
+                    hexGrid.getHexList().get(from2).setBall(selected.get(1));
+                    hexGrid.getHexList().get(from).setBall(ballTo);
+                }
         } else if (selected.size() == 3){
             int from2 = hexGrid.getBallAt(selected.get(1));
             int from3 = hexGrid.getBallAt(selected.get(2));
-            // if(hexGrid.getHexList().get(from).getZ() != hexGrid.getHexList().get(from2).getZ()){
-                hexGrid.getHexList().get(to).setBall(selected.get(2));
+                hexGrid.getHexList().get(to).setBall(selected.get(0));
                 hexGrid.getHexList().get(from3).setBall(selected.get(1));
-                hexGrid.getHexList().get(from2).setBall(selected.get(0));
+                hexGrid.getHexList().get(from2).setBall(selected.get(2));
                 hexGrid.getHexList().get(from).setBall(ballTo);
-            // }
+
         }
 
         selected.clear();
