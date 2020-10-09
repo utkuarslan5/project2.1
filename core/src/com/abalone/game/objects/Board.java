@@ -145,16 +145,38 @@ public class Board {
                 int to2 = hexGrid.getBallAt(tempHex2.getBall());
                 Ball tempBall = tempHex2.getBall();
                 if (isLegal(from2, to2)) {
-                    hexGrid.getHexList().get(to).setBall(selected.get(1));
-                    hexGrid.getHexList().get(to2).setBall(selected.get(0));
-                    hexGrid.getHexList().get(from).setBall(ballTo);
-                    hexGrid.getHexList().get(from2).setBall(tempBall);
-                }
-            } else {
+
+                            hexGrid.getHexList().get(to).setBall(selected.get(1));
+                            hexGrid.getHexList().get(to2).setBall(selected.get(0));
+                            hexGrid.getHexList().get(from).setBall(ballTo);
+                            hexGrid.getHexList().get(from2).setBall(tempBall);
+                        }
+                    }
+
+
+            else {
                 if (isLegal(from2, to)) {
-                    hexGrid.getHexList().get(to).setBall(selected.get(1));
-                    hexGrid.getHexList().get(from2).setBall(selected.get(0));
-                    hexGrid.getHexList().get(from).setBall(ballTo);
+                    if(hexGrid.getHexList().get(from).getX() == hexGrid.getHexList().get(from2).getX()) {
+                        if (hexGrid.getHexList().get(from2).getX() == hexGrid.getHexList().get(to).getX()) {
+                            hexGrid.getHexList().get(to).setBall(selected.get(1));
+                            hexGrid.getHexList().get(from2).setBall(selected.get(0));
+                            hexGrid.getHexList().get(from).setBall(ballTo);
+                        }
+                        else{
+                            System.out.println("Snake MOVE!");
+                        }
+                    }
+                    else{
+                        if (hexGrid.getHexList().get(from2).getY() == hexGrid.getHexList().get(to).getY()) {
+                            hexGrid.getHexList().get(to).setBall(selected.get(1));
+                            hexGrid.getHexList().get(from2).setBall(selected.get(0));
+                            hexGrid.getHexList().get(from).setBall(ballTo);
+                        }
+                        else{
+                            System.out.println("Snake MOVE!");
+                        }
+                    }
+
                 }
             }
 
@@ -197,10 +219,27 @@ public class Board {
                 }
             } else {
                 if (isLegal(from3, to)) {
-                    hexGrid.getHexList().get(to).setBall(selected.get(2));
-                    hexGrid.getHexList().get(from3).setBall(selected.get(1));
-                    hexGrid.getHexList().get(from2).setBall(selected.get(0));
-                    hexGrid.getHexList().get(from).setBall(ballTo);
+                    if(hexGrid.getHexList().get(from3).getX() == hexGrid.getHexList().get(from2).getX()){
+                        if (hexGrid.getHexList().get(from3).getX() == hexGrid.getHexList().get(to).getX()) {
+                            hexGrid.getHexList().get(to).setBall(selected.get(2));
+                            hexGrid.getHexList().get(from3).setBall(selected.get(1));
+                            hexGrid.getHexList().get(from2).setBall(selected.get(0));
+                            hexGrid.getHexList().get(from).setBall(ballTo);
+                        }
+                        else{
+                            System.out.println("Snake MOVE!");
+                        }
+                    }
+                    else {
+                        if (hexGrid.getHexList().get(from3).getY() == hexGrid.getHexList().get(to).getY()) {
+                            hexGrid.getHexList().get(to).setBall(selected.get(2));
+                            hexGrid.getHexList().get(from3).setBall(selected.get(1));
+                            hexGrid.getHexList().get(from2).setBall(selected.get(0));
+                            hexGrid.getHexList().get(from).setBall(ballTo);
+                        } else {
+                            System.out.println("Snake MOVE!");
+                        }
+                    }
 
                 }
             }
