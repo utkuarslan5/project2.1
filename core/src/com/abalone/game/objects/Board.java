@@ -285,6 +285,7 @@ public class Board {
         Hex hexBallTo = hexGrid.getHexList().get(to);
         if(hex1.getX() == hexBallTo.getX() || hex1.getY() == hexBallTo.getY() ){
 
+
             if(selected.size() == 2){
                 int dif = hex1.getZ()- hex2.getZ();
                 Hex emptyNeighbor = null;
