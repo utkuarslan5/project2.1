@@ -263,6 +263,11 @@ public class PlayState extends State {
         purpleLostBalls.setText("Purple Lost: " + lostP);
         blueLostBalls.setText("Blue Lost: " + lostB);
 
+        if(lostP == 6 || lostB == 6) {
+            State endState = new EndState(gsm);
+            gsm.pop();
+            gsm.push(endState);
+        }
     }
 
     @Override
