@@ -49,4 +49,8 @@ public class Turn {
     public Color getColor() {
         return color;
     }
+
+    public List<Move> getMovesList() {
+        return movesList;
+    }
 }

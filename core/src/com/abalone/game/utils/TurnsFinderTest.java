@@ -3,6 +3,7 @@ package com.abalone.game.utils;
 import com.abalone.game.objects.Board;
 import com.abalone.game.objects.Hex;
 import com.abalone.game.objects.HexGrid;
+import com.abalone.game.objects.Move;
 import com.abalone.game.objects.Turn;
 import com.badlogic.gdx.math.Interpolation;
 
@@ -48,6 +49,8 @@ public class TurnsFinderTest {
                 System.out.println("Turns for hex " + (i + 1));
                 for (Turn t : h) {
                     System.out.println(t.toString());
+                    for(Move m : t.getMovesList()){
+                    }
                 }
             }
             else{

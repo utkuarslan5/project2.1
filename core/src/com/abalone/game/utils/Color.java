@@ -12,6 +12,11 @@ public enum Color {
         public boolean isBlue() {
             return false;
         }
+
+        @Override
+        public boolean equals(Color c) {
+            return c.isBlank();
+        }
     },
     PURPLE{
         public  boolean isBlank() { return false;}
@@ -22,6 +27,11 @@ public enum Color {
 
         public boolean isBlue() {
             return false;
+        }
+
+        @Override
+        public boolean equals(Color c) {
+            return c.isPurple();
         }
     },
     BLUE{
@@ -34,6 +44,11 @@ public enum Color {
         public boolean isBlue() {
             return true;
         }
+
+        @Override
+        public boolean equals(Color c) {
+            return c.isBlue();
+        }
     };
 
     public abstract boolean isBlank();
@@ -41,4 +56,6 @@ public enum Color {
     public abstract boolean isPurple();
 
     public abstract boolean isBlue();
+
+    public abstract boolean equals(Color c);
 }
