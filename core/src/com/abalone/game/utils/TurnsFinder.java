@@ -24,10 +24,10 @@ public class TurnsFinder {
         this.hexes.add(hex);
     }
 
-    public void findTurns(Hex hex){
+    public List<Turn> findTurns(Hex hex){
 
         if(hex.getBall().getColor().isBlank()){
-            return;
+            return null;
         }
 
         currentColor = hex.getBall().getColor();
@@ -149,6 +149,7 @@ public class TurnsFinder {
         }
 
         turns.add(foundTurns);
+        return foundTurns;
 
     }
 
