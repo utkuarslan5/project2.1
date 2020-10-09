@@ -211,13 +211,13 @@ public class Board {
     public boolean isLegal(int hexFrom, int hexTo) {
         boolean legal = false;
         List<Turn> tempList = turnsFinder.findTurns(hexGrid.getHexList().get(hexFrom));
-        for (Turn turn : tempList) {
+        outerloop: for (Turn turn : tempList) {
             for (int j = 0; j < turn.getMovesList().size(); j++) {
                 List<Move> tempMoveList = turn.getMovesList();
-                if (tempMoveList.get(j).getDestination().getZ() == hexGrid.getHexList().get(hexTo).getZ() &&
-                        tempMoveList.get(j).getDestination().getX() == hexGrid.getHexList().get(hexTo).getX()) {
+                if (tempMoveList.get(j).getDestination() == hexGrid.getHexList().get(hexTo)
+                    && tempMoveList.get(j).getStart() == hexGrid.getHexList().get(hexFrom)) {
                     legal = true;
-                    break;
+                    break outerloop;
                 }
             }
         }
