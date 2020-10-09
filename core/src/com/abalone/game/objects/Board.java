@@ -150,10 +150,17 @@ public class Board {
                     hexGrid.getHexList().get(from).setBall(ballTo);
                     hexGrid.getHexList().get(from2).setBall(tempBall);
                     movePerformed = true;
-                        }
-                    }
-
-
+                }
+            }
+            else if(hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from2).getZ() &&
+                    hexGrid.getHexList().get(to).getZ() == hexGrid.getHexList().get(from2).getZ()) {
+                if(isLegal(from2,to)){
+                    hexGrid.getHexList().get(to).setBall(selected.get(1));
+                    hexGrid.getHexList().get(from2).setBall(selected.get(0));
+                    hexGrid.getHexList().get(from).setBall(ballTo);
+                    movePerformed = true;
+                }
+            }
             else {
                 if (isLegal(from2, to)) {
                     if(hexGrid.getHexList().get(from).getX() == hexGrid.getHexList().get(from2).getX()) {
@@ -221,15 +228,18 @@ public class Board {
                     hexGrid.getHexList().get(from3).setBall(tempBall2);
                     movePerformed = true;
                 }
-            } else {
+            }
+            else if(hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from3).getZ() &&
+                    hexGrid.getHexList().get(to).getZ() == hexGrid.getHexList().get(from3).getZ()) {
+                if(isLegal(from3,to)){
+                    moveThree(ballTo, from, to, from2, from3);
+                }
+            }
+            else{
                 if (isLegal(from3, to)) {
                     if(hexGrid.getHexList().get(from3).getX() == hexGrid.getHexList().get(from2).getX()){
                         if (hexGrid.getHexList().get(from3).getX() == hexGrid.getHexList().get(to).getX()) {
-                            hexGrid.getHexList().get(to).setBall(selected.get(2));
-                            hexGrid.getHexList().get(from3).setBall(selected.get(1));
-                            hexGrid.getHexList().get(from2).setBall(selected.get(0));
-                            hexGrid.getHexList().get(from).setBall(ballTo);
-                            movePerformed = true;
+                            moveThree(ballTo, from, to, from2, from3);
                         }
                         else{
                             System.out.println("Snake MOVE!");
@@ -237,11 +247,7 @@ public class Board {
                     }
                     else {
                         if (hexGrid.getHexList().get(from3).getY() == hexGrid.getHexList().get(to).getY()) {
-                            hexGrid.getHexList().get(to).setBall(selected.get(2));
-                            hexGrid.getHexList().get(from3).setBall(selected.get(1));
-                            hexGrid.getHexList().get(from2).setBall(selected.get(0));
-                            hexGrid.getHexList().get(from).setBall(ballTo);
-                            movePerformed = true;
+                            moveThree(ballTo, from, to, from2, from3);
                         } else {
                             System.out.println("Snake MOVE!");
                         }
@@ -251,6 +257,14 @@ public class Board {
         }
 
         selected.clear();
+    }
+
+    private void moveThree(Ball ballTo, int from, int to, int from2, int from3) {
+        hexGrid.getHexList().get(to).setBall(selected.get(2));
+        hexGrid.getHexList().get(from3).setBall(selected.get(1));
+        hexGrid.getHexList().get(from2).setBall(selected.get(0));
+        hexGrid.getHexList().get(from).setBall(ballTo);
+        movePerformed = true;
     }
 
     public Boolean isModified() {

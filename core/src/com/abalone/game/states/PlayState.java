@@ -142,9 +142,9 @@ public class PlayState extends State {
             }
 
             ImageButton ballButton = new ImageButton(
-                ballTextureRegionDrawable,
-                ballTextureRegionDrawable,
-                ballTexturePressedRegionDrawable
+                    ballTextureRegionDrawable,
+                    ballTextureRegionDrawable,
+                    ballTexturePressedRegionDrawable
             );
 
             ballButton.addListener(new ClickListener() {
