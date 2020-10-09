@@ -144,13 +144,18 @@ public class PlayState extends State {
                         }
                         else {
                             ballButtons[index].setChecked(false);
+                            System.out.println("PUSH NEEDED");
+                            board.pushBalls(ball);
                         }
                     }
-                    else {
+                    else if(ball.getColor().isBlank()) {
                         board.setIsModified();
                         if(board.getSelected().size() > 0) {
                             board.move(ball);
-                            switchTurnPlayer();
+                            if(board.getMovePerformed()) {
+                                switchTurnPlayer();
+                                board.setMovePerformed(false);
+                            }
                         }
                     }
                 }
