@@ -35,6 +35,7 @@ public class PlayState extends State {
     private CheckBox bluePlayer;
     private CheckBox purplePlayer;
     private ButtonGroup<CheckBox> colorSelectPlayer;
+    private Ball ball;
 
     private TextureRegionDrawable ballTextureRegionDrawableBlue;
     private TextureRegionDrawable ballTexturePressedRegionDrawableBlue;
@@ -190,6 +191,21 @@ public class PlayState extends State {
                 selectedList.clear();
             }
         }
+
+      /*  if(selectedList.size()!=0) {
+                if (first.getId() == 0 && !(curr.getId() == 5 || curr.getId() == 6)) {
+                    for (Ball ball : selectedList) {
+                        ballButtons[ball.getId()].setChecked(false);
+                    }
+                    selectedList.clear();
+                }
+            if (first.getId() == 6 && !(curr.getId() == 13 || curr.getId() == 0 || curr.getId() == 1)) {
+                for (Ball ball : selectedList) {
+                    ballButtons[ball.getId()].setChecked(false);
+                }
+                selectedList.clear();
+            }
+        }*/
 
         if (returnButton.isChecked()){
             State MenuState = new MenuState(gsm);

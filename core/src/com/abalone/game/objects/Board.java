@@ -11,7 +11,7 @@ public class Board {
     private Image board;
     private Boolean isModified;
     private HexGrid hexGrid;
-    private ArrayList<Ball> selected;
+    public ArrayList<Ball> selected;
     private TurnsFinder turnsFinder;
 
     public Board() {
@@ -98,8 +98,9 @@ public class Board {
         for (int i = 0; i < selected.size(); i++) {
             System.out.println(selected.get(i).getId());
         }
-    }
 
+       // if(selected.get(1) == selected.get(0).ge)
+    }
 
     //TODO: push other balls if they get hit
     public void pushBall() {
@@ -244,6 +245,8 @@ public class Board {
                 }
             }
         }
+
+
 
         selected.clear();
     }

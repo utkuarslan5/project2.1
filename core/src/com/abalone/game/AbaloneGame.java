@@ -22,7 +22,7 @@ public class AbaloneGame extends ApplicationAdapter {
 
 	@Override
 	public void create () {
-		music1 = Gdx.audio.newMusic(Gdx.files.internal("AbaloneMusic.ogg"));
+		music1 = Gdx.audio.newMusic(Gdx.files.internal("WiiRemix.ogg"));
 		music1.setLooping(true);
 		music1.setVolume(0.18f);
 		music1.play();
