@@ -35,6 +35,10 @@ public class PlayState extends State {
     private CheckBox bluePlayer;
     private CheckBox purplePlayer;
     private ButtonGroup<CheckBox> colorSelectPlayer;
+    private Label purpleLostBalls;
+    private Label blueLostBalls;
+    public static int lostP;
+    public static int lostB;
 
     private TextureRegionDrawable ballTextureRegionDrawableBlue;
     private TextureRegionDrawable ballTexturePressedRegionDrawableBlue;
@@ -94,6 +98,16 @@ public class PlayState extends State {
         colorSelectPlayer.setMaxCheckCount(1);
         colorSelectPlayer.setMinCheckCount(1);
 
+        lostP = 0;
+        lostB = 0;
+        purpleLostBalls = new Label("Purple Lost: " + lostP, skin);
+        purpleLostBalls.setFontScale(1.5f);
+        purpleLostBalls.getStyle().fontColor = Color.WHITE;
+        purpleLostBalls.setPosition(530,50);
+        blueLostBalls = new Label("Blue Lost: " + lostB, skin);
+        blueLostBalls.setFontScale(1.5f);
+        blueLostBalls.setPosition(550,700);
+
         ballTextureRegionDrawableBlue = new TextureRegionDrawable(new Texture(Gdx.files.internal("blue.png")));
         ballTexturePressedRegionDrawableBlue = new TextureRegionDrawable(new Texture(Gdx.files.internal("blueClicked.png")));
 
@@ -142,10 +156,18 @@ public class PlayState extends State {
                                 (ball.getColor().isPurple() == (colorSelectPlayer.getCheckedIndex() == 1)) ) {
                             board.selectBall(ball);
                         }
-                        else {
+                        else if(board.getSelected().size()>1){
                             ballButtons[index].setChecked(false);
                             System.out.println("PUSH NEEDED");
                             board.pushBalls(ball);
+                            if(board.getMovePerformed()) {
+                                switchTurnPlayer();
+                                board.setMovePerformed(false);
+                            }
+                        }
+                        else {
+                            ballButtons[index].setChecked(false);
+
                         }
                     }
                     else if(ball.getColor().isBlank()) {
@@ -201,7 +223,8 @@ public class PlayState extends State {
             gsm.pop();
             gsm.push(MenuState);
         }
-
+        purpleLostBalls.setText("Purple Lost: " + lostP);
+        blueLostBalls.setText("Blue Lost: " + lostB);
 
     }
 
@@ -250,6 +273,8 @@ public class PlayState extends State {
         stage.addActor(bluePlayer);
         stage.addActor(purplePlayer);
         stage.addActor(returnButton);
+        stage.addActor(purpleLostBalls);
+        stage.addActor(blueLostBalls);
         stage.draw();
     }
 

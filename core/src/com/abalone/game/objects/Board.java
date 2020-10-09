@@ -1,5 +1,7 @@
 package com.abalone.game.objects;
 
+import com.abalone.game.states.PlayState;
+import com.abalone.game.utils.Color;
 import com.abalone.game.utils.TurnsFinder;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -13,11 +15,12 @@ public class Board {
     private HexGrid hexGrid;
     private ArrayList<Ball> selected;
     private TurnsFinder turnsFinder;
+    private boolean movePerformed;
 
     public Board() {
         // isModified initiated to true, so will be display in the UI
         this.isModified = true;
-
+        this.movePerformed = false;
         Texture img = new Texture("abalone.png");
         this.board = new Image(img);
 
@@ -100,12 +103,6 @@ public class Board {
         }
     }
 
-
-    //TODO: push other balls if they get hit
-    public void pushBall() {
-
-    }
-
     //TODO: rewrite the move ball so it takes in account the whole list of selected balls
     public void move(Ball ballTo) {
         organizeSelected(ballTo);
@@ -119,6 +116,7 @@ public class Board {
             if (isLegal(from, to)) {
                 hexGrid.getHexList().get(to).setBall(selected.get(0));
                 hexGrid.getHexList().get(from).setBall(ballTo);
+                movePerformed = true;
             } else {
                 System.out.println("Illegal!!!!!!!!!!!!");
             }
@@ -137,6 +135,7 @@ public class Board {
                     hexGrid.getHexList().get(to2).setBall(selected.get(0));
                     hexGrid.getHexList().get(from).setBall(ballTo);
                     hexGrid.getHexList().get(from2).setBall(tempBall);
+                    movePerformed = true;
                 }
             } else if (hexGrid.getHexList().get(to).getZ() < hexGrid.getHexList().get(from).getZ() &&
                     hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from2).getZ()) {
@@ -146,10 +145,11 @@ public class Board {
                 Ball tempBall = tempHex2.getBall();
                 if (isLegal(from2, to2)) {
 
-                            hexGrid.getHexList().get(to).setBall(selected.get(1));
-                            hexGrid.getHexList().get(to2).setBall(selected.get(0));
-                            hexGrid.getHexList().get(from).setBall(ballTo);
-                            hexGrid.getHexList().get(from2).setBall(tempBall);
+                    hexGrid.getHexList().get(to).setBall(selected.get(1));
+                    hexGrid.getHexList().get(to2).setBall(selected.get(0));
+                    hexGrid.getHexList().get(from).setBall(ballTo);
+                    hexGrid.getHexList().get(from2).setBall(tempBall);
+                    movePerformed = true;
                         }
                     }
 
@@ -161,6 +161,7 @@ public class Board {
                             hexGrid.getHexList().get(to).setBall(selected.get(1));
                             hexGrid.getHexList().get(from2).setBall(selected.get(0));
                             hexGrid.getHexList().get(from).setBall(ballTo);
+                            movePerformed = true;
                         }
                         else{
                             System.out.println("Snake MOVE!");
@@ -171,6 +172,7 @@ public class Board {
                             hexGrid.getHexList().get(to).setBall(selected.get(1));
                             hexGrid.getHexList().get(from2).setBall(selected.get(0));
                             hexGrid.getHexList().get(from).setBall(ballTo);
+                            movePerformed = true;
                         }
                         else{
                             System.out.println("Snake MOVE!");
@@ -199,6 +201,7 @@ public class Board {
                     hexGrid.getHexList().get(from).setBall(ballTo);
                     hexGrid.getHexList().get(from2).setBall(tempBall);
                     hexGrid.getHexList().get(from3).setBall(tempBall2);
+                    movePerformed = true;
                 }
             } else if (hexGrid.getHexList().get(to).getZ() < hexGrid.getHexList().get(from).getZ() &&
                     hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from2).getZ()) {
@@ -216,6 +219,7 @@ public class Board {
                     hexGrid.getHexList().get(from).setBall(ballTo);
                     hexGrid.getHexList().get(from2).setBall(tempBall);
                     hexGrid.getHexList().get(from3).setBall(tempBall2);
+                    movePerformed = true;
                 }
             } else {
                 if (isLegal(from3, to)) {
@@ -225,6 +229,7 @@ public class Board {
                             hexGrid.getHexList().get(from3).setBall(selected.get(1));
                             hexGrid.getHexList().get(from2).setBall(selected.get(0));
                             hexGrid.getHexList().get(from).setBall(ballTo);
+                            movePerformed = true;
                         }
                         else{
                             System.out.println("Snake MOVE!");
@@ -236,11 +241,11 @@ public class Board {
                             hexGrid.getHexList().get(from3).setBall(selected.get(1));
                             hexGrid.getHexList().get(from2).setBall(selected.get(0));
                             hexGrid.getHexList().get(from).setBall(ballTo);
+                            movePerformed = true;
                         } else {
                             System.out.println("Snake MOVE!");
                         }
                     }
-
                 }
             }
         }
@@ -269,11 +274,120 @@ public class Board {
         return legal;
     }
 
+    public void pushBalls(Ball ballTo){
+        organizeSelected(ballTo);
+        int sel1 = hexGrid.getBallAt(selected.get(0));
+        Hex hex1 = hexGrid.getHexList().get(sel1);
+        int sel2 = hexGrid.getBallAt(selected.get(1));
+        Hex hex2 = hexGrid.getHexList().get(sel2);
+
+        int to = hexGrid.getBallAt(ballTo);
+        Hex hexBallTo = hexGrid.getHexList().get(to);
+        if(hex1.getX() == hexBallTo.getX() || hex1.getY() == hexBallTo.getY() ){
+
+            if(selected.size() == 2){
+                int dif = hex1.getZ()- hex2.getZ();
+                Hex emptyNeighbor = null;
+                if(hex1.getX() == hexBallTo.getX()) {
+                    // not eorking
+                    emptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX(), hexBallTo.getZ() - dif));
+                }else if(hex1.getY() == hexBallTo.getY()){
+                    //working
+                    emptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX() + dif, hexBallTo.getZ() - dif));
+                }
+                try {
+                    Ball tempBall2 = emptyNeighbor.getBall();
+                    if (tempBall2.getColor().isBlank()) {
+                        int from2 = hexGrid.getBallAt(tempBall2);
+                        hexGrid.getHexList().get(to).setBall(tempBall2);
+                        hexGrid.getHexList().get(from2).setBall(ballTo);
+                        System.out.println("PUSHED");
+                        move(tempBall2);
+                    }
+                }catch (Exception e){
+                    System.out.println("OUT OF BOARD");
+                    ballTo.setColor(Color.BLANK);
+
+                    if(selected.get(0).getColor().isBlue()){
+                        PlayState.lostP += 1;
+                    }else{
+                        PlayState.lostB += 1;
+                    }
+                    move(ballTo);
+
+                }
+            }
+
+            if(selected.size() == 3){
+                int dif = hex1.getZ()- hex2.getZ();
+                Hex emptyNeighbor = null;
+                Hex nonEmptyNeighbor = null;
+                if(hex1.getX() == hexBallTo.getX()) {
+
+                    emptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX(), hexBallTo.getZ() - 2*dif));
+                    nonEmptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX(), hexBallTo.getZ() - dif));
+                }else if(hex1.getY() == hexBallTo.getY()){
+
+                    emptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX() + 2*dif, hexBallTo.getZ() - 2*dif));
+                    nonEmptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX() + dif, hexBallTo.getZ() - dif));
+                }
+
+                System.out.println(nonEmptyNeighbor);
+
+                try {
+                    if(!nonEmptyNeighbor.getBall().getColor().isBlank()) {
+                        Ball tempBall = emptyNeighbor.getBall();
+                        int fromTemp = hexGrid.getBallAt(tempBall);
+                        Ball tempBall2 = nonEmptyNeighbor.getBall();
+                        int fromTemp2 = hexGrid.getBallAt(tempBall2);
+                        if (tempBall.getColor().isBlank() && !tempBall2.getColor().isBlank()) {
+                            hexGrid.getHexList().get(to).setBall(tempBall);
+                            hexGrid.getHexList().get(fromTemp).setBall(tempBall2);
+                            hexGrid.getHexList().get(fromTemp2).setBall(ballTo);
+                            System.out.println("PUSHED");
+                            move(tempBall);
+                        }
+                    }else {
+
+                        //tempball is blank so nonempty is empty lol
+                        Ball tempBall = nonEmptyNeighbor.getBall();
+                        int fromTemp = hexGrid.getBallAt(tempBall);
+                        if (tempBall.getColor().isBlank()) {
+                            hexGrid.getHexList().get(to).setBall(tempBall);
+                            hexGrid.getHexList().get(fromTemp).setBall(ballTo);
+                            System.out.println("PUSHED");
+                            move(tempBall);
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println("OUT OF BOARD");
+                    ballTo.setColor(Color.BLANK);
+
+                    if(selected.get(0).getColor().isBlue()){
+                        PlayState.lostP += 1;
+                    }else{
+                        PlayState.lostB += 1;
+                    }
+                    move(ballTo);
+                }
+            }
+        }
+    }
+
+
     public void setIsModified(Boolean isModified) {
         this.isModified = isModified;
     }
 
     public void setIsModified() {
         this.setIsModified(true);
+    }
+
+    public void setMovePerformed(boolean movePerformed){
+        this.movePerformed = movePerformed;
+    }
+
+    public boolean getMovePerformed(){
+        return movePerformed;
     }
 }
