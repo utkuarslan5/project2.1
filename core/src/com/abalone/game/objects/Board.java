@@ -13,7 +13,6 @@ public class Board {
     private HexGrid hexGrid;
     private ArrayList<Ball> selected;
     private TurnsFinder turnsFinder;
-    private boolean movePerformed;
 
     public Board() {
         // isModified initiated to true, so will be display in the UI
@@ -25,7 +24,6 @@ public class Board {
         hexGrid = new HexGrid();
         selected = new ArrayList<>();
         turnsFinder = new TurnsFinder(hexGrid);
-        movePerformed = false;
     }
 
     //For TESTING
@@ -121,92 +119,133 @@ public class Board {
             if (isLegal(from, to)) {
                 hexGrid.getHexList().get(to).setBall(selected.get(0));
                 hexGrid.getHexList().get(from).setBall(ballTo);
-                movePerformed = true;
             } else {
                 System.out.println("Illegal!!!!!!!!!!!!");
             }
 
         } else if (selected.size() == 2) {
             int from2 = hexGrid.getBallAt(selected.get(1));
-            if (isLegal(from2, to)) {
-                if (hexGrid.getHexList().get(to).getZ() > hexGrid.getHexList().get(from).getZ() &&
-                        hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from2).getZ()) {
-                    Hex tempHex = hexGrid.getHexList().get(to);
-                    Hex tempHex2 = hexGrid.getMatchedHex(new Hex(tempHex.getX() + 1, tempHex.getZ()));
-                    int to2 = hexGrid.getBallAt(tempHex2.getBall());
-                    Ball tempBall = tempHex2.getBall();
+
+            if (hexGrid.getHexList().get(to).getZ() > hexGrid.getHexList().get(from).getZ() &&
+                    hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from2).getZ()) {
+                Hex tempHex = hexGrid.getHexList().get(to);
+                Hex tempHex2 = hexGrid.getMatchedHex(new Hex(tempHex.getX() + 1, tempHex.getZ()));
+                int to2 = hexGrid.getBallAt(tempHex2.getBall());
+                Ball tempBall = tempHex2.getBall();
+                if (isLegal(from2, to2)) {
                     hexGrid.getHexList().get(to).setBall(selected.get(1));
                     hexGrid.getHexList().get(to2).setBall(selected.get(0));
                     hexGrid.getHexList().get(from).setBall(ballTo);
                     hexGrid.getHexList().get(from2).setBall(tempBall);
-                } else if (hexGrid.getHexList().get(to).getZ() < hexGrid.getHexList().get(from).getZ() &&
-                        hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from2).getZ()) {
-                    Hex tempHex = hexGrid.getHexList().get(to);
-                    Hex tempHex2 = hexGrid.getMatchedHex(new Hex(tempHex.getX() - 1, tempHex.getZ()));
-                    int to2 = hexGrid.getBallAt(tempHex2.getBall());
-                    Ball tempBall = tempHex2.getBall();
-                    hexGrid.getHexList().get(to).setBall(selected.get(1));
-                    hexGrid.getHexList().get(to2).setBall(selected.get(0));
-                    hexGrid.getHexList().get(from).setBall(ballTo);
-                    hexGrid.getHexList().get(from2).setBall(tempBall);
-                } else {
-                    hexGrid.getHexList().get(to).setBall(selected.get(1));
-                    hexGrid.getHexList().get(from2).setBall(selected.get(0));
-                    hexGrid.getHexList().get(from).setBall(ballTo);
                 }
-                movePerformed = true;
-            } else {
-                System.out.println("Illegal Move!");
+            } else if (hexGrid.getHexList().get(to).getZ() < hexGrid.getHexList().get(from).getZ() &&
+                    hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from2).getZ()) {
+                Hex tempHex = hexGrid.getHexList().get(to);
+                Hex tempHex2 = hexGrid.getMatchedHex(new Hex(tempHex.getX() - 1, tempHex.getZ()));
+                int to2 = hexGrid.getBallAt(tempHex2.getBall());
+                Ball tempBall = tempHex2.getBall();
+                if (isLegal(from2, to2)) {
+
+                            hexGrid.getHexList().get(to).setBall(selected.get(1));
+                            hexGrid.getHexList().get(to2).setBall(selected.get(0));
+                            hexGrid.getHexList().get(from).setBall(ballTo);
+                            hexGrid.getHexList().get(from2).setBall(tempBall);
+                        }
+                    }
+
+
+            else {
+                if (isLegal(from2, to)) {
+                    if(hexGrid.getHexList().get(from).getX() == hexGrid.getHexList().get(from2).getX()) {
+                        if (hexGrid.getHexList().get(from2).getX() == hexGrid.getHexList().get(to).getX()) {
+                            hexGrid.getHexList().get(to).setBall(selected.get(1));
+                            hexGrid.getHexList().get(from2).setBall(selected.get(0));
+                            hexGrid.getHexList().get(from).setBall(ballTo);
+                        }
+                        else{
+                            System.out.println("Snake MOVE!");
+                        }
+                    }
+                    else{
+                        if (hexGrid.getHexList().get(from2).getY() == hexGrid.getHexList().get(to).getY()) {
+                            hexGrid.getHexList().get(to).setBall(selected.get(1));
+                            hexGrid.getHexList().get(from2).setBall(selected.get(0));
+                            hexGrid.getHexList().get(from).setBall(ballTo);
+                        }
+                        else{
+                            System.out.println("Snake MOVE!");
+                        }
+                    }
+
+                }
             }
+
         } else if (selected.size() == 3) {
             int from2 = hexGrid.getBallAt(selected.get(1));
             int from3 = hexGrid.getBallAt(selected.get(2));
-            if (isLegal(from3, to)) {
-                if (hexGrid.getHexList().get(to).getZ() > hexGrid.getHexList().get(from).getZ() &&
-                        hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from2).getZ()) {
-                    Hex tempHex = hexGrid.getHexList().get(to);
-                    Hex tempHex2 = hexGrid.getMatchedHex(new Hex(tempHex.getX() + 1, tempHex.getZ()));
-                    Hex tempHex3 = hexGrid.getMatchedHex(new Hex(tempHex.getX() + 2, tempHex.getZ()));
-                    int to2 = hexGrid.getBallAt(tempHex2.getBall());
-                    int to3 = hexGrid.getBallAt(tempHex3.getBall());
-                    Ball tempBall = tempHex2.getBall();
-                    Ball tempBall2 = tempHex3.getBall();
+            if (hexGrid.getHexList().get(to).getZ() > hexGrid.getHexList().get(from).getZ() &&
+                    hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from2).getZ()) {
+                Hex tempHex = hexGrid.getHexList().get(to);
+                Hex tempHex2 = hexGrid.getMatchedHex(new Hex(tempHex.getX() + 1, tempHex.getZ()));
+                Hex tempHex3 = hexGrid.getMatchedHex(new Hex(tempHex.getX() + 2, tempHex.getZ()));
+                int to2 = hexGrid.getBallAt(tempHex2.getBall());
+                int to3 = hexGrid.getBallAt(tempHex3.getBall());
+                Ball tempBall = tempHex2.getBall();
+                Ball tempBall2 = tempHex3.getBall();
+                if (isLegal(from3, to3)) {
                     hexGrid.getHexList().get(to).setBall(selected.get(2));
                     hexGrid.getHexList().get(to2).setBall(selected.get(1));
                     hexGrid.getHexList().get(to3).setBall(selected.get(0));
                     hexGrid.getHexList().get(from).setBall(ballTo);
                     hexGrid.getHexList().get(from2).setBall(tempBall);
                     hexGrid.getHexList().get(from3).setBall(tempBall2);
-                } else if (hexGrid.getHexList().get(to).getZ() < hexGrid.getHexList().get(from).getZ() &&
-                        hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from2).getZ()) {
-                    Hex tempHex = hexGrid.getHexList().get(to);
-                    Hex tempHex2 = hexGrid.getMatchedHex(new Hex(tempHex.getX() - 1, tempHex.getZ()));
-                    Hex tempHex3 = hexGrid.getMatchedHex(new Hex(tempHex.getX() - 2, tempHex.getZ()));
-                    int to2 = hexGrid.getBallAt(tempHex2.getBall());
-                    int to3 = hexGrid.getBallAt(tempHex3.getBall());
-                    Ball tempBall = tempHex2.getBall();
-                    Ball tempBall2 = tempHex3.getBall();
+                }
+            } else if (hexGrid.getHexList().get(to).getZ() < hexGrid.getHexList().get(from).getZ() &&
+                    hexGrid.getHexList().get(from).getZ() == hexGrid.getHexList().get(from2).getZ()) {
+                Hex tempHex = hexGrid.getHexList().get(to);
+                Hex tempHex2 = hexGrid.getMatchedHex(new Hex(tempHex.getX() - 1, tempHex.getZ()));
+                Hex tempHex3 = hexGrid.getMatchedHex(new Hex(tempHex.getX() - 2, tempHex.getZ()));
+                int to2 = hexGrid.getBallAt(tempHex2.getBall());
+                int to3 = hexGrid.getBallAt(tempHex3.getBall());
+                Ball tempBall = tempHex2.getBall();
+                Ball tempBall2 = tempHex3.getBall();
+                if (isLegal(from3, to3)) {
                     hexGrid.getHexList().get(to).setBall(selected.get(0));
                     hexGrid.getHexList().get(to2).setBall(selected.get(1));
                     hexGrid.getHexList().get(to3).setBall(selected.get(2));
                     hexGrid.getHexList().get(from).setBall(ballTo);
                     hexGrid.getHexList().get(from2).setBall(tempBall);
                     hexGrid.getHexList().get(from3).setBall(tempBall2);
-                } else {
-                    hexGrid.getHexList().get(to).setBall(selected.get(2));
-                    hexGrid.getHexList().get(from3).setBall(selected.get(1));
-                    hexGrid.getHexList().get(from2).setBall(selected.get(0));
-                    hexGrid.getHexList().get(from).setBall(ballTo);
                 }
-                movePerformed = true;
             } else {
-                System.out.println("Illegal move!");
+                if (isLegal(from3, to)) {
+                    if(hexGrid.getHexList().get(from3).getX() == hexGrid.getHexList().get(from2).getX()){
+                        if (hexGrid.getHexList().get(from3).getX() == hexGrid.getHexList().get(to).getX()) {
+                            hexGrid.getHexList().get(to).setBall(selected.get(2));
+                            hexGrid.getHexList().get(from3).setBall(selected.get(1));
+                            hexGrid.getHexList().get(from2).setBall(selected.get(0));
+                            hexGrid.getHexList().get(from).setBall(ballTo);
+                        }
+                        else{
+                            System.out.println("Snake MOVE!");
+                        }
+                    }
+                    else {
+                        if (hexGrid.getHexList().get(from3).getY() == hexGrid.getHexList().get(to).getY()) {
+                            hexGrid.getHexList().get(to).setBall(selected.get(2));
+                            hexGrid.getHexList().get(from3).setBall(selected.get(1));
+                            hexGrid.getHexList().get(from2).setBall(selected.get(0));
+                            hexGrid.getHexList().get(from).setBall(ballTo);
+                        } else {
+                            System.out.println("Snake MOVE!");
+                        }
+                    }
+
+                }
             }
         }
 
-
         selected.clear();
-
     }
 
     public Boolean isModified() {
@@ -216,11 +255,12 @@ public class Board {
     public boolean isLegal(int hexFrom, int hexTo) {
         boolean legal = false;
         List<Turn> tempList = turnsFinder.findTurns(hexGrid.getHexList().get(hexFrom));
-        outerloop: for (Turn turn : tempList) {
+        outerloop:
+        for (Turn turn : tempList) {
             for (int j = 0; j < turn.getMovesList().size(); j++) {
                 List<Move> tempMoveList = turn.getMovesList();
                 if (tempMoveList.get(j).getDestination() == hexGrid.getHexList().get(hexTo)
-                    && tempMoveList.get(j).getStart() == hexGrid.getHexList().get(hexFrom)) {
+                        && tempMoveList.get(j).getStart() == hexGrid.getHexList().get(hexFrom)) {
                     legal = true;
                     break outerloop;
                 }
@@ -229,43 +269,11 @@ public class Board {
         return legal;
     }
 
-    public void pushBalls(Ball ballTo){
-        organizeSelected(ballTo);
-        int from = hexGrid.getBallAt(ballTo);
-        Hex hexBallTo = hexGrid.getHexList().get(from);
-        Hex emptyNeighbor = null;
-        for(Hex neighbor: hexBallTo.getNeighbors()){
-            System.out.println("neigh" + neighbor);
-            /*if(neighbor.getBall().getColor().isBlank()){
-                emptyNeighbor = neighbor;
-            }
-
-             */
-        }
-        if(getHexGrid().getHexList().get(selected.get(0).getId()).getX()
-                == getHexGrid().getHexList().get(ballTo.getId()).getX()){
-            if(selected.size() == 2){
-                Ball tempBall = ballTo;
-                Ball tempBall2 = emptyNeighbor.getBall();
-                int from2 = hexGrid.getBallAt(tempBall2);
-                hexGrid.getHexList().get(from).setBall(tempBall2);
-                hexGrid.getHexList().get(from2).setBall(tempBall);
-            }
-        }
-    }
-
     public void setIsModified(Boolean isModified) {
         this.isModified = isModified;
     }
 
     public void setIsModified() {
         this.setIsModified(true);
-    }
-
-    public void setMovePerformed(boolean movePerformed){
-        this.movePerformed = movePerformed;
-    }
-    public boolean getMovePerformed(){
-        return movePerformed;
     }
 }
