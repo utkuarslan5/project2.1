@@ -307,18 +307,19 @@ public class Board {
 
         int to = hexGrid.getBallAt(ballTo);
         Hex hexBallTo = hexGrid.getHexList().get(to);
-        if(hex1.getX() == hexBallTo.getX() || hex1.getY() == hexBallTo.getY() ){
-
+        if(hex1.getX() == hexBallTo.getX() || hex1.getY() == hexBallTo.getY() || hex1.getZ() == hexBallTo.getZ() ){
 
             if(selected.size() == 2){
                 int dif = hex1.getZ()- hex2.getZ();
                 Hex emptyNeighbor = null;
                 if(hex1.getX() == hexBallTo.getX()) {
-                    // not eorking
                     emptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX(), hexBallTo.getZ() - dif));
                 }else if(hex1.getY() == hexBallTo.getY()){
-                    //working
                     emptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX() + dif, hexBallTo.getZ() - dif));
+                }else if(hex1.getZ() == hexBallTo.getZ()){
+                    int dif2 = hex1.getX()- hex2.getX();
+                    emptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX() - dif2, hexBallTo.getZ()));
+                    System.out.println(emptyNeighbor);
                 }
                 try {
                     Ball tempBall2 = emptyNeighbor.getBall();
@@ -355,6 +356,10 @@ public class Board {
 
                     emptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX() + 2*dif, hexBallTo.getZ() - 2*dif));
                     nonEmptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX() + dif, hexBallTo.getZ() - dif));
+                }else if(hex1.getZ() == hexBallTo.getZ()){
+                    int dif2 = hex1.getX()- hex2.getX();
+                    emptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX() - 2*dif2, hexBallTo.getZ()));
+                    nonEmptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX() - dif2, hexBallTo.getZ()));
                 }
 
                 System.out.println(nonEmptyNeighbor);
