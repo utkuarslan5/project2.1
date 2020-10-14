@@ -210,42 +210,6 @@ public class PlayState extends State {
             first = selectedList.get(0);
         }
 
-        if(selectedList.size()>1){
-            int z1 = board.getHexGrid().getHexList().get(selectedList.get(0).getId()).getZ();
-            int z2 = board.getHexGrid().getHexList().get(selectedList.get(1).getId()).getZ();
-            int y1 = board.getHexGrid().getHexList().get(selectedList.get(0).getId()).getY();
-            int y2 = board.getHexGrid().getHexList().get(selectedList.get(1).getId()).getY();
-            int x1 = board.getHexGrid().getHexList().get(selectedList.get(0).getId()).getX();
-            int x2 = board.getHexGrid().getHexList().get(selectedList.get(1).getId()).getX();
-            int x3,y3,z3;
-
-            if(z1 != z2 && y1 != y2 && x1 != x2 || ( y1 == y2 && Math.abs(x1-x2) !=1)
-                    || (x1 == x2 && Math.abs(y1-y2)!=1) || (z1 == z2 && Math.abs(y1-y2)!=1)){
-
-                for (Ball ball : selectedList) {
-                    ballButtons[ball.getId()].setChecked(false);
-                }
-                selectedList.clear();
-
-            }
-            if(selectedList.size() == 3){
-                z3 = board.getHexGrid().getHexList().get(selectedList.get(2).getId()).getZ();
-                y3 = board.getHexGrid().getHexList().get(selectedList.get(2).getId()).getY();
-                x3 = board.getHexGrid().getHexList().get(selectedList.get(2).getId()).getX();
-                if(z1 != z3 && y1 != y3 && x1 != x3 || ( y1 == y2 && y2!=y3)
-                        || (x1 == x2 && x2 != x3) || (z1 == z2 && (z2 != z3 || Math.abs(x2-x3) != 1 ) )){
-
-                    for (Ball ball : selectedList) {
-                        ballButtons[ball.getId()].setChecked(false);
-
-                    }
-                    selectedList.clear();
-
-                }
-            }
-
-        }
-
         if(curr != first){
             if (curr.getColor() != first.getColor()){
                 for (Ball ball : selectedList){
@@ -263,11 +227,6 @@ public class PlayState extends State {
         purpleLostBalls.setText("Purple Lost: " + lostP);
         blueLostBalls.setText("Blue Lost: " + lostB);
 
-        if(lostP == 6 || lostB == 6) {
-            State endState = new EndState(gsm);
-            gsm.pop();
-            gsm.push(endState);
-        }
     }
 
     @Override
