@@ -1,10 +1,12 @@
 package com.abalone.game.objects;
 
 public class Move {
+    private int moveType; // 0 - one ball, 1 - broadside, 2 - inline
     private Hex start;
     private Hex destination;
 
-    public Move(Hex start, Hex destination){
+    public Move(int moveType, Hex start, Hex destination){
+        this.moveType = moveType;
         this.start = start;
         this.destination = destination;
     }
@@ -22,5 +24,9 @@ public class Move {
 
     public Hex getDestination() {
         return destination;
+    }
+
+    public int getMoveType() {
+        return moveType;
     }
 }

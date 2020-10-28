@@ -50,7 +50,7 @@ public class TurnsFinder {
             /** Onestep Moves **/
             if(h.getBall().getColor().isBlank()){
                 foundTurns.add(new Turn(hex));
-                foundTurns.get(foundTurns.size()-1).addMove(hex,h);
+                foundTurns.get(foundTurns.size()-1).addMove(0,hex,h);
             }
 
             /** Broadside turns **/
@@ -85,8 +85,8 @@ public class TurnsFinder {
                             // Check if targets are empty
                             if (layerOneTarget.getBall().getColor().isBlank() && layerTwoTarget.getBall().getColor().isBlank()) {
                                 foundTurns.add(new Turn(hex));
-                                foundTurns.get(foundTurns.size() - 1).addMove(hex, layerOneTarget);
-                                foundTurns.get(foundTurns.size() - 1).addMove(candidates.get(1), layerTwoTarget);
+                                foundTurns.get(foundTurns.size() - 1).addMove(1,hex, layerOneTarget);
+                                foundTurns.get(foundTurns.size() - 1).addMove(1,candidates.get(1), layerTwoTarget);
 
                                 // Check third layer
                                 Hex nhhh = candidates.get(1).getNeighbors().get(neighborId);
@@ -99,9 +99,9 @@ public class TurnsFinder {
                                         // Check if third layer ball isn't  blocked
                                         if (layerThreeTarget.getBall().getColor().isBlank()) {
                                             foundTurns.add(new Turn(hex));
-                                            foundTurns.get(foundTurns.size() - 1).addMove(hex, layerOneTarget);
-                                            foundTurns.get(foundTurns.size() - 1).addMove(candidates.get(1), layerTwoTarget);
-                                            foundTurns.get(foundTurns.size() - 1).addMove(hhh, layerThreeTarget);
+                                            foundTurns.get(foundTurns.size() - 1).addMove(1,hex, layerOneTarget);
+                                            foundTurns.get(foundTurns.size() - 1).addMove(1,candidates.get(1), layerTwoTarget);
+                                            foundTurns.get(foundTurns.size() - 1).addMove(1,hhh, layerThreeTarget);
                                         }
                                     }
                                 }
@@ -132,17 +132,17 @@ public class TurnsFinder {
             if (holdForceDouble > 0 && grid.onBoard(neighbors.get(findInverseNeighborId(neighborId)))) {
                 if(!grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))).getBall().getColor().isBlank()) {
                     foundTurns.add(new Turn(hex)); // i h n = 1 1 0
-                    foundTurns.get(foundTurns.size() - 1).addMove(hex, grid.getMatchedHex(neighbors.get(neighborId))); // i h n = 1 0 1
-                    foundTurns.get(foundTurns.size() - 1).addMove(grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))), hex); // i h n = 0 1 1
+                    foundTurns.get(foundTurns.size() - 1).addMove(2,hex, grid.getMatchedHex(neighbors.get(neighborId))); // i h n = 1 0 1
+                    foundTurns.get(foundTurns.size() - 1).addMove(2,grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))), hex); // i h n = 0 1 1
                 }
             }
 
             if (holdForceTriple > 0 && grid.onBoard(neighbors.get(findInverseNeighborId(neighborId))) && grid.onBoard(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId)))) {
                 if(!grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))).getBall().getColor().isBlank() && !grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId))).getBall().getColor().isBlank()) {
                     foundTurns.add(new Turn(hex)); // ii i h n = 1 1 1 0
-                    foundTurns.get(foundTurns.size() - 1).addMove(hex, grid.getMatchedHex(neighbors.get(neighborId))); // ii i h n = 1 1 0 1
-                    foundTurns.get(foundTurns.size() - 1).addMove(grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))), hex); // ii i h n = 1 0 1 1
-                    foundTurns.get(foundTurns.size() - 1).addMove(grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId))), grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId)))); // ii i h n = 0 1 1 1
+                    foundTurns.get(foundTurns.size() - 1).addMove(2,hex, grid.getMatchedHex(neighbors.get(neighborId))); // ii i h n = 1 1 0 1
+                    foundTurns.get(foundTurns.size() - 1).addMove(2,grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))), hex); // ii i h n = 1 0 1 1
+                    foundTurns.get(foundTurns.size() - 1).addMove(2,grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId))), grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId)))); // ii i h n = 0 1 1 1
                 }
             }
 
