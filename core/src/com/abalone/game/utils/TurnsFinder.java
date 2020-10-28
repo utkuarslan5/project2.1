@@ -99,9 +99,9 @@ public class TurnsFinder {
                                         // Check if third layer ball isn't  blocked
                                         if (layerThreeTarget.getBall().getColor().isBlank()) {
                                             foundTurns.add(new Turn(hex));
-                                            foundTurns.get(foundTurns.size() - 1).addMove(1,hex, layerOneTarget);
-                                            foundTurns.get(foundTurns.size() - 1).addMove(1,candidates.get(1), layerTwoTarget);
-                                            foundTurns.get(foundTurns.size() - 1).addMove(1,hhh, layerThreeTarget);
+                                            foundTurns.get(foundTurns.size() - 1).addMove(2,hex, layerOneTarget);
+                                            foundTurns.get(foundTurns.size() - 1).addMove(2,candidates.get(1), layerTwoTarget);
+                                            foundTurns.get(foundTurns.size() - 1).addMove(2,hhh, layerThreeTarget);
                                         }
                                     }
                                 }
@@ -132,8 +132,8 @@ public class TurnsFinder {
             if (holdForceDouble > 0 && grid.onBoard(neighbors.get(findInverseNeighborId(neighborId)))) {
                 if(!grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))).getBall().getColor().isBlank()) {
                     foundTurns.add(new Turn(hex)); // i h n = 1 1 0
-                    foundTurns.get(foundTurns.size() - 1).addMove(2,hex, grid.getMatchedHex(neighbors.get(neighborId))); // i h n = 1 0 1
-                    foundTurns.get(foundTurns.size() - 1).addMove(2,grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))), hex); // i h n = 0 1 1
+                    foundTurns.get(foundTurns.size() - 1).addMove(1,hex, grid.getMatchedHex(neighbors.get(neighborId))); // i h n = 1 0 1
+                    foundTurns.get(foundTurns.size() - 1).addMove(1,grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))), hex); // i h n = 0 1 1
                 }
             }
 

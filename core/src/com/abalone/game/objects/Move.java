@@ -1,7 +1,7 @@
 package com.abalone.game.objects;
 
 public class Move {
-    private int moveType; // 0 - one ball, 1 - broadside, 2 - inline
+    private int moveType; // 0 - one ball, 1 - two balls, 2 - three balls
     private Hex start;
     private Hex destination;
 

@@ -29,10 +29,10 @@ public class Turn {
             r = "Moves (One ball) ";
         }
         else if(this.turnType == 1){
-            r = "Moves (Broadside) ";
+            r = "Moves (Two balls) ";
         }
         else{
-            r = "Moves (In-line) ";
+            r = "Moves (Three balls) ";
         }
 
         for(Move m : movesList){
