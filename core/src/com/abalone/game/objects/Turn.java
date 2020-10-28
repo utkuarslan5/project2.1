@@ -38,4 +38,8 @@ public class Turn {
     public List<Move> getMovesList() {
         return movesList;
     }
+
+    public int getTurnType() {
+        return turnType;
+    }
 }
