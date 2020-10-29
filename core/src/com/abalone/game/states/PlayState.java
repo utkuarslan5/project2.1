@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlayState extends State {
     private SpriteBatch spriteBatch;
@@ -150,12 +151,14 @@ public class PlayState extends State {
             ballButton.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
                     Ball ball = board.getHexGrid().getHexList().get(index).getBall();
-                    System.out.println("Ball " + index + " clicked " + ball.getColor() + " x:" + hex.getX() + " y:" + hex.getY() + " z:" + hex.getZ());
+                    System.out.println("Ball " + ball.getId() + " clicked " + ball.getColor() + " x:" + hex.getX() + " y:" + hex.getY() + " z:" + hex.getZ());
                     // doesn't allow empty balls to be selected
                     if(!ball.getColor().isBlank()) {
                         if(ball.getColor().isBlue() == (colorSelectPlayer.getCheckedIndex() == 0) ||
                                 (ball.getColor().isPurple() == (colorSelectPlayer.getCheckedIndex() == 1)) ) {
-                            board.selectBall(ball);
+
+                            //ONLY ALLOWS NEIGHBOURS TO BE SELECTED IN A LINE
+                            alignSelection(hex,ball,index);
                         }
                         else if(board.getSelected().size()>1){
                             ballButtons[index].setChecked(false);
@@ -304,6 +307,74 @@ public class PlayState extends State {
         }
         else {
             purplePlayer.setChecked(true);
+        }
+    }
+
+    public void alignSelection(Hex hex, Ball ball, int index){
+        board.selectBall(ball);
+        if(board.getSelected().size()>1 && board.getSelected().size()<4) {
+            int theBall = board.getHexGrid().getBallAt(board.getSelected().get(board.getSelected().size()-2));
+            Hex tempHex = board.getHexGrid().getHexList().get(theBall);
+
+            boolean added = false;
+            //current hex that's selected
+            int x1 = hex.getX();
+            int y1 = hex.getY();
+            int z1 = hex.getZ();
+            int x2,y2,z2;
+
+            //the last selected hex
+            int tempx1 = tempHex.getX();
+            int tempy1 = tempHex.getY();
+            int tempz1 = tempHex.getZ();
+
+            //first selected hex
+            Ball first = board.getSelected().get(0);
+            int firstint = board.getHexGrid().getBallAt(first);
+            Hex firstHex = board.getHexGrid().getHexList().get(firstint);
+            int fx1 = firstHex.getX();
+            int fy1 = firstHex.getY();
+            int fz1 = firstHex.getZ();
+
+            List<Hex> neighb = tempHex.getNeighbors();
+            for (Hex theHex : neighb) {
+                x2 = theHex.getX();
+                y2 = theHex.getY();
+                z2 = theHex.getZ();
+                if(x1==x2 && y1 == y2 && z1== z2){ //if it's a neighbour
+                    if(board.getSelected().size() == 3){
+                        // check if they are in a line
+                        if( (x2 == fx1 && x2 == tempx1) || (y2 == fy1 && y2 == tempy1) || (z2 == fz1 && z2 == tempz1)){
+                            added = true;
+                            break;
+                        }
+                    }else{
+                        //add directly if size 2
+                        added = true;
+                        break;
+                    }
+                }
+            }
+            //if nothing found from neighbours skip to the other (first) selected ball's neighbours
+            if(board.getSelected().size()==3 && !added){
+                List<Hex> neighb2 = firstHex.getNeighbors();
+                for (Hex theHex : neighb2) {
+                    int xs3 = theHex.getX();
+                    int ys3 = theHex.getY();
+                    int zs3 = theHex.getZ();
+                    if(x1==xs3 && y1 == ys3 && z1== zs3 && // if neighbour and one of the following is true
+                            ((tempx1 == xs3 && xs3 == fx1)
+                                    || (tempy1 == ys3 && ys3 == fy1)
+                                    || (tempz1 == zs3 && zs3 == fz1))){
+                        added = true;
+                        break;
+                    }
+                }
+            }
+            if(!added){ //if it can't be added remove it
+                board.removeBall(ball);
+                ballButtons[index].setChecked(false);
+            }
         }
     }
 }

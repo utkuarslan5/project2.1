@@ -98,9 +98,12 @@ public class Board {
                 }
             }
         }
+        /*
         for (int i = 0; i < selected.size(); i++) {
             System.out.println(selected.get(i).getId());
         }
+
+         */
     }
 
     //TODO: rewrite the move ball so it takes in account the whole list of selected balls
@@ -319,7 +322,7 @@ public class Board {
                 }else if(hex1.getZ() == hexBallTo.getZ()){
                     int dif2 = hex1.getX()- hex2.getX();
                     emptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX() - dif2, hexBallTo.getZ()));
-                    System.out.println(emptyNeighbor);
+                    //System.out.println(emptyNeighbor);
                 }
                 try {
                     Ball tempBall2 = emptyNeighbor.getBall();
@@ -362,7 +365,7 @@ public class Board {
                     nonEmptyNeighbor = hexGrid.getMatchedHex(new Hex(hexBallTo.getX() - dif2, hexBallTo.getZ()));
                 }
 
-                System.out.println(nonEmptyNeighbor);
+                //System.out.println(nonEmptyNeighbor);
 
                 try {
                     if(!nonEmptyNeighbor.getBall().getColor().isBlank()) {
