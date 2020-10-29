@@ -103,12 +103,12 @@ public class SettingsState extends State {
 
     @Override
     public void update(float dt) {
+        handleInput();
         if (returnButton.isChecked()){
             State MenuState = new MenuState(gsm);
             gsm.pop();
             gsm.push(MenuState);
         }
-        handleInput();
     }
 
     @Override
