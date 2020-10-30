@@ -6,8 +6,9 @@ import java.util.List;
 public class Node<T> {
 
     private T stateData = null;
-    private List<Node<T>> children = new ArrayList<>();
+    private final List<Node<T>> children = new ArrayList<>();
     private Node<T> parent = null;
+    private int depth;
 
     public Node(T stateData) {
         this.stateData = stateData;
