@@ -38,6 +38,7 @@ public class PlayState extends State {
     private Label blueLostBalls;
     public static int lostP;
     public static int lostB;
+    private List<Hex> allDestinations = new ArrayList<>();
 
 
     private TextureRegionDrawable ballTextureRegionDrawableBlue;
@@ -161,6 +162,7 @@ public class PlayState extends State {
                                 (ball.getColor().isPurple() == (colorSelectPlayer.getCheckedIndex() == 1)) ) {
 
                             //ONLY ALLOWS NEIGHBOURS TO BE SELECTED IN A LINE
+                            allDestinations.clear();
                             alignSelection(hex,ball,index);
                             highlightMoves();
                         }
