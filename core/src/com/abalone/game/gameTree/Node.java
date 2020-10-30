@@ -1,45 +1,70 @@
 package com.abalone.game.gameTree;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Node<T> {
+public class Node<BoardState> {
 
-    private T stateData = null;
-    private final List<Node<T>> children = new ArrayList<>();
-    private Node<T> parent = null;
-    private int depth;
+    private final BoardState stateData;
+    private List<Node<BoardState>> children;
+    private Node<BoardState> parent;
+    private byte depth;
 
-    public Node(T stateData) {
+
+    public Node(BoardState stateData) {
         this.stateData = stateData;
     }
 
-    public void addChild(Node<T> child){
+    public Node(BoardState stateData, byte depth) {
+        this.stateData = stateData;
+        this.depth = depth;
+    }
+
+    public Node(BoardState stateData, Node<BoardState> parent, byte depth) {
+        this.stateData = stateData;
+        this.parent = parent;
+        this.depth = depth;
+    }
+
+    public Node(BoardState stateData, List<Node<BoardState>> children, Node<BoardState> parent, byte depth) {
+        this.stateData = stateData;
+        this.children = children;
+        this.parent = parent;
+        this.depth = depth;
+    }
+
+    public void addChild(Node<BoardState> child) {
         child.setParent(this);
         this.children.add(child);
     }
 
-    public Node<T> getChild(int i){
+    public void addChildren(List<Node<BoardState>> children) {
+        this.children = children;
+        for (Node<BoardState> child : this.children) {
+            child.setParent(this);
+        }
+    }
+
+    public boolean isChildOf(Node<BoardState> child) {
+        return children.contains(child);
+    }
+
+    public Node<BoardState> getChild(int i) {
         return children.get(i);
     }
 
-    public List<Node<T>> getChildren() {
+    public List<Node<BoardState>> getChildren() {
         return children;
     }
 
-    public T getStateData() {
+    public BoardState getStateData() {
         return stateData;
     }
 
-    public void setStateData(T stateData){
-        this.stateData = stateData;
-    }
-
-    public void setParent(Node<T> parent){
-        this.parent = parent;
-    }
-
-    public Node<T> getParent(){
+    public Node<BoardState> getParent() {
         return parent;
+    }
+
+    public void setParent(Node<BoardState> parent) {
+        this.parent = parent;
     }
 }
