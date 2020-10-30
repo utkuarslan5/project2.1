@@ -2,10 +2,8 @@ package com.abalone.game.states;
 
 import com.abalone.game.AbaloneGame;
 import com.abalone.game.managers.GameStateManager;
-import com.abalone.game.objects.Ball;
-import com.abalone.game.objects.Board;
-import com.abalone.game.objects.Hex;
-import com.abalone.game.objects.HexGrid;
+import com.abalone.game.objects.*;
+import com.abalone.game.utils.TurnsFinder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -48,6 +46,8 @@ public class PlayState extends State {
     private TextureRegionDrawable ballTexturePressedRegionDrawablePurple;
     private TextureRegionDrawable ballTextureRegionDrawableBlank;
     private TextureRegionDrawable ballTexturePressedRegionDrawableBlank;
+    private TextureRegionDrawable ballTextureRegionDrawableBlankDark;
+    private TextureRegionDrawable ballTexturePressedRegionDrawableBlankDark;
 
     private ImageButton returnButton;
 
@@ -119,6 +119,9 @@ public class PlayState extends State {
         ballTextureRegionDrawableBlank = new TextureRegionDrawable(new Texture(Gdx.files.internal("blank.png")));
         ballTexturePressedRegionDrawableBlank = new TextureRegionDrawable(new Texture(Gdx.files.internal("blank.png")));
 
+        ballTextureRegionDrawableBlankDark = new TextureRegionDrawable(new Texture(Gdx.files.internal("blankdark.png")));
+        ballTexturePressedRegionDrawableBlankDark = new TextureRegionDrawable(new Texture(Gdx.files.internal("blankdark.png")));
+
         // TODO: adapt the loop and conditions to the the hexgrid (and not the temporary array)
         ArrayList<Hex> hexList = (ArrayList<Hex>) board.getHexGrid().getHexList();
         ballButtons = new ImageButton[61];
@@ -159,6 +162,7 @@ public class PlayState extends State {
 
                             //ONLY ALLOWS NEIGHBOURS TO BE SELECTED IN A LINE
                             alignSelection(hex,ball,index);
+                            highlightMoves();
                         }
                         else if(board.getSelected().size()>1){
                             ballButtons[index].setChecked(false);
@@ -180,6 +184,7 @@ public class PlayState extends State {
                             board.move(ball);
                             if(board.getMovePerformed()) {
                                 switchTurnPlayer();
+                                allDestinations.clear();
                                 board.setMovePerformed(false);
                             }
                         }
@@ -269,11 +274,17 @@ public class PlayState extends State {
                 ballButtons[i].getStyle().imageUp = ballTextureRegionDrawablePurple;
                 ballButtons[i].getStyle().imageDown = ballTextureRegionDrawablePurple;
                 ballButtons[i].getStyle().imageChecked = ballTexturePressedRegionDrawablePurple;
-            }
-            else {
-                ballButtons[i].getStyle().imageUp = ballTextureRegionDrawableBlank;
-                ballButtons[i].getStyle().imageDown = ballTextureRegionDrawableBlank;
-                ballButtons[i].getStyle().imageChecked = ballTextureRegionDrawableBlank;
+            }else{
+                if(allDestinations.contains(hex)) {
+                    ballButtons[i].getStyle().imageUp = ballTextureRegionDrawableBlankDark;
+                    ballButtons[i].getStyle().imageDown = ballTextureRegionDrawableBlankDark;
+                    ballButtons[i].getStyle().imageChecked = ballTextureRegionDrawableBlankDark;
+
+                }else{
+                    ballButtons[i].getStyle().imageUp = ballTextureRegionDrawableBlank;
+                    ballButtons[i].getStyle().imageDown = ballTextureRegionDrawableBlank;
+                    ballButtons[i].getStyle().imageChecked = ballTextureRegionDrawableBlank;
+                }
             }
             stage.addActor(ballButtons[i]);
             temp = y;
@@ -374,6 +385,41 @@ public class PlayState extends State {
             if(!added){ //if it can't be added remove it
                 board.removeBall(ball);
                 ballButtons[index].setChecked(false);
+            }
+        }
+    }
+
+    public void highlightMoves(){
+
+        TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
+        List<List<Turn>> tempList = new ArrayList<>();
+        List<Hex> startHexes = new ArrayList<>();
+        List<Hex> tempdest = new ArrayList<>();
+        List<Hex> inselected = new ArrayList<>();
+        for (Ball allBall : board.getSelected()) {
+            tempList.add(turnsFinder.findTurns(board.getHexGrid().getHexList().get(allBall.getId())));
+            int temp = board.getHexGrid().getBallAt(allBall);
+                inselected.add(board.getHexGrid().getHexList().get(temp));
+        }
+
+        for (List<Turn> mainturns : tempList) {
+            assert mainturns != null;
+            if (mainturns != null) {
+                for (Turn turn : mainturns) {
+                    if (turn.getTurnType() + 1 == board.getSelected().size()) {
+                        List<Move> tempMoveList = turn.getMovesList();
+                        for (int j = 0; j < turn.getMovesList().size(); j++) {
+                            startHexes.add(tempMoveList.get(j).getStart());
+                            tempdest.add(tempMoveList.get(j).getDestination());
+                        }
+                        if (inselected.containsAll(startHexes)) {
+                            allDestinations.addAll(tempdest);
+                        } else {
+                            startHexes.clear();
+                            tempdest.clear();
+                        }
+                    }
+                }
             }
         }
     }
