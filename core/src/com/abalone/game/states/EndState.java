@@ -27,6 +27,7 @@ public class EndState extends State {
     private Image background;
     private TextButton mainMenu;
     private TextButton retry;
+
     protected EndState(GameStateManager ourGsm) {
         super(ourGsm);
     }
@@ -47,11 +48,11 @@ public class EndState extends State {
         retry.getColor().set(Color.LIGHT_GRAY);
         Texture img1 = new Texture("PurpleWon.png");
         Texture img2 = new Texture("BlueWon.png");
-        if(PlayState.lostB == 6){
+        if (PlayState.lostB == 6) {
             background = new Image(img1);
             background.setWidth(AbaloneGame.width);
             background.setHeight(AbaloneGame.height);
-        } else if(PlayState.lostP == 6){
+        } else if (PlayState.lostP == 6) {
             background = new Image(img2);
             background.setWidth(AbaloneGame.width);
             background.setHeight(AbaloneGame.height);
@@ -71,7 +72,7 @@ public class EndState extends State {
         table.add(mainMenu).width(200);
         table.setTransform(true);
         table.bottom();
-        table.setPosition(1/8, 1/300);
+        table.setPosition(1 / 8, 1 / 300);
         table.row().pad(0, 0, 300, 0);
         table.add(retry).fillX().uniformX();
         table.row();
@@ -87,11 +88,11 @@ public class EndState extends State {
 
     @Override
     public void handleInput() {
-        if(mainMenu.isPressed()){
+        if (mainMenu.isPressed()) {
             State mainMenu = new MenuState(gsm);
             gsm.pop();
             gsm.push(mainMenu);
-        }else if(retry.isPressed()){
+        } else if (retry.isPressed()) {
             State playState = new PlayState(gsm);
             gsm.pop();
             gsm.push(playState);

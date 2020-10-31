@@ -1,7 +1,9 @@
 package com.abalone.game.gameTree;
+
 import com.abalone.game.objects.HexGrid;
 import com.abalone.game.objects.Turn;
 import com.abalone.game.utils.TurnsFinder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class BoardState {
     // creates a new board state after a move is made
     // is called in line 24 in Tree class
     // if you run this first time, "newMoves" will be all legal moves from the beginning
-    public BoardState getState(Turn newMove){
+    public BoardState getState(Turn newMove) {
 
         List<List<Turn>> newLegalMoves = new ArrayList<>();
         List<Turn> movesMade = new ArrayList<>();
@@ -39,7 +41,7 @@ public class BoardState {
 
         // Since the legal moves are stored in a list of lists we have to loop through it twice to get each legal move
         // each legal move is stored in a list available, each list available is stored in the list legalMoves
-        for(int i = 0; i < legalMoves.size(); i++) {
+        for (int i = 0; i < legalMoves.size(); i++) {
             List<Turn> available = legalMoves.get(i);
 
             for (int j = 0; j < available.size(); j++) {

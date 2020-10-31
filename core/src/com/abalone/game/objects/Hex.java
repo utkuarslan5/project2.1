@@ -8,12 +8,14 @@ import java.util.List;
 public class Hex {
     private int x;
     private int z;
-    private static final List<Hex> directions = new ArrayList<Hex>(){{add(new Hex(0, 1));
+    private static final List<Hex> directions = new ArrayList<Hex>() {{
+        add(new Hex(0, 1));
         add(new Hex(0, -1));
         add(new Hex(1, 0));
         add(new Hex(-1, 0));
         add(new Hex(-1, 1));
-    add(new Hex(1, -1));}};
+        add(new Hex(1, -1));
+    }};
     private Ball ball = null;
 
     public Hex(int x, int z) {
@@ -26,7 +28,7 @@ public class Hex {
         this.z += b.z;
     }
 
-    public void subtract(Hex b){
+    public void subtract(Hex b) {
         this.x -= b.x;
         this.z -= b.z;
     }

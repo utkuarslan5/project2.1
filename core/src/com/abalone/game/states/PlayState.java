@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -61,7 +60,7 @@ public class PlayState extends State {
         skin = new Skin(Gdx.files.internal("cloud-form/skin/cloud-form-ui.json"));
         spriteBatch = new SpriteBatch();
         board = new Board();
-        board.getBoardImage().setPosition(AbaloneGame.width/2f-(board.getBoardImage().getWidth()/2),AbaloneGame.height/2f- (board.getBoardImage().getHeight()/2));
+        board.getBoardImage().setPosition(AbaloneGame.width / 2f - (board.getBoardImage().getWidth() / 2), AbaloneGame.height / 2f - (board.getBoardImage().getHeight() / 2));
         Viewport viewport = new FitViewport(AbaloneGame.width, AbaloneGame.height, AbaloneGame.cam);
         viewport.apply();
         FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("Prime-Regular.ttf"));
@@ -74,7 +73,7 @@ public class PlayState extends State {
 
         returnButton = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("returnArrow.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("returnArrowPressed.png"))));
-        returnButton.getImage().setScale(1/18f);
+        returnButton.getImage().setScale(1 / 18f);
         returnButton.setScale(0.5f);
         returnButton.setPosition(15, 730);
 
@@ -83,16 +82,16 @@ public class PlayState extends State {
         background.setWidth(AbaloneGame.width);
         background.setHeight(AbaloneGame.height);
 
-        bluePlayer = new CheckBox("Blue", skin,"radio");
-        bluePlayer.setPosition(1000,600);
+        bluePlayer = new CheckBox("Blue", skin, "radio");
+        bluePlayer.setPosition(1000, 600);
         bluePlayer.setTransform(true);
         bluePlayer.setScale(1.5f);
         bluePlayer.getLabel().setFontScale(0.5f);
         bluePlayer.getStyle().fontColor = Color.WHITE;
         bluePlayer.setChecked(true);
 
-        purplePlayer = new CheckBox("Purple", skin,"radio");
-        purplePlayer.setPosition(991,550);
+        purplePlayer = new CheckBox("Purple", skin, "radio");
+        purplePlayer.setPosition(991, 550);
         purplePlayer.setTransform(true);
         purplePlayer.setScale(1.5f);
         purplePlayer.getLabel().setFontScale(0.5f);
@@ -106,10 +105,10 @@ public class PlayState extends State {
         purpleLostBalls = new Label("Purple Lost: " + lostP, skin);
         purpleLostBalls.setFontScale(1.5f);
         purpleLostBalls.getStyle().fontColor = Color.WHITE;
-        purpleLostBalls.setPosition(530,50);
+        purpleLostBalls.setPosition(530, 50);
         blueLostBalls = new Label("Blue Lost: " + lostB, skin);
         blueLostBalls.setFontScale(1.5f);
-        blueLostBalls.setPosition(550,700);
+        blueLostBalls.setPosition(550, 700);
 
         ballTextureRegionDrawableBlue = new TextureRegionDrawable(new Texture(Gdx.files.internal("blue.png")));
         ballTexturePressedRegionDrawableBlue = new TextureRegionDrawable(new Texture(Gdx.files.internal("blueClicked.png")));
@@ -126,22 +125,20 @@ public class PlayState extends State {
         // TODO: adapt the loop and conditions to the the hexgrid (and not the temporary array)
         ArrayList<Hex> hexList = (ArrayList<Hex>) board.getHexGrid().getHexList();
         ballButtons = new ImageButton[61];
-        for(int iHex = 0; iHex < hexList.size(); iHex++) {
+        for (int iHex = 0; iHex < hexList.size(); iHex++) {
             final int index = iHex;
             final Hex hex = hexList.get(iHex);
 
             TextureRegionDrawable ballTextureRegionDrawable;
             TextureRegionDrawable ballTexturePressedRegionDrawable;
 
-            if(hexList.get(iHex).getBall() != null && hexList.get(iHex).getBall().getColor().isBlue()) {
+            if (hexList.get(iHex).getBall() != null && hexList.get(iHex).getBall().getColor().isBlue()) {
                 ballTextureRegionDrawable = ballTextureRegionDrawableBlue;
                 ballTexturePressedRegionDrawable = ballTexturePressedRegionDrawableBlue;
-            }
-            else if(hexList.get(iHex).getBall() != null && hexList.get(iHex).getBall().getColor().isPurple()) {
+            } else if (hexList.get(iHex).getBall() != null && hexList.get(iHex).getBall().getColor().isPurple()) {
                 ballTextureRegionDrawable = ballTextureRegionDrawablePurple;
                 ballTexturePressedRegionDrawable = ballTexturePressedRegionDrawablePurple;
-            }
-            else {
+            } else {
                 ballTextureRegionDrawable = ballTextureRegionDrawableBlank;
                 ballTexturePressedRegionDrawable = ballTexturePressedRegionDrawableBlank;
             }
@@ -157,34 +154,31 @@ public class PlayState extends State {
                     Ball ball = board.getHexGrid().getHexList().get(index).getBall();
                     System.out.println("Ball " + ball.getId() + " clicked " + ball.getColor() + " x:" + hex.getX() + " y:" + hex.getY() + " z:" + hex.getZ());
                     // doesn't allow empty balls to be selected
-                    if(!ball.getColor().isBlank()) {
-                        if(ball.getColor().isBlue() == (colorSelectPlayer.getCheckedIndex() == 0) ||
-                                (ball.getColor().isPurple() == (colorSelectPlayer.getCheckedIndex() == 1)) ) {
+                    if (!ball.getColor().isBlank()) {
+                        if (ball.getColor().isBlue() == (colorSelectPlayer.getCheckedIndex() == 0) ||
+                                (ball.getColor().isPurple() == (colorSelectPlayer.getCheckedIndex() == 1))) {
 
                             //ONLY ALLOWS NEIGHBOURS TO BE SELECTED IN A LINE
                             allDestinations.clear();
-                            alignSelection(hex,ball,index);
+                            alignSelection(hex, ball, index);
                             highlightMoves();
-                        }
-                        else if(board.getSelected().size()>1){
+                        } else if (board.getSelected().size() > 1) {
                             ballButtons[index].setChecked(false);
                             System.out.println("PUSH NEEDED");
                             board.pushBalls(ball);
-                            if(board.getMovePerformed()) {
+                            if (board.getMovePerformed()) {
                                 switchTurnPlayer();
                                 board.setMovePerformed(false);
                             }
-                        }
-                        else {
+                        } else {
                             ballButtons[index].setChecked(false);
 
                         }
-                    }
-                    else if(ball.getColor().isBlank()) {
+                    } else if (ball.getColor().isBlank()) {
                         board.setIsModified();
-                        if(board.getSelected().size() > 0) {
+                        if (board.getSelected().size() > 0) {
                             board.move(ball);
-                            if(board.getMovePerformed()) {
+                            if (board.getMovePerformed()) {
                                 switchTurnPlayer();
                                 allDestinations.clear();
                                 board.setMovePerformed(false);
@@ -206,7 +200,7 @@ public class PlayState extends State {
         assert selectedList != null;
 
         // doesn't allow more than 3 balls to be selected
-        if(selectedList.size() > 3) {
+        if (selectedList.size() > 3) {
             for (Ball ball : selectedList) {
                 ballButtons[ball.getId()].setChecked(false);
             }
@@ -215,21 +209,21 @@ public class PlayState extends State {
 
         Ball curr = null;
         Ball first = null;
-        if(selectedList.size()!=0){
+        if (selectedList.size() != 0) {
             curr = selectedList.get(selectedList.size() - 1);
             first = selectedList.get(0);
         }
 
-        if(curr != first){
-            if (curr.getColor() != first.getColor()){
-                for (Ball ball : selectedList){
+        if (curr != first) {
+            if (curr.getColor() != first.getColor()) {
+                for (Ball ball : selectedList) {
                     ballButtons[ball.getId()].setChecked(false);
                 }
                 selectedList.clear();
             }
         }
 
-        if (returnButton.isChecked()){
+        if (returnButton.isChecked()) {
             State MenuState = new MenuState(gsm);
             gsm.pop();
             gsm.push(MenuState);
@@ -237,7 +231,7 @@ public class PlayState extends State {
         purpleLostBalls.setText("Purple Lost: " + lostP);
         blueLostBalls.setText("Blue Lost: " + lostB);
 
-        if(lostP == 6 || lostB == 6) {
+        if (lostP == 6 || lostB == 6) {
             State endState = new EndState(gsm);
             gsm.pop();
             gsm.push(endState);
@@ -256,33 +250,32 @@ public class PlayState extends State {
         int c = 1;
         float temp = -4;
 
-        for(int i = 0; i < 61; i++) {
+        for (int i = 0; i < 61; i++) {
             Hex hex = hexList.get(i);
             float x = hex.getX();
             float y = hex.getZ();
-            if(temp != y) {
+            if (temp != y) {
                 c++;
             }
             x += c * 0.5;
-            ballButtons[i].setBounds((x*53 +445),y*48 +380,43,43);
+            ballButtons[i].setBounds((x * 53 + 445), y * 48 + 380, 43, 43);
 
             // Update ballButton color
-            if(hex.getBall() != null && hex.getBall().getColor().isBlue()) {
+            if (hex.getBall() != null && hex.getBall().getColor().isBlue()) {
                 ballButtons[i].getStyle().imageUp = ballTextureRegionDrawableBlue;
                 ballButtons[i].getStyle().imageDown = ballTextureRegionDrawableBlue;
                 ballButtons[i].getStyle().imageChecked = ballTexturePressedRegionDrawableBlue;
-            }
-            else if(hex.getBall() != null && hex.getBall().getColor().isPurple()) {
+            } else if (hex.getBall() != null && hex.getBall().getColor().isPurple()) {
                 ballButtons[i].getStyle().imageUp = ballTextureRegionDrawablePurple;
                 ballButtons[i].getStyle().imageDown = ballTextureRegionDrawablePurple;
                 ballButtons[i].getStyle().imageChecked = ballTexturePressedRegionDrawablePurple;
-            }else{
-                if(allDestinations.contains(hex)) {
+            } else {
+                if (allDestinations.contains(hex)) {
                     ballButtons[i].getStyle().imageUp = ballTextureRegionDrawableBlankDark;
                     ballButtons[i].getStyle().imageDown = ballTextureRegionDrawableBlankDark;
                     ballButtons[i].getStyle().imageChecked = ballTextureRegionDrawableBlankDark;
 
-                }else{
+                } else {
                     ballButtons[i].getStyle().imageUp = ballTextureRegionDrawableBlank;
                     ballButtons[i].getStyle().imageDown = ballTextureRegionDrawableBlank;
                     ballButtons[i].getStyle().imageChecked = ballTextureRegionDrawableBlank;
@@ -312,21 +305,20 @@ public class PlayState extends State {
     }
 
     public void switchTurnPlayer() {
-        for(int i = 0; i < 61 ; i++) {
+        for (int i = 0; i < 61; i++) {
             ballButtons[i].setChecked(false);
         }
-        if(purplePlayer.isChecked()) {
+        if (purplePlayer.isChecked()) {
             bluePlayer.setChecked(true);
-        }
-        else {
+        } else {
             purplePlayer.setChecked(true);
         }
     }
 
-    public void alignSelection(Hex hex, Ball ball, int index){
+    public void alignSelection(Hex hex, Ball ball, int index) {
         board.selectBall(ball);
-        if(board.getSelected().size()>1 && board.getSelected().size()<4) {
-            int theBall = board.getHexGrid().getBallAt(board.getSelected().get(board.getSelected().size()-2));
+        if (board.getSelected().size() > 1 && board.getSelected().size() < 4) {
+            int theBall = board.getHexGrid().getBallAt(board.getSelected().get(board.getSelected().size() - 2));
             Hex tempHex = board.getHexGrid().getHexList().get(theBall);
 
             boolean added = false;
@@ -334,7 +326,7 @@ public class PlayState extends State {
             int x1 = hex.getX();
             int y1 = hex.getY();
             int z1 = hex.getZ();
-            int x2,y2,z2;
+            int x2, y2, z2;
 
             //the last selected hex
             int tempx1 = tempHex.getX();
@@ -354,14 +346,14 @@ public class PlayState extends State {
                 x2 = theHex.getX();
                 y2 = theHex.getY();
                 z2 = theHex.getZ();
-                if(x1==x2 && y1 == y2 && z1== z2){ //if it's a neighbour
-                    if(board.getSelected().size() == 3){
+                if (x1 == x2 && y1 == y2 && z1 == z2) { //if it's a neighbour
+                    if (board.getSelected().size() == 3) {
                         // check if they are in a line
-                        if( (x2 == fx1 && x2 == tempx1) || (y2 == fy1 && y2 == tempy1) || (z2 == fz1 && z2 == tempz1)){
+                        if ((x2 == fx1 && x2 == tempx1) || (y2 == fy1 && y2 == tempy1) || (z2 == fz1 && z2 == tempz1)) {
                             added = true;
                             break;
                         }
-                    }else{
+                    } else {
                         //add directly if size 2
                         added = true;
                         break;
@@ -369,30 +361,29 @@ public class PlayState extends State {
                 }
             }
             //if nothing found from neighbours skip to the other (first) selected ball's neighbours
-            if(board.getSelected().size()==3 && !added){
+            if (board.getSelected().size() == 3 && !added) {
                 List<Hex> neighb2 = firstHex.getNeighbors();
                 for (Hex theHex : neighb2) {
                     int xs3 = theHex.getX();
                     int ys3 = theHex.getY();
                     int zs3 = theHex.getZ();
-                    if(x1==xs3 && y1 == ys3 && z1== zs3 && // if neighbour and one of the following is true
+                    if (x1 == xs3 && y1 == ys3 && z1 == zs3 && // if neighbour and one of the following is true
                             ((tempx1 == xs3 && xs3 == fx1)
                                     || (tempy1 == ys3 && ys3 == fy1)
-                                    || (tempz1 == zs3 && zs3 == fz1))){
+                                    || (tempz1 == zs3 && zs3 == fz1))) {
                         added = true;
                         break;
                     }
                 }
             }
-            if(!added){ //if it can't be added remove it
+            if (!added) { //if it can't be added remove it
                 board.removeBall(ball);
                 ballButtons[index].setChecked(false);
             }
         }
     }
 
-    public void highlightMoves(){
-
+    public void highlightMoves() {
         TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
         List<List<Turn>> tempList = new ArrayList<>();
         List<Hex> startHexes = new ArrayList<>();
@@ -401,25 +392,23 @@ public class PlayState extends State {
         for (Ball allBall : board.getSelected()) {
             tempList.add(turnsFinder.findTurns(board.getHexGrid().getHexList().get(allBall.getId())));
             int temp = board.getHexGrid().getBallAt(allBall);
-                inselected.add(board.getHexGrid().getHexList().get(temp));
+            inselected.add(board.getHexGrid().getHexList().get(temp));
         }
 
         for (List<Turn> mainturns : tempList) {
             assert mainturns != null;
-            if (mainturns != null) {
-                for (Turn turn : mainturns) {
-                    if (turn.getTurnType() + 1 == board.getSelected().size()) {
-                        List<Move> tempMoveList = turn.getMovesList();
-                        for (int j = 0; j < turn.getMovesList().size(); j++) {
-                            startHexes.add(tempMoveList.get(j).getStart());
-                            tempdest.add(tempMoveList.get(j).getDestination());
-                        }
-                        if (inselected.containsAll(startHexes)) {
-                            allDestinations.addAll(tempdest);
-                        } else {
-                            startHexes.clear();
-                            tempdest.clear();
-                        }
+            for (Turn turn : mainturns) {
+                if (turn.getTurnType() + 1 == board.getSelected().size()) {
+                    List<Move> tempMoveList = turn.getMovesList();
+                    for (int j = 0; j < turn.getMovesList().size(); j++) {
+                        startHexes.add(tempMoveList.get(j).getStart());
+                        tempdest.add(tempMoveList.get(j).getDestination());
+                    }
+                    if (inselected.containsAll(startHexes)) {
+                        allDestinations.addAll(tempdest);
+                    } else {
+                        startHexes.clear();
+                        tempdest.clear();
                     }
                 }
             }

@@ -3,6 +3,7 @@ package com.abalone.game.gameTree;
 import com.abalone.game.objects.Board;
 import com.abalone.game.objects.Hex;
 import com.abalone.game.utils.Color;
+
 import java.sql.Timestamp;
 import java.util.List;
 

@@ -15,7 +15,7 @@ public class TurnsFinderTest {
     private HexGrid hexGrid;
     private TurnsFinder turnsFinder;
 
-    public TurnsFinderTest(){
+    public TurnsFinderTest() {
         this.board = new Board(0);
         this.hexGrid = board.getHexGrid();
         this.turnsFinder = new TurnsFinder(hexGrid);
@@ -33,10 +33,10 @@ public class TurnsFinderTest {
         }
 
         // Find all turns
-        for(int i = 0; i < hexGrid.getHexList().size();i++){
+        for (int i = 0; i < hexGrid.getHexList().size(); i++) {
             //no return for findTurns ?
             turnsFinder.findTurns(hexGrid.getHexList().get(i));
-            }
+        }
 
         // Print all turns
         System.out.println();
@@ -44,24 +44,23 @@ public class TurnsFinderTest {
         List<List<Turn>> turns = turnsFinder.getTurns();
         int i = 1;
         List<Integer> noTurns = new ArrayList<>();
-        for(List<Turn> h : turns) {
-            if(h.size()>0) {
+        for (List<Turn> h : turns) {
+            if (h.size() > 0) {
                 System.out.println("Turns for hex " + (i + 1));
                 for (Turn t : h) {
                     System.out.println(t.toString());
-                    for(Move m : t.getMovesList()){
+                    for (Move m : t.getMovesList()) {
                     }
                 }
-            }
-            else{
-                noTurns.add(i+1);
+            } else {
+                noTurns.add(i + 1);
             }
 
             i++;
         }
         System.out.print("Hexes without turns: ");
-        for(Integer n : noTurns){
-            System.out.print(n+" ");
+        for (Integer n : noTurns) {
+            System.out.print(n + " ");
         }
         System.out.println();
     }

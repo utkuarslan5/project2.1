@@ -77,23 +77,21 @@ public class MenuState extends State {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
         spriteBatch.begin();
-        gameFont.draw(spriteBatch,"Abalone", 400, 750);
+        gameFont.draw(spriteBatch, "Abalone", 400, 750);
         spriteBatch.end();
     }
 
     @Override
     public void handleInput() {
-        if(playGame.isPressed()){
+        if (playGame.isPressed()) {
             State gameState = new PlayState(gsm);
             gsm.pop();
             gsm.push(gameState);
-        }
-        else if(settingsMenu.isPressed()){
+        } else if (settingsMenu.isPressed()) {
             State settingsState = new SettingsState(gsm);
             gsm.pop();
             gsm.push(settingsState);
-        }
-        else if(exit.isPressed()){
+        } else if (exit.isPressed()) {
             Gdx.app.exit();
         }
     }

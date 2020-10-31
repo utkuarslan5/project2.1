@@ -25,18 +25,16 @@ public class Turn {
     @Override
     public String toString() {
         String r;
-        if(this.turnType == 0){
+        if (this.turnType == 0) {
             r = "Moves (One ball) ";
-        }
-        else if(this.turnType == 1){
+        } else if (this.turnType == 1) {
             r = "Moves (Two balls) ";
-        }
-        else{
+        } else {
             r = "Moves (Three balls) ";
         }
 
-        for(Move m : movesList){
-            r += ";"+m.toString()+" ";
+        for (Move m : movesList) {
+            r += ";" + m.toString() + " ";
         }
         return r;
     }

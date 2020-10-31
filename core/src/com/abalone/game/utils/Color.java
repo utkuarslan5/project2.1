@@ -2,8 +2,10 @@ package com.abalone.game.utils;
 
 public enum Color {
 
-    BLANK{
-        public  boolean isBlank() { return true;}
+    BLANK {
+        public boolean isBlank() {
+            return true;
+        }
 
         public boolean isPurple() {
             return false;
@@ -18,8 +20,10 @@ public enum Color {
             return c.isBlank();
         }
     },
-    PURPLE{
-        public  boolean isBlank() { return false;}
+    PURPLE {
+        public boolean isBlank() {
+            return false;
+        }
 
         public boolean isPurple() {
             return true;
@@ -34,8 +38,10 @@ public enum Color {
             return c.isPurple();
         }
     },
-    BLUE{
-        public  boolean isBlank() { return false;}
+    BLUE {
+        public boolean isBlank() {
+            return false;
+        }
 
         public boolean isPurple() {
             return false;

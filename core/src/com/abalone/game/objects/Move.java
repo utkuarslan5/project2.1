@@ -5,7 +5,7 @@ public class Move {
     private Hex start;
     private Hex destination;
 
-    public Move(int moveType, Hex start, Hex destination){
+    public Move(int moveType, Hex start, Hex destination) {
         this.moveType = moveType;
         this.start = start;
         this.destination = destination;
@@ -13,8 +13,8 @@ public class Move {
 
     @Override
     public String toString() {
-        String r = "From "+start.toString();
-        r += " to "+destination.toString();
+        String r = "From " + start.toString();
+        r += " to " + destination.toString();
         return r;
     }
 

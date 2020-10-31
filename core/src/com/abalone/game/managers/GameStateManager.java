@@ -10,25 +10,26 @@ import java.util.Stack;
 public class GameStateManager extends InputAdapter {
     private Stack<State> currentState;
 
-    public GameStateManager(){
+    public GameStateManager() {
         currentState = new Stack<>();
         init();
     }
 
-    public void init(){
+    public void init() {
         State initialScreen = new MenuState(this);
         initialScreen.init();
         currentState.push(initialScreen);
     }
-    public void update(float dt){
+
+    public void update(float dt) {
         currentState.peek().update(dt);
     }
 
-    public void draw(){
+    public void draw() {
         currentState.peek().draw();
     }
 
-    public GameStateManager push(State state){
+    public GameStateManager push(State state) {
         state.init();
         currentState.push(state);
         return this;

@@ -1,6 +1,7 @@
 package com.abalone.game.gameTree;
 
 import com.abalone.game.objects.Turn;
+
 import java.util.List;
 
 public class Tree {
@@ -18,12 +19,12 @@ public class Tree {
 
         List<List<Turn>> legal = root.getStateData().getLegalMoves(); //Supposed to find all legal moves from the root
 
-       for(List<Turn> i : legal) { //For every legal move, add it as a child from the root
-           List<Turn> hi = i;
-           for (Turn j : hi) {
-               root.addChild(new Node<>(root.getStateData().getState(j)));
-           }
-       }
+        for (List<Turn> i : legal) { //For every legal move, add it as a child from the root
+            List<Turn> hi = i;
+            for (Turn j : hi) {
+                root.addChild(new Node<>(root.getStateData().getState(j)));
+            }
+        }
 
         List<Node<BoardState>> currChildren = root.getChildren();
         // this recursive call could be improved

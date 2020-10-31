@@ -65,21 +65,21 @@ public class SettingsState extends State {
 
         returnButton = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("returnArrow.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("returnArrowPressed.png"))));
-        returnButton.getImage().setScale(1/18f);
+        returnButton.getImage().setScale(1 / 18f);
         returnButton.setScale(0.5f);
         returnButton.setPosition(15, 730);
 
         Music1Checked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
-        Music1Checked.getImage().setScale(1/20f);
+        Music1Checked.getImage().setScale(1 / 20f);
         Music1Checked.setScale(0.1f);
         Music1Checked.setPosition(300, 380);
 
         Music2Checked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
-        Music2Checked.getImage().setScale(1/20f);
+        Music2Checked.getImage().setScale(1 / 20f);
         Music2Checked.setScale(0.1f);
         Music2Checked.setPosition(300, 310);
         Music2Checked.setChecked(true);
@@ -87,7 +87,7 @@ public class SettingsState extends State {
         MusicOnOff = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
-        MusicOnOff.getImage().setScale(1/20f);
+        MusicOnOff.getImage().setScale(1 / 20f);
         MusicOnOff.setScale(0.1f);
         MusicOnOff.setPosition(300, 240);
         MusicOnOff.setChecked(true);
@@ -95,7 +95,7 @@ public class SettingsState extends State {
         AiChecked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
-        AiChecked.getImage().setScale(1/20f);
+        AiChecked.getImage().setScale(1 / 20f);
         AiChecked.setScale(0.1f);
         AiChecked.setPosition(790, 380);
 
@@ -104,7 +104,7 @@ public class SettingsState extends State {
     @Override
     public void update(float dt) {
         handleInput();
-        if (returnButton.isChecked()){
+        if (returnButton.isChecked()) {
             State MenuState = new MenuState(gsm);
             gsm.pop();
             gsm.push(MenuState);
@@ -124,9 +124,9 @@ public class SettingsState extends State {
 
         stage.draw();
         spriteBatch.begin();
-        gameFontSetting.draw(spriteBatch,"Settings", 390, 750);
-        gameFontMusic.draw(spriteBatch,"Music:",280,490);
-        gameFontMusic.draw(spriteBatch,"AI:",740,490);
+        gameFontSetting.draw(spriteBatch, "Settings", 390, 750);
+        gameFontMusic.draw(spriteBatch, "Music:", 280, 490);
+        gameFontMusic.draw(spriteBatch, "AI:", 740, 490);
         gameFontSubPoints.draw(spriteBatch, "Theme 1", 360, 405);
         gameFontSubPoints.draw(spriteBatch, "Theme 2", 360, 335);
         gameFontSubPoints.draw(spriteBatch, "On/Off", 850, 405);
@@ -137,29 +137,29 @@ public class SettingsState extends State {
     @Override
     public void handleInput() {
 
-        if(!MusicOnOff.isChecked() && (!Music1Checked.isChecked() || !Music2Checked.isChecked()) &&
-                (AbaloneGame.music1.isPlaying() || AbaloneGame.music2.isPlaying())){
+        if (!MusicOnOff.isChecked() && (!Music1Checked.isChecked() || !Music2Checked.isChecked()) &&
+                (AbaloneGame.music1.isPlaying() || AbaloneGame.music2.isPlaying())) {
             AbaloneGame.music1.pause();
             AbaloneGame.music2.pause();
             Music2Checked.setChecked(true);
             Music1Checked.setChecked(true);
         }
 
-        if(Music1Checked.isChecked() && AbaloneGame.music1.isPlaying()){
+        if (Music1Checked.isChecked() && AbaloneGame.music1.isPlaying()) {
             AbaloneGame.music1.pause();
             Music2Checked.setChecked(false);
             MusicOnOff.setChecked(true);
-        }else if(!Music1Checked.isChecked() && !AbaloneGame.music1.isPlaying()){
+        } else if (!Music1Checked.isChecked() && !AbaloneGame.music1.isPlaying()) {
             AbaloneGame.music1.play();
             Music2Checked.setChecked(true);
             MusicOnOff.setChecked(true);
         }
 
-        if(Music2Checked.isChecked() && AbaloneGame.music2.isPlaying()){
+        if (Music2Checked.isChecked() && AbaloneGame.music2.isPlaying()) {
             AbaloneGame.music2.pause();
             Music1Checked.setChecked(false);
             MusicOnOff.setChecked(true);
-        } else if(!Music2Checked.isChecked() && !AbaloneGame.music2.isPlaying()){
+        } else if (!Music2Checked.isChecked() && !AbaloneGame.music2.isPlaying()) {
             AbaloneGame.music2.play();
             Music1Checked.setChecked(true);
             MusicOnOff.setChecked(true);

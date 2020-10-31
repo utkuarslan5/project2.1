@@ -16,9 +16,11 @@ public class Ball {
     public Color getColor() {
         return this.color;
     }
+
     public int getId() {
         return id;
     }
+
     public void setColor(Color color) {
         this.color = color;
     }
