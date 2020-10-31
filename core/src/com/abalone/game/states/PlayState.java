@@ -397,6 +397,7 @@ public class PlayState extends State {
 
         for (List<Turn> mainturns : tempList) {
             assert mainturns != null;
+            if (mainturns != null) {
             for (Turn turn : mainturns) {
                 if (turn.getTurnType() + 1 == board.getSelected().size()) {
                     List<Move> tempMoveList = turn.getMovesList();
@@ -409,9 +410,10 @@ public class PlayState extends State {
                     } else {
                         startHexes.clear();
                         tempdest.clear();
-                    }
-                }
-            }
-        }
-    }
+                     }
+                 }
+             }
+         }
+     }
+  }
 }
