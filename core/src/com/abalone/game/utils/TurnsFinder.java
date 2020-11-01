@@ -11,8 +11,6 @@ public class TurnsFinder {
     private HexGrid grid;
     private List<Hex> hexes = new ArrayList<>();
     private List<List<Turn>> turns = new ArrayList<>();
-    private int holdForceDouble;
-    private int holdForceTriple;
     private Color currentColor;
 
     public TurnsFinder(HexGrid grid){
@@ -26,6 +24,8 @@ public class TurnsFinder {
 
     public List<Turn> findTurns(Hex hex){
 
+        System.out.println("BASE HEX "+hex.toString());
+
         if(hex.getBall().getColor().isBlank()){
             return null;
         }
@@ -38,6 +38,7 @@ public class TurnsFinder {
         // Loop though all directions the ball can move in.
         for (Hex nh : neighbors) {
             neighborId++;
+            int iNeighborId = findInverseNeighborId(neighborId);
 
             /** All turns **/
             if (!grid.onBoard(nh)) {
@@ -120,30 +121,85 @@ public class TurnsFinder {
             }
 
             // Find forces for two and three consecutive balls
-            holdForceDouble = 0;
-            holdForceTriple = 0;
+            int forceTypeTwo = 1;
+            int forceTypeThree = 1;
 
-            findForce(1, hex, findInverseNeighborId(neighborId), 2, 2, true, false);
-            findForce(0, hex, neighborId,3, 2, true, true);
-            findForce(1, hex, findInverseNeighborId(neighborId), 3, 2, false, false);
-            findForce(0, hex, neighborId,4, 2, false, true);
+            Hex nhh = h.getNeighbors().get(neighborId);
+            Hex hh = null;
+            if(grid.onBoard(nhh)){
+                hh = grid.getMatchedHex(nhh);
+            }
+            Hex nhhh = null;
+            if(hh != null){
+                nhhh = hh.getNeighbors().get(neighborId);
+            }
+            Hex hhh = null;
+            if(nhhh != null && grid.onBoard(nhhh)){
+                hhh = grid.getMatchedHex(nhhh);
+            }
+            Hex nih = hex.getNeighbors().get(iNeighborId);
+            Hex ih = null;
+            if(grid.onBoard(nih)){
+                ih = grid.getMatchedHex(nih);
+            }
+            Hex nihh = null;
+            if(ih != null){
+                nihh = ih.getNeighbors().get(iNeighborId);
+            }
+            Hex ihh = null;
+            if(nihh != null && grid.onBoard(nihh)){
+                ihh = grid.getMatchedHex(nihh);
+            }
 
-            // Get in-line turns from forces
-            if (holdForceDouble > 0 && grid.onBoard(neighbors.get(findInverseNeighborId(neighborId)))) {
-                if(!grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))).getBall().getColor().isBlank()) {
-                    foundTurns.add(new Turn(hex)); // i h n = 1 1 0
-                    foundTurns.get(foundTurns.size() - 1).addMove(1,hex, grid.getMatchedHex(neighbors.get(neighborId))); // i h n = 1 0 1
-                    foundTurns.get(foundTurns.size() - 1).addMove(1,grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))), hex); // i h n = 0 1 1
+            if(hhh != null && hh != null && ih != null && ihh != null) {
+                System.out.println(hhh.toString() + hh.toString() + h.toString() + hex.toString() + ih.toString() + ihh.toString());
+            }
+
+            if(h != null){
+                if(!h.getBall().getColor().isBlank() && h.getBall().getColor() != hex.getBall().getColor()){
+                    forceTypeTwo--;
+                    forceTypeThree--;
+                }
+            }
+            if(hh != null){
+                if(!hh.getBall().getColor().isBlank() && hh.getBall().getColor() != hex.getBall().getColor()){
+                    forceTypeTwo--;
+                    forceTypeThree--;
+                }
+            }
+            if(hhh != null){
+                if(!hhh.getBall().getColor().isBlank() && hhh.getBall().getColor() != hex.getBall().getColor()){
+                    forceTypeTwo--;
+                    forceTypeThree--;
+                }
+            }
+            if(ih != null){
+                if(ih.getBall().getColor() == hex.getBall().getColor()){
+                    forceTypeTwo++;
+                    forceTypeThree++;
+                }
+            }
+            if(ihh != null){
+                if(ihh.getBall().getColor() == hex.getBall().getColor()){
+                    forceTypeThree++;
                 }
             }
 
-            if (holdForceTriple > 0 && grid.onBoard(neighbors.get(findInverseNeighborId(neighborId))) && grid.onBoard(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId)))) {
-                if(!grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))).getBall().getColor().isBlank() && !grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId))).getBall().getColor().isBlank()) {
-                    foundTurns.add(new Turn(hex)); // ii i h n = 1 1 1 0
-                    foundTurns.get(foundTurns.size() - 1).addMove(2,hex, grid.getMatchedHex(neighbors.get(neighborId))); // ii i h n = 1 1 0 1
-                    foundTurns.get(foundTurns.size() - 1).addMove(2,grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId))), hex); // ii i h n = 1 0 1 1
-                    foundTurns.get(foundTurns.size() - 1).addMove(2,grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId)).getNeighbors().get(findInverseNeighborId(neighborId))), grid.getMatchedHex(neighbors.get(findInverseNeighborId(neighborId)))); // ii i h n = 0 1 1 1
-                }
+            System.out.println("Ft2="+forceTypeTwo+" Ft3="+forceTypeThree);
+
+            // Get in-line turns from forces
+            if(forceTypeTwo > 0 && ih != null){
+                foundTurns.add(new Turn(hex));
+                foundTurns.get(foundTurns.size()-1).addMove(1,hex,h);
+                foundTurns.get(foundTurns.size()-1).addMove(1,ih,hex);
+                System.out.println(foundTurns.get(foundTurns.size()-1).toString());
+            }
+            if(forceTypeThree > 0 && ih != null && ihh != null){
+                foundTurns.add(new Turn(hex));
+                foundTurns.get(foundTurns.size()-1).addMove(2,hex,h);
+                foundTurns.get(foundTurns.size()-1).addMove(2,ih,hex);
+                foundTurns.get(foundTurns.size()-1).addMove(2,ihh,ih);
+                System.out.println(foundTurns.get(foundTurns.size()-1).toString());
             }
 
         }
@@ -153,113 +209,23 @@ public class TurnsFinder {
 
     }
 
-    private boolean findForce(int force, Hex hex, int neighborId, int maxDepth, int depth, boolean doub, boolean inverse) {
-        if(depth > maxDepth){
-            if(doub){
-                if(inverse){
-                    holdForceDouble -= force;
-                }
-                else{
-                    holdForceDouble += force;
-                }
-            }
-            else{
-                if(inverse){
-                    holdForceTriple -= force;
-                }
-                else{
-                    holdForceTriple += force;
-                }
-            }
-            return false;
-        }
-        Hex nHex = hex.getNeighbors().get(neighborId);
-        if(!grid.onBoard(nHex)){
-            if(doub){
-                if(inverse){
-                    holdForceDouble -= force;
-                }
-                else{
-                    holdForceDouble += force;
-                }
-            }
-            else{
-                if(inverse){
-                    holdForceTriple -= force;
-                }
-                else{
-                    holdForceTriple += force;
-                }
-            }
-            return false;
-        }
-        Hex useMe = grid.getMatchedHex(nHex);
-        if(useMe != null) {
-            if (useMe.getBall().getColor().isBlank()) { // If the next space is empty
-                if (doub) {
-                    if (inverse) {
-                        holdForceDouble -= force;
-                    } else {
-                        holdForceDouble += force;
-                    }
-                } else {
-                    if (inverse) {
-                        holdForceTriple -= force;
-                    } else {
-                        holdForceTriple += force;
-                    }
-                }
-                return false;
-            }
-            if (inverse) { // If searching for enemy balls
-                if (!useMe.getBall().getColor().equals(currentColor)) { // If another enemy ball is found
-                    findForce(force + 1, nHex, neighborId, maxDepth, depth + 1, doub, inverse);
-                } else { // If no more enemy balls are found
-                    if (doub) {
-                        if (inverse) {
-                            holdForceDouble -= force;
-                        } else {
-                            holdForceDouble += force;
-                        }
-                    } else {
-                        if (inverse) {
-                            holdForceTriple -= force;
-                        } else {
-                            holdForceTriple += force;
-                        }
-                    }
-                    return false;
-                }
-            } else { // If searching for friendly balls
-                if (useMe.getBall().getColor().equals(currentColor)) { // If another friendly ball is found
-                    findForce(force + 1, nHex, neighborId, maxDepth, depth + 1, doub, inverse);
-                } else { // If no more friendly balls are found
-                    if (doub) {
-                        if (inverse) {
-                            holdForceDouble -= force;
-                        } else {
-                            holdForceDouble += force;
-                        }
-                    } else {
-                        if (inverse) {
-                            holdForceTriple -= force;
-                        } else {
-                            holdForceTriple += force;
-                        }
-                    }
-                    return false;
-                }
-            }
-
-        }
-        return false;
-    }
 
     private int findInverseNeighborId(int id){
-        if(id-3 >= 0){
-            return id - 3;
-        } else {
-            return id + 3;
+        switch(id){
+            case 0:
+                return 1;
+            case 1:
+                return 0;
+            case 2:
+                return 3;
+            case 3:
+                return 2;
+            case 4:
+                return 5;
+            case 5:
+                return 4;
+            default:
+                return 6;
         }
     }
 
