@@ -105,68 +105,71 @@ public class Board {
         int to = hexGrid.getBallAt(ballTo);
         System.out.println(from + " to " + to);
 
-        if (selected.size() == 1) {
-            if (isLegal(from, to)) {
-                hexGrid.getHexList().get(to).setBall(selected.get(0));
-                hexGrid.getHexList().get(from).setBall(ballTo);
-                movePerformed = true;
-                selected.clear();
-            }
-        } else if (selected.size() == 2) {
-            int from2 = hexGrid.getBallAt(selected.get(1));
-            Turn decidedMove = findDoubleMove(from2, to, from);
-            if (decidedMove != null) {
-                List<Move> moveList = decidedMove.getMovesList();
-                Hex secondDestination = moveList.get(1).getDestination();
-                Ball secondBall = secondDestination.getBall();
-                if (secondDestination == hexGrid.getHexList().get(from2)) {
-                    hexGrid.getHexList().get(to).setBall(selected.get(1));
-                    hexGrid.getHexList().get(from2).setBall(selected.get(0));
+        switch (selected.size()) {
+            case 1:
+                if (isLegal(from, to)) {
+                    hexGrid.getHexList().get(to).setBall(selected.get(0));
                     hexGrid.getHexList().get(from).setBall(ballTo);
-                } else {
-                    hexGrid.getHexList().get(to).setBall(selected.get(1));
-                    hexGrid.getHexList().get(hexGrid.getBallAt(secondBall)).setBall(selected.get(0));
-                    hexGrid.getHexList().get(from).setBall(ballTo);
-                    hexGrid.getHexList().get(from2).setBall(secondBall);
+                    movePerformed = true;
+                    selected.clear();
                 }
+                break;
+            case 2:
+                int from2 = hexGrid.getBallAt(selected.get(1));
+                Turn decidedMove = findDoubleMove(from2, to, from);
+                if (decidedMove != null) {
+                    List<Move> moveList = decidedMove.getMovesList();
+                    Hex secondDestination = moveList.get(1).getDestination();
+                    Ball secondBall = secondDestination.getBall();
+                    if (secondDestination == hexGrid.getHexList().get(from2)) {
+                        hexGrid.getHexList().get(to).setBall(selected.get(1));
+                        hexGrid.getHexList().get(from2).setBall(selected.get(0));
+                        hexGrid.getHexList().get(from).setBall(ballTo);
+                    } else {
+                        hexGrid.getHexList().get(to).setBall(selected.get(1));
+                        hexGrid.getHexList().get(hexGrid.getBallAt(secondBall)).setBall(selected.get(0));
+                        hexGrid.getHexList().get(from).setBall(ballTo);
+                        hexGrid.getHexList().get(from2).setBall(secondBall);
+                    }
 
-                movePerformed = true;
-                System.out.println("Move performed!");
-                selected.clear();
-            } else {
-                System.out.println("Illegal move!");
-            }
-
-        } else if (selected.size() == 3) {
-            int from2 = hexGrid.getBallAt(selected.get(1));
-            int from3 = hexGrid.getBallAt(selected.get(2));
-            Turn decidedMove = findTripleMove(from3, to, from2, from);
-            if (decidedMove != null) {
-                List<Move> moveList = decidedMove.getMovesList();
-                Hex secondDestination = moveList.get(1).getDestination();
-                Hex thirdDestination = moveList.get(2).getDestination();
-                Ball secondBall = secondDestination.getBall();
-                Ball thirdBall = thirdDestination.getBall();
-                if (secondDestination == hexGrid.getHexList().get(from3) && thirdDestination == hexGrid.getHexList().get(from2)) {
-                    hexGrid.getHexList().get(to).setBall(selected.get(2));
-                    hexGrid.getHexList().get(from3).setBall(selected.get(1));
-                    hexGrid.getHexList().get(from2).setBall(selected.get(0));
-                    hexGrid.getHexList().get(from).setBall(ballTo);
+                    movePerformed = true;
+                    System.out.println("Move performed!");
+                    selected.clear();
                 } else {
-                    hexGrid.getHexList().get(to).setBall(selected.get(2));
-                    hexGrid.getHexList().get(hexGrid.getBallAt(secondBall)).setBall(selected.get(1));
-                    hexGrid.getHexList().get(hexGrid.getBallAt(thirdBall)).setBall(selected.get(0));
-                    hexGrid.getHexList().get(from).setBall(ballTo);
-                    hexGrid.getHexList().get(from2).setBall(secondBall);
-                    hexGrid.getHexList().get(from3).setBall(thirdBall);
+                    System.out.println("Illegal move!");
                 }
+                break;
+            case 3:
+                from2 = hexGrid.getBallAt(selected.get(1));
+                int from3 = hexGrid.getBallAt(selected.get(2));
+                Turn decidedTripleMove = findTripleMove(from3, to, from2, from);
+                if (decidedTripleMove != null) {
+                    List<Move> moveList = decidedTripleMove.getMovesList();
+                    Hex secondDestination = moveList.get(1).getDestination();
+                    Hex thirdDestination = moveList.get(2).getDestination();
+                    Ball secondBall = secondDestination.getBall();
+                    Ball thirdBall = thirdDestination.getBall();
+                    if (secondDestination == hexGrid.getHexList().get(from3) && thirdDestination == hexGrid.getHexList().get(from2)) {
+                        hexGrid.getHexList().get(to).setBall(selected.get(2));
+                        hexGrid.getHexList().get(from3).setBall(selected.get(1));
+                        hexGrid.getHexList().get(from2).setBall(selected.get(0));
+                        hexGrid.getHexList().get(from).setBall(ballTo);
+                    } else {
+                        hexGrid.getHexList().get(to).setBall(selected.get(2));
+                        hexGrid.getHexList().get(hexGrid.getBallAt(secondBall)).setBall(selected.get(1));
+                        hexGrid.getHexList().get(hexGrid.getBallAt(thirdBall)).setBall(selected.get(0));
+                        hexGrid.getHexList().get(from).setBall(ballTo);
+                        hexGrid.getHexList().get(from2).setBall(secondBall);
+                        hexGrid.getHexList().get(from3).setBall(thirdBall);
+                    }
 
-                movePerformed = true;
-                System.out.println("Move performed!");
-                selected.clear();
-            } else {
-                System.out.println("Illegal move!");
-            }
+                    movePerformed = true;
+                    System.out.println("Move performed!");
+                    selected.clear();
+                } else {
+                    System.out.println("Illegal move!");
+                }
+                break;
         }
     }
 
