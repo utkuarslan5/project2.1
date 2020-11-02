@@ -204,6 +204,7 @@ public class Board {
                 }
             }
         }
+        turnsFinder.clearTurns();
         return foundTurn;
     }
 
@@ -220,6 +221,7 @@ public class Board {
                 }
             }
         }
+        turnsFinder.clearTurns();
         return legal;
     }
 
