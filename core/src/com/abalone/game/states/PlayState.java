@@ -177,7 +177,7 @@ public class PlayState extends State {
                     } else if (ball.getColor().isBlank()) {
                         board.setIsModified();
                         if (board.getSelected().size() > 0) {
-                            board.move(ball);
+                            board.requestMove(ball);
                             if (board.getMovePerformed()) {
                                 switchTurnPlayer();
                                 allDestinations.clear();
@@ -398,22 +398,22 @@ public class PlayState extends State {
         for (List<Turn> mainturns : tempList) {
             assert mainturns != null;
             if (mainturns != null) {
-            for (Turn turn : mainturns) {
-                if (turn.getTurnType() + 1 == board.getSelected().size()) {
-                    List<Move> tempMoveList = turn.getMovesList();
-                    for (int j = 0; j < turn.getMovesList().size(); j++) {
-                        startHexes.add(tempMoveList.get(j).getStart());
-                        tempdest.add(tempMoveList.get(j).getDestination());
-                    }
-                    if (inselected.containsAll(startHexes)) {
-                        allDestinations.addAll(tempdest);
-                    } else {
-                        startHexes.clear();
-                        tempdest.clear();
+                for (Turn turn : mainturns) {
+                    if (turn.getTurnType() + 1 == board.getSelected().size()) {
+                        List<Move> tempMoveList = turn.getMovesList();
+                        for (int j = 0; j < turn.getMovesList().size(); j++) {
+                            startHexes.add(tempMoveList.get(j).getStart());
+                            tempdest.add(tempMoveList.get(j).getDestination());
+                        }
+                        if (inselected.containsAll(startHexes)) {
+                            allDestinations.addAll(tempdest);
+                        } else {
+                            startHexes.clear();
+                            tempdest.clear();
+                        }
                      }
                  }
              }
-         }
-     }
+        }
   }
 }
