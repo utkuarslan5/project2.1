@@ -172,6 +172,7 @@ public class PlayState extends State {
                             ballButtons[index].setChecked(false);
                             System.out.println("PUSH NEEDED");
                             board.pushBalls(ball);
+                            allDestinations.clear();
                             if (board.getMovePerformed()) {
                                 switchTurnPlayer();
                                 board.setMovePerformed(false);
@@ -393,7 +394,8 @@ public class PlayState extends State {
         List<Hex> tempdest = new ArrayList<>();
         List<Hex> inselected = new ArrayList<>();
         for (Ball allBall : board.getSelected()) {
-            tempList.add(turnsFinder.findTurns(board.getHexGrid().getHexList().get(allBall.getId())));
+            int tired = board.getHexGrid().getBallAt(allBall);
+            tempList.add(turnsFinder.findTurns(board.getHexGrid().getHexList().get(tired)));
             int temp = board.getHexGrid().getBallAt(allBall);
             inselected.add(board.getHexGrid().getHexList().get(temp));
         }
