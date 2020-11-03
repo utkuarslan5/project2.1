@@ -71,6 +71,22 @@ public class Board {
         return temp;
     }
 
+    public ArrayList<Hex> getBlueHex() {
+        ArrayList<Hex> temp = new ArrayList<>();
+        for (Hex h : hexGrid.getHexList()) {
+            if (h.isOccupied() && h.getBall().getColor() == Color.BLUE) temp.add(h);
+        }
+        return temp;
+    }
+
+    public ArrayList<Hex> getPurpleHex() {
+        ArrayList<Hex> temp = new ArrayList<>();
+        for (Hex h : hexGrid.getHexList()) {
+            if (h.isOccupied() && h.getBall().getColor() == Color.PURPLE) temp.add(h);
+        }
+        return temp;
+    }
+
     // a method to return all unoccupied Hex's
     public ArrayList<Hex> getUnoccupiedHex() {
         ArrayList<Hex> temp = new ArrayList<>();

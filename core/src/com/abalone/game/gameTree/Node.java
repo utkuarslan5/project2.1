@@ -11,19 +11,19 @@ public class Node {
     //private final BoardState stateData;
     private List<Node> children;
     private Node parent;
-    private byte depth;
+    private int depth;
 
-    public Node(Board board, byte depth) {
+    public Node(Board board, int depthTree, int depth) {
         this.children = new ArrayList();
 
         BoardState boardState = new BoardState(board);
-        if (depth > 0) {
+        if (depthTree > depth) {
             // every combinations of balls of the player playing
             for(int i = 0; i < 4; i++) {
                 // every move
                 for(int iMove = 0; iMove < 2; iMove++) {
                     Board newBoard = new Board(); // board.move(availableMoves[iMove]);
-                    this.addChild(new Node(newBoard, (byte) (depth-1)));
+                    this.addChild(new Node(newBoard, depthTree, depth+1));
                 }
             }
         }
@@ -35,7 +35,7 @@ public class Node {
         this.stateData = stateData;
     }
 
-    public Node(BoardState stateData, List<Node<BoardState>> children, Node<BoardState> parent, byte depth) {
+    public Node(BoardState stateData, List<Node<BoardState>> children, Node<BoardState> parent, int depth) {
         this.stateData = stateData;
         this.children = children;
         this.parent = parent;

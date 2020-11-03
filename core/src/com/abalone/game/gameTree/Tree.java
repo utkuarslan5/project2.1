@@ -9,8 +9,8 @@ public class Tree {
 
     private final Node root;
 
-    public Tree(Board board, byte depth) {
-        root = new Node(board, depth);
+    public Tree(Board board, int depthTree) {
+        root = new Node(board, depthTree, 0);
     }
 
     public Node getRoot() {

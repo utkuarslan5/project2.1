@@ -64,7 +64,7 @@ public class PlayState extends State {
         spriteBatch = new SpriteBatch();
         board = new Board();
 
-        tree = new Tree(board, (byte) 2);
+        tree = new Tree(board, 2);
 
         board.getBoardImage().setPosition(AbaloneGame.width / 2f - (board.getBoardImage().getWidth() / 2), AbaloneGame.height / 2f - (board.getBoardImage().getHeight() / 2));
         Viewport viewport = new FitViewport(AbaloneGame.width, AbaloneGame.height, AbaloneGame.cam);
