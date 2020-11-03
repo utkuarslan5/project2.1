@@ -33,6 +33,7 @@ public class PlayState extends State {
     private ImageButton[] ballButtons;
     private CheckBox bluePlayer;
     private CheckBox purplePlayer;
+    private CheckBox highlight;
     private ButtonGroup<CheckBox> colorSelectPlayer;
     private Label purpleLostBalls;
     private Label blueLostBalls;
@@ -106,6 +107,14 @@ public class PlayState extends State {
         colorSelectPlayer.setMaxCheckCount(1);
         colorSelectPlayer.setMinCheckCount(1);
 
+        highlight = new CheckBox("Highlight Possible Moves",skin);
+        highlight.setPosition(830,650);
+        highlight.setTransform(true);
+        highlight.setScale(1.5f);
+        highlight.getLabel().setFontScale(0.5f);
+        highlight.getStyle().fontColor = Color.WHITE;
+        highlight.setChecked(true);
+
         lostP = 0;
         lostB = 0;
         purpleLostBalls = new Label("Purple Lost: " + lostP, skin);
@@ -167,7 +176,9 @@ public class PlayState extends State {
                             //ONLY ALLOWS NEIGHBOURS TO BE SELECTED IN A LINE
                             allDestinations.clear();
                             alignSelection(hex, ball, index);
-                            highlightMoves();
+                            if(highlight.isChecked()) {
+                                highlightMoves();
+                            }
                         } else if (board.getSelected().size() > 1) {
                             ballButtons[index].setChecked(false);
                             System.out.println("PUSH NEEDED");
@@ -276,7 +287,8 @@ public class PlayState extends State {
                 ballButtons[i].getStyle().imageDown = ballTextureRegionDrawablePurple;
                 ballButtons[i].getStyle().imageChecked = ballTexturePressedRegionDrawablePurple;
             } else {
-                if (allDestinations.contains(hex)) {
+
+                if (allDestinations.contains(hex) && highlight.isChecked()) {
                     ballButtons[i].getStyle().imageUp = ballTextureRegionDrawableBlankDark;
                     ballButtons[i].getStyle().imageDown = ballTextureRegionDrawableBlankDark;
                     ballButtons[i].getStyle().imageChecked = ballTextureRegionDrawableBlankDark;
@@ -292,6 +304,7 @@ public class PlayState extends State {
         }
         stage.addActor(bluePlayer);
         stage.addActor(purplePlayer);
+        stage.addActor(highlight);
         stage.addActor(returnButton);
         stage.addActor(purpleLostBalls);
         stage.addActor(blueLostBalls);
