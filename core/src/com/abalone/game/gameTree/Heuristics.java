@@ -8,24 +8,24 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class Heuristics {
-
     private final Board current;
     private final Timestamp timestamp;
     private final Color player;
-    private final float value;
+    public final float value;
 
     public Heuristics(Board current, Color player) {
         timestamp = new Timestamp(System.currentTimeMillis());
         this.current = current;
         this.player = player;
-        this.value = valueFunction(current, 1, 1);
+        this.value = valueFunction(current, 1, 1, 1);
     }
 
     //Heuristics
-    private float valueFunction(Board board, float w1, float w2) {
+    private float valueFunction(Board board, float w1, float w2, float w3) {
         List<Hex> hexlist = board.getHexGrid().getHexList();
         int count = 0;
         float totalDistance = 0;
+        int countNeighboursOfEachBall = 0;
 
         for (Hex hex : hexlist) {
             if (hex.isOccupied() && hex.getBall().getColor().equals(player)) {
@@ -36,10 +36,24 @@ public class Heuristics {
             }
         }
 
+        //For the cohesion we count every neighbour of each ball, and add these up
+        for (Hex hex : hexlist){
+            if(hex.isOccupied() && hex.getBall().getColor().equals(player)){
+                if(!hex.getNeighbors().isEmpty()) {
+                    for (int i = 0; i <= hex.getNeighbors().size(); i++) {
+                        countNeighboursOfEachBall += 1;
+                    }
+                } else {
+                    countNeighboursOfEachBall++;
+                }
+            }
+        }
+
         float h1 = w1 * count;
         float h2 = w2 * (totalDistance / count);
-        System.out.println("h1:" + h1 + "h2: " + h2);
-        float value = h1 + h2;
+        float h3 = w3 * countNeighboursOfEachBall;
+        System.out.println("h1:" + h1 + "h2: " + h2 + "h3: " + h3);
+        float value = h1 + h2 + h3;
 
         return value;
     }
@@ -66,3 +80,4 @@ public class Heuristics {
                 '}';
     }
 }
+

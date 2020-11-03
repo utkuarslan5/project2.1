@@ -3,7 +3,6 @@ package com.abalone.game.utils;
 import com.abalone.game.objects.Hex;
 import com.abalone.game.objects.HexGrid;
 import com.abalone.game.objects.Turn;
-
 import java.util.ArrayList;
 import java.util.List;
 
