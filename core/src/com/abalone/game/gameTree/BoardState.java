@@ -1,5 +1,6 @@
 package com.abalone.game.gameTree;
 
+import com.abalone.game.objects.Board;
 import com.abalone.game.objects.HexGrid;
 import com.abalone.game.objects.Turn;
 import com.abalone.game.utils.TurnsFinder;
@@ -19,10 +20,8 @@ public class BoardState {
     private List<List<Turn>> legalMoves;
     private Heuristics heuristics;
 
-    public BoardState(List<List<Turn>> availableMoves) {
-        hexGrid = new HexGrid();
-        turnsFinder = new TurnsFinder(hexGrid);
-        this.legalMoves = getLegalMoves();
+    public BoardState(Board board) {
+        this.hexGrid = board.getHexGrid();
     }
 
     public List<List<Turn>> getLegalMoves() {
@@ -32,6 +31,7 @@ public class BoardState {
     // creates a new board state after a move is made
     // is called in line 24 in Tree class
     // if you run this first time, "newMoves" will be all legal moves from the beginning
+    /*
     public BoardState getState(Turn newMove) {
 
         List<List<Turn>> newLegalMoves = new ArrayList<>();
@@ -58,4 +58,5 @@ public class BoardState {
         //create further branches build on every move
         return new BoardState(newLegalMoves);
     }
+    */
 }

@@ -49,7 +49,7 @@ public class HexGrid {
                     x = col - half;
                 }
                 int z = row - half;
-                System.out.println("Hex created with x " + x + " and z " + z);
+                // System.out.println("Hex created with x " + x + " and z " + z);
                 Hex newHex = new Hex(x, z);
                 if (iBall < 11 || (iBall >= 13 && iBall <= 15)) {
                     newHex.setBall(new Ball(Color.PURPLE,iBall));
@@ -64,6 +64,7 @@ public class HexGrid {
             }
         }
 
+        /*
         //Neighbors functionality check
         System.out.println(temp.size());
         List<Hex> neighbors = temp.get(30).getNeighbors();
@@ -72,6 +73,7 @@ public class HexGrid {
             System.out.println("The hex 30 has neighbors " + tempHex.getX() +
                     tempHex.getZ() );
         }
+        */
         return temp;
     }
 

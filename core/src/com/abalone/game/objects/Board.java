@@ -11,15 +11,12 @@ import java.util.List;
 
 public class Board {
     private Image board;
-    private Boolean isModified;
     private HexGrid hexGrid;
     private ArrayList<Ball> selected;
     private TurnsFinder turnsFinder;
     private boolean movePerformed;
 
     public Board() {
-        // isModified initiated to true, so will be display in the UI
-        this.isModified = true;
         this.movePerformed = false;
         Texture img = new Texture("abalone.png");
         this.board = new Image(img);
@@ -31,8 +28,6 @@ public class Board {
 
     //For TESTING
     public Board(int x) {
-        // isModified initiated to true, so will be display in the UI
-        this.isModified = true;
         hexGrid = new HexGrid();
         selected = new ArrayList<>();
     }
@@ -333,15 +328,6 @@ public class Board {
                 }
             }
         }
-    }
-
-
-    public void setIsModified(Boolean isModified) {
-        this.isModified = isModified;
-    }
-
-    public void setIsModified() {
-        this.setIsModified(true);
     }
 
     public void setMovePerformed(boolean movePerformed) {

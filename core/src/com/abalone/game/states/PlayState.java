@@ -1,6 +1,7 @@
 package com.abalone.game.states;
 
 import com.abalone.game.AbaloneGame;
+import com.abalone.game.gameTree.Tree;
 import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.*;
 import com.abalone.game.utils.TurnsFinder;
@@ -39,6 +40,8 @@ public class PlayState extends State {
     public static int lostB;
     private List<Hex> allDestinations = new ArrayList<>();
 
+    private Tree tree;
+
 
     private TextureRegionDrawable ballTextureRegionDrawableBlue;
     private TextureRegionDrawable ballTexturePressedRegionDrawableBlue;
@@ -60,6 +63,9 @@ public class PlayState extends State {
         skin = new Skin(Gdx.files.internal("cloud-form/skin/cloud-form-ui.json"));
         spriteBatch = new SpriteBatch();
         board = new Board();
+
+        tree = new Tree(board, (byte) 2);
+
         board.getBoardImage().setPosition(AbaloneGame.width / 2f - (board.getBoardImage().getWidth() / 2), AbaloneGame.height / 2f - (board.getBoardImage().getHeight() / 2));
         Viewport viewport = new FitViewport(AbaloneGame.width, AbaloneGame.height, AbaloneGame.cam);
         viewport.apply();
@@ -175,7 +181,6 @@ public class PlayState extends State {
 
                         }
                     } else if (ball.getColor().isBlank()) {
-                        board.setIsModified();
                         if (board.getSelected().size() > 0) {
                             board.requestMove(ball);
                             if (board.getMovePerformed()) {
@@ -284,8 +289,6 @@ public class PlayState extends State {
             stage.addActor(ballButtons[i]);
             temp = y;
         }
-        board.setIsModified(false);
-
         stage.addActor(bluePlayer);
         stage.addActor(purplePlayer);
         stage.addActor(returnButton);
@@ -415,5 +418,5 @@ public class PlayState extends State {
                  }
              }
         }
-  }
+    }
 }
