@@ -155,32 +155,39 @@ public class TurnsFinder {
                 System.out.println(hhh.toString() + hh.toString() + h.toString() + hex.toString() + ih.toString() + ihh.toString());
             }
 
-            if(h != null){
+            boolean firstBlock = false;
+            boolean secondBlock = false;
+            boolean firstPush = false;
+
+            if(h != null){ // First block
                 if(!h.getBall().getColor().isBlank() && h.getBall().getColor() != hex.getBall().getColor()){
                     forceTypeTwo--;
                     forceTypeThree--;
+                    firstBlock = true;
                 }
             }
-            if(hh != null){
-                if(!hh.getBall().getColor().isBlank() && hh.getBall().getColor() != hex.getBall().getColor()){
+            if(hh != null){ // Second block - First block must succeed
+                if(!hh.getBall().getColor().isBlank() && hh.getBall().getColor() != hex.getBall().getColor() && firstBlock){
+                    forceTypeTwo--;
+                    forceTypeThree--;
+                    secondBlock = true;
+                }
+            }
+            if(hhh != null){ // Third block - Second block must succeed
+                if(!hhh.getBall().getColor().isBlank() && hhh.getBall().getColor() != hex.getBall().getColor() && secondBlock){
                     forceTypeTwo--;
                     forceTypeThree--;
                 }
             }
-            if(hhh != null){
-                if(!hhh.getBall().getColor().isBlank() && hhh.getBall().getColor() != hex.getBall().getColor()){
-                    forceTypeTwo--;
-                    forceTypeThree--;
-                }
-            }
-            if(ih != null){
+            if(ih != null){ // First push
                 if(ih.getBall().getColor() == hex.getBall().getColor()){
                     forceTypeTwo++;
                     forceTypeThree++;
+                    firstPush = true;
                 }
             }
-            if(ihh != null){
-                if(ihh.getBall().getColor() == hex.getBall().getColor()){
+            if(ihh != null){ // Second push - First push must succeed
+                if(ihh.getBall().getColor() == hex.getBall().getColor() && firstPush){
                     forceTypeThree++;
                 }
             }
