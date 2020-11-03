@@ -1,6 +1,7 @@
 package com.abalone.game.gameTree;
 
 import com.abalone.game.objects.Board;
+import com.abalone.game.objects.Hex;
 import com.abalone.game.objects.Move;
 
 import java.util.ArrayList;
@@ -18,10 +19,13 @@ public class Node {
 
         BoardState boardState = new BoardState(board);
         if (depthTree > depth) {
-            // every combinations of balls of the player playing
-            for(int i = 0; i < 4; i++) {
-                // every move
-                for(int iMove = 0; iMove < 2; iMove++) {
+            // If the depth of this node is even, this mean it's the state of the board after a move of the human player
+            // So we get the purple balls (balls of the AI) because it is the turn of the AI to play
+            // Otherwise we take the blue balls because it is the turn of the human to play
+            List<Hex> hexes = (depth%2 == 0) ? board.getPurpleHex() : board.getBlueHex();
+            for(int iHex = 0; iHex < hexes.size(); iHex++) {
+                // TODO: get all turns of each hexes.get(iHex) and apply it to the board to create the next board
+                for(int iMove = 0; iMove < 1; iMove++) {
                     Board newBoard = new Board(); // board.move(availableMoves[iMove]);
                     this.addChild(new Node(newBoard, depthTree, depth+1));
                 }
