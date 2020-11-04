@@ -176,9 +176,9 @@ public class PlayState extends State {
                             //ONLY ALLOWS NEIGHBOURS TO BE SELECTED IN A LINE
                             allDestinations.clear();
                             alignSelection(hex, ball, index);
-                            if(highlight.isChecked()) {
-                                highlightMoves();
-                            }
+
+                            highlightMoves();
+
                         } else if (board.getSelected().size() > 1) {
                             ballButtons[index].setChecked(false);
                             System.out.println("PUSH NEEDED");
