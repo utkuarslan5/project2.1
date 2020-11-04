@@ -40,6 +40,8 @@ public class PlayState extends State {
     public static int lostP;
     public static int lostB;
     private List<Hex> allDestinations = new ArrayList<>();
+    private ImageButton[] lostBalls;
+    private ImageButton[] circles;
 
     private Tree tree;
 
@@ -190,7 +192,6 @@ public class PlayState extends State {
                             }
                         } else {
                             ballButtons[index].setChecked(false);
-
                         }
                     } else if (ball.getColor().isBlank()) {
                         if (board.getSelected().size() > 0) {
@@ -208,6 +209,43 @@ public class PlayState extends State {
             ballTextureRegionDrawable.setMinSize(50, 50);
             ballTexturePressedRegionDrawable.setMinSize(50, 50);
             ballButtons[iHex] = ballButton;
+        }
+
+        lostBalls = new ImageButton[12];
+        circles = new ImageButton[12];
+        int tempy= 0;
+        int tempy2 =0;
+        float t = 1;
+        float t2= 1;
+        TextureRegionDrawable circle = new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png")));
+        circle.setMinSize(52,52);
+        for(int h = 0;h<lostBalls.length;h++){
+            circles[h] = new ImageButton(
+                    circle,
+                    circle
+            );
+            if(h<6){
+                lostBalls[h] = new ImageButton(
+                        ballTextureRegionDrawableBlue,
+                        ballTextureRegionDrawableBlue,
+                        ballTexturePressedRegionDrawableBlue
+                );
+                lostBalls[h].setPosition(240 + t,418 + tempy);
+                circles[h].setPosition(240 + t,418 + tempy);
+                t += 31;
+                tempy += 55;
+            }else{
+                lostBalls[h] = new ImageButton(
+                        ballTextureRegionDrawablePurple,
+                        ballTextureRegionDrawablePurple,
+                        ballTexturePressedRegionDrawablePurple
+                );
+                lostBalls[h].setPosition(240 + t2,328 - tempy2);
+                circles[h].setPosition(240 + t2, 328 - tempy2);
+                t2 += 31;
+                tempy2 += 55;
+            }
+            lostBalls[h].setVisible(false);
         }
     }
 
@@ -248,6 +286,12 @@ public class PlayState extends State {
         purpleLostBalls.setText("Purple Lost: " + lostP);
         blueLostBalls.setText("Blue Lost: " + lostB);
 
+        if(lostB!=0) {
+            lostBalls[lostB-1].setVisible(true);
+        }
+        if(lostP!=0){
+            lostBalls[6 + lostP-1].setVisible(true);
+        }
         if (lostP == 6 || lostB == 6) {
             State endState = new EndState(gsm);
             gsm.pop();
@@ -301,6 +345,12 @@ public class PlayState extends State {
             }
             stage.addActor(ballButtons[i]);
             temp = y;
+        }
+        for(ImageButton lostBalls : lostBalls){
+            stage.addActor(lostBalls);
+        }
+        for(ImageButton circles : circles){
+            stage.addActor(circles);
         }
         stage.addActor(bluePlayer);
         stage.addActor(purplePlayer);
