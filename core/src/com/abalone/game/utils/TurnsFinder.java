@@ -23,7 +23,7 @@ public class TurnsFinder {
 
     public List<Turn> findTurns(Hex hex){
 
-        System.out.println("BASE HEX "+hex.toString());
+        System.out.println("BASE HEX " + hex.toString());
 
         if(hex.getBall().getColor().isBlank()){
             return null;

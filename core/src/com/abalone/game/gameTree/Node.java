@@ -3,6 +3,8 @@ package com.abalone.game.gameTree;
 import com.abalone.game.objects.Board;
 import com.abalone.game.objects.Hex;
 import com.abalone.game.objects.Move;
+import com.abalone.game.objects.Turn;
+import com.abalone.game.utils.TurnsFinder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ public class Node {
     private int depth;
 
     public Node(Board board, int depthTree, int depth) {
+        TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
         this.children = new ArrayList();
 
         BoardState boardState = new BoardState(board);
@@ -23,10 +26,18 @@ public class Node {
             // So we get the purple balls (balls of the AI) because it is the turn of the AI to play
             // Otherwise we take the blue balls because it is the turn of the human to play
             List<Hex> hexes = (depth%2 == 0) ? board.getPurpleHex() : board.getBlueHex();
-            for(int iHex = 0; iHex < hexes.size(); iHex++) {
-                // TODO: get all turns of each hexes.get(iHex) and apply it to the board to create the next board
-                for(int iMove = 0; iMove < 1; iMove++) {
+
+            turnsFinder.clearTurns();
+            for(Hex hex : hexes) {
+                // calculte all turns for each hex
+                turnsFinder.findTurns(hex);
+            }
+            // get every calculated turns for all hexes
+            List<List<Turn>> allTurns = turnsFinder.getTurns();
+            for(List<Turn> ts : allTurns) {
+                for(Turn t : ts) {
                     Board newBoard = new Board(); // board.move(availableMoves[iMove]);
+                    // TODO: apply the turn to the board (by creating a new board, attention to reference)
                     this.addChild(new Node(newBoard, depthTree, depth+1));
                 }
             }
