@@ -110,6 +110,72 @@ public class Board {
         }
     }
 
+    public void move(Turn move) {
+        switch (move.getTurnType()) {
+            case 0:
+                List<Move> moveList = move.getMovesList();
+                Hex start = moveList.get(0).getStart();
+                Hex destination = moveList.get(0).getDestination();
+                Ball startBall = start.getBall();
+                Ball destinationBall = destination.getBall();
+                hexGrid.getHexList().get(hexGrid.getBallAt(destinationBall)).setBall(startBall);
+                hexGrid.getHexList().get(hexGrid.getBallAt(startBall)).setBall(destinationBall);
+                break;
+            case 1:
+                moveList = move.getMovesList();
+                start = moveList.get(0).getStart();
+                Hex start2 = moveList.get(1).getStart();
+                destination = moveList.get(0).getDestination();
+                Hex destination2 = moveList.get(1).getDestination();
+                startBall = start.getBall();
+                Ball start2Ball = start2.getBall();
+                destinationBall = destination.getBall();
+                Ball destination2Ball = destination2.getBall();
+                if (destination2 == start) {
+                    hexGrid.getHexList().get(hexGrid.getBallAt(destinationBall)).setBall(startBall);
+                    hexGrid.getHexList().get(hexGrid.getBallAt(startBall)).setBall(start2Ball);
+                    hexGrid.getHexList().get(hexGrid.getBallAt(start2Ball)).setBall(destinationBall);
+                } else {
+                    hexGrid.getHexList().get(hexGrid.getBallAt(destinationBall)).setBall(startBall);
+                    hexGrid.getHexList().get(hexGrid.getBallAt(destination2Ball)).setBall(start2Ball);
+                    hexGrid.getHexList().get(hexGrid.getBallAt(startBall)).setBall(destinationBall);
+                    hexGrid.getHexList().get(hexGrid.getBallAt(start2Ball)).setBall(destination2Ball);
+                }
+                break;
+
+            case 2:
+                moveList = move.getMovesList();
+                start = moveList.get(0).getStart();
+                start2 = moveList.get(1).getStart();
+                Hex start3 = moveList.get(2).getStart();
+                destination = moveList.get(0).getDestination();
+                destination2 = moveList.get(1).getDestination();
+                Hex destination3 = moveList.get(2).getDestination();
+                startBall = start.getBall();
+                start2Ball = start2.getBall();
+                Ball start3Ball = start3.getBall();
+                destinationBall = destination.getBall();
+                destination2Ball = destination2.getBall();
+                Ball destination3Ball = destination3.getBall();
+                if (destination2 == start && destination3 == start2) {
+                    hexGrid.getHexList().get(hexGrid.getBallAt(destinationBall)).setBall(startBall);
+                    hexGrid.getHexList().get(hexGrid.getBallAt(startBall)).setBall(start2Ball);
+                    hexGrid.getHexList().get(hexGrid.getBallAt(start2Ball)).setBall(start3Ball);
+                    hexGrid.getHexList().get(hexGrid.getBallAt(start3Ball)).setBall(destinationBall);
+                } else {
+                    hexGrid.getHexList().get(hexGrid.getBallAt(destinationBall)).setBall(startBall);
+                    hexGrid.getHexList().get(hexGrid.getBallAt(destination2Ball)).setBall(start2Ball);
+                    hexGrid.getHexList().get(hexGrid.getBallAt(destination3Ball)).setBall(start3Ball);
+                    hexGrid.getHexList().get(hexGrid.getBallAt(startBall)).setBall(destinationBall);
+                    hexGrid.getHexList().get(hexGrid.getBallAt(start2Ball)).setBall(destination2Ball);
+                    hexGrid.getHexList().get(hexGrid.getBallAt(start3Ball)).setBall(destination3Ball);
+
+                }
+
+                break;
+        }
+    }
+
     public void requestMove(Ball ballTo) {
         organizeSelected(ballTo);
         int from = hexGrid.getBallAt(selected.get(0));
