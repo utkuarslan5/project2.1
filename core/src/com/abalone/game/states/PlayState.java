@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class PlayState extends State {
     private Label blueLostBalls;
     public static int lostP;
     public static int lostB;
-    private List<Hex> allDestinations = new ArrayList<>();
+    private final List<Hex> allDestinations = new ArrayList<>();
     private ImageButton[] lostBalls;
     private ImageButton[] circles;
 
@@ -67,7 +66,7 @@ public class PlayState extends State {
         spriteBatch = new SpriteBatch();
         board = new Board();
 
-        tree = new Tree(board, 2);
+        //tree = new Tree(board, 2); //this results in an infinite loop
 
         board.getBoardImage().setPosition(AbaloneGame.width / 2f - (board.getBoardImage().getWidth() / 2), AbaloneGame.height / 2f - (board.getBoardImage().getHeight() / 2));
         Viewport viewport = new FitViewport(AbaloneGame.width, AbaloneGame.height, AbaloneGame.cam);

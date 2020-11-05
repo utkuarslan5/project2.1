@@ -4,17 +4,14 @@ import com.abalone.game.objects.Board;
 import com.abalone.game.objects.Hex;
 import com.abalone.game.utils.Color;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public class Heuristics {
     private final Board current;
-    private final Timestamp timestamp;
     private final Color player;
     public final float value;
 
     public Heuristics(Board current, Color player) {
-        timestamp = new Timestamp(System.currentTimeMillis());
         this.current = current;
         this.player = player;
         this.value = valueFunction(current, 1, 1, 1);
@@ -52,7 +49,7 @@ public class Heuristics {
         float h1 = w1 * count;
         float h2 = w2 * (totalDistance / count);
         float h3 = w3 * countNeighboursOfEachBall;
-        System.out.println("h1:" + h1 + "h2: " + h2 + "h3: " + h3);
+        System.out.println("h1:" + h1 + " h2: " + h2 + " h3: " + h3);
         float value = h1 + h2 + h3;
 
         return value;
@@ -62,9 +59,6 @@ public class Heuristics {
         return current;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
-    }
 
     public float getValue() {
         return value;
@@ -73,8 +67,7 @@ public class Heuristics {
     @Override
     public String toString() {
         return "BoardState{" +
-                "current=" + current +
-                ", timestamp=" + timestamp +
+                "current=" + current.toString() +
                 ", player=" + player.toString() +
                 ", value=" + value +
                 '}';
