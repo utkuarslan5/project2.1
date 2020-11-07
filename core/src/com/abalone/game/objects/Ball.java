@@ -4,7 +4,7 @@ import com.abalone.game.utils.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class Ball {
+public class Ball implements Cloneable {
     private Color color;
     private int id;
 
@@ -23,5 +23,10 @@ public class Ball {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        Ball clonedBall = (Ball)super.clone();
+        return clonedBall;
     }
 }

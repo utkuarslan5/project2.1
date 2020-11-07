@@ -9,7 +9,7 @@ import java.util.List;
 import static com.abalone.game.utils.Color.BLANK;
 
 // TODO: add a configuration file of the board and game's initial conditions
-public class HexGrid {
+public class HexGrid implements Cloneable {
     private List<Hex> hexList = new ArrayList<>();
 
     public HexGrid() {
@@ -113,5 +113,14 @@ public class HexGrid {
 
     public void setHexList(List<Hex> hexList) {
         this.hexList = hexList;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        HexGrid clonedHexGrid = (HexGrid)super.clone();
+        clonedHexGrid.hexList = new ArrayList<>();
+        for (Hex hex : this.hexList) {
+            clonedHexGrid.hexList.add((Hex)hex.clone());
+        }
+        return clonedHexGrid;
     }
 }

@@ -34,12 +34,17 @@ public class Node {
             }
             // get every calculated turns for all hexes
             List<List<Turn>> allTurns = turnsFinder.getTurns();
-            for(List<Turn> ts : allTurns) {
-                for(Turn t : ts) {
-                    Board newBoard = new Board(); // board.move(availableMoves[iMove]);
-                    // TODO: apply the turn to the board (by creating a new board, attention to reference)
-                    this.addChild(new Node(newBoard, depthTree, depth+1));
+            try {
+                for(List<Turn> ts : allTurns) {
+                    for(Turn t : ts) {
+                        Board newBoard = (Board)board.clone();
+                        // TODO: apply the turn/push to the newBoard
+                        this.addChild(new Node(newBoard, depthTree, depth+1));
+                    }
                 }
+            }
+            catch (Exception e) {
+                System.out.println("Clone excpetion");
             }
         }
         this.depth = depth;

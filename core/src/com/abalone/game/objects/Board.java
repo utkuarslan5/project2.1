@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board {
+public class Board implements Cloneable {
     private Image board;
     private HexGrid hexGrid;
     private ArrayList<Ball> selected;
@@ -418,5 +418,12 @@ public class Board {
 
     public boolean getMovePerformed() {
         return movePerformed;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        Board clonedBoard = (Board)super.clone();
+        clonedBoard.selected = new ArrayList<>();
+        clonedBoard.hexGrid = (HexGrid)this.hexGrid.clone();
+        return clonedBoard;
     }
 }

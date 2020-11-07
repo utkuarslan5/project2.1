@@ -5,7 +5,7 @@ import com.abalone.game.utils.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Hex {
+public class Hex implements Cloneable {
     private int x;
     private int z;
     private static final List<Hex> directions = new ArrayList<Hex>() {{
@@ -97,5 +97,13 @@ public class Hex {
                 " z" + z +
                 " " + ball.getColor() +
                 '}';
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        Hex clonedHex = (Hex)super.clone();
+        if(clonedHex.ball != null) {
+            clonedHex.ball = (Ball)this.ball.clone();
+        }
+        return clonedHex;
     }
 }
