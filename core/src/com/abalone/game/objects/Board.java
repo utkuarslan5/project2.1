@@ -131,7 +131,13 @@ public class Board implements Cloneable {
                 Ball start2Ball = start2.getBall();
                 destinationBall = destination.getBall();
                 Ball destination2Ball = destination2.getBall();
-                if (destination2 == start) {
+                if ((startBall.getColor().isBlue() && destinationBall.getColor().isPurple()) ||
+                        startBall.getColor().isPurple() && destinationBall.getColor().isBlue()) {
+                    selected.clear();
+                    selected.add(startBall);
+                    selected.add(start2Ball);
+                    pushBalls(destinationBall);
+                } else if (destination2 == start) {
                     hexGrid.getHexList().get(hexGrid.getBallAt(destinationBall)).setBall(startBall);
                     hexGrid.getHexList().get(hexGrid.getBallAt(startBall)).setBall(start2Ball);
                     hexGrid.getHexList().get(hexGrid.getBallAt(start2Ball)).setBall(destinationBall);
@@ -157,7 +163,14 @@ public class Board implements Cloneable {
                 destinationBall = destination.getBall();
                 destination2Ball = destination2.getBall();
                 Ball destination3Ball = destination3.getBall();
-                if (destination2 == start && destination3 == start2) {
+                if ((startBall.getColor().isBlue() && destinationBall.getColor().isPurple()) ||
+                        startBall.getColor().isPurple() && destinationBall.getColor().isBlue()) {
+                    selected.clear();
+                    selected.add(startBall);
+                    selected.add(start2Ball);
+                    selected.add(start3Ball);
+                    pushBalls(destinationBall);
+                } else if (destination2 == start && destination3 == start2) {
                     hexGrid.getHexList().get(hexGrid.getBallAt(destinationBall)).setBall(startBall);
                     hexGrid.getHexList().get(hexGrid.getBallAt(startBall)).setBall(start2Ball);
                     hexGrid.getHexList().get(hexGrid.getBallAt(start2Ball)).setBall(start3Ball);
@@ -421,9 +434,9 @@ public class Board implements Cloneable {
     }
 
     public Object clone() throws CloneNotSupportedException {
-        Board clonedBoard = (Board)super.clone();
+        Board clonedBoard = (Board) super.clone();
         clonedBoard.selected = new ArrayList<>();
-        clonedBoard.hexGrid = (HexGrid)this.hexGrid.clone();
+        clonedBoard.hexGrid = (HexGrid) this.hexGrid.clone();
         return clonedBoard;
     }
 }
