@@ -38,7 +38,7 @@ public class Node {
                 for(List<Turn> ts : allTurns) {
                     for(Turn t : ts) {
                         Board newBoard = (Board)board.clone();
-                        // TODO: apply the turn/push to the newBoard
+                        newBoard.move(t);
                         this.addChild(new Node(newBoard, depthTree, depth+1));
                     }
                 }
