@@ -2,7 +2,6 @@ package com.abalone.game.gameTree;
 
 import com.abalone.game.objects.Board;
 import com.abalone.game.objects.Hex;
-import com.abalone.game.objects.Move;
 import com.abalone.game.objects.Turn;
 import com.abalone.game.utils.TurnsFinder;
 
@@ -15,6 +14,8 @@ public class Node {
     private List<Node> children;
     private Node parent;
     private int depth;
+    private float value;
+    private Heuristics heuristics;
 
     public Node(Board board, int depthTree, int depth) {
         TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
@@ -22,14 +23,14 @@ public class Node {
 
         BoardState boardState = new BoardState(board);
         if (depthTree > depth) {
-            // If the depth of this node is even, this mean it's the state of the board after a move of the human player
+            // If the depth of this node is even, this means it's the state of the board after a move of the human player
             // So we get the purple balls (balls of the AI) because it is the turn of the AI to play
             // Otherwise we take the blue balls because it is the turn of the human to play
             List<Hex> hexes = (depth%2 == 0) ? board.getPurpleHex() : board.getBlueHex();
 
             turnsFinder.clearTurns();
             for(Hex hex : hexes) {
-                // calculte all turns for each hex
+                // calculate all turns for each hex
                 turnsFinder.findTurns(hex);
             }
             // get every calculated turns for all hexes
@@ -48,13 +49,13 @@ public class Node {
             }
         }
         this.depth = depth;
+        setHeuristicsValue(this);
     }
 
     /*
     public Node(BoardState stateData) {
         this.stateData = stateData;
     }
-
     public Node(BoardState stateData, List<Node<BoardState>> children, Node<BoardState> parent, int depth) {
         this.stateData = stateData;
         this.children = children;
@@ -101,5 +102,13 @@ public class Node {
 
     public void setParent(Node parent) {
         this.parent = parent;
+    }
+
+    public void setHeuristicsValue(Node node){
+        this.value = heuristics.getValue();
+    }
+
+    public float getHeuristicsValue(){
+        return this.value;
     }
 }
