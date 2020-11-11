@@ -256,6 +256,9 @@ public class PlayState extends State {
 
     @Override
     public void update(float dt) {
+        lostB = 14-board.getBlueHex().size();
+        lostP = 14-board.getPurpleHex().size();
+
         ArrayList<Ball> selectedList = board.getSelected();
         assert selectedList != null;
 
@@ -296,6 +299,7 @@ public class PlayState extends State {
         }
         if(lostP!=0){
             lostBalls[6 + lostP-1].setVisible(true);
+            System.out.println(lostP);
         }
         if (lostP == 6 || lostB == 6) {
             State endState = new EndState(gsm);

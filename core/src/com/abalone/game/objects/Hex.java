@@ -98,7 +98,7 @@ public class Hex implements Cloneable {
                 " " + ball.getColor() +
                 '}';
     }
-
+    @Override
     public Object clone() throws CloneNotSupportedException {
         Hex clonedHex = (Hex)super.clone();
         if(clonedHex.ball != null) {

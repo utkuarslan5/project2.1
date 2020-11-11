@@ -23,7 +23,7 @@ public class Node {
         this.children = new ArrayList();
 
         BoardState boardState = new BoardState(board);
-        heuristics = new Heuristics(board, Color.BLUE);
+        heuristics = new Heuristics(board, Color.PURPLE);
         setHeuristicsValue(heuristics.getValue());
         if (depthTree > depth) {
             // If the depth of this node is even, this means it's the state of the board after a move of the human player
@@ -47,8 +47,8 @@ public class Node {
                     }
                 }
             }
-            catch (Exception e) {
-                System.out.println("Clone excpetion");
+            catch (CloneNotSupportedException e) {
+                System.out.println("Clone exception");
             }
         }
         this.depth = depth;
@@ -97,6 +97,7 @@ public class Node {
     public BoardState getStateData() {
         return stateData;
     }
+
     */
 
     public Node getParent() {

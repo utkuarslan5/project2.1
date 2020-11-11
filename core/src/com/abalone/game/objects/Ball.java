@@ -25,6 +25,7 @@ public class Ball implements Cloneable {
         this.color = color;
     }
 
+    @Override
     public Object clone() throws CloneNotSupportedException {
         Ball clonedBall = (Ball)super.clone();
         return clonedBall;

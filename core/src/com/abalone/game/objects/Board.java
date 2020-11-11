@@ -351,17 +351,10 @@ public class Board implements Cloneable {
                         System.out.println("PUSHED");
                         requestMove(tempBall2);
                     }
-                } catch (Exception e) {
+                } catch (NullPointerException e) {
                     System.out.println("OUT OF BOARD");
-                    ballTo.setColor(Color.BLANK);
-
-                    if (selected.get(0).getColor().isBlue()) {
-                        PlayState.lostP += 1;
-                    } else {
-                        PlayState.lostB += 1;
-                    }
+                    ballTo = new Ball(Color.BLANK,ballTo.getId());
                     requestMove(ballTo);
-
                 }
             }
 
@@ -410,15 +403,9 @@ public class Board implements Cloneable {
                             requestMove(tempBall);
                         }
                     }
-                } catch (Exception e) {
+                } catch (NullPointerException e) {
                     System.out.println("OUT OF BOARD");
-                    ballTo.setColor(Color.BLANK);
-
-                    if (selected.get(0).getColor().isBlue()) {
-                        PlayState.lostP += 1;
-                    } else {
-                        PlayState.lostB += 1;
-                    }
+                    ballTo = new Ball(Color.BLANK,ballTo.getId());
                     requestMove(ballTo);
                 }
             }
@@ -433,6 +420,7 @@ public class Board implements Cloneable {
         return movePerformed;
     }
 
+    @Override
     public Object clone() throws CloneNotSupportedException {
         Board clonedBoard = (Board) super.clone();
         clonedBoard.selected = new ArrayList<>();

@@ -115,6 +115,7 @@ public class HexGrid implements Cloneable {
         this.hexList = hexList;
     }
 
+    @Override
     public Object clone() throws CloneNotSupportedException {
         HexGrid clonedHexGrid = (HexGrid)super.clone();
         clonedHexGrid.hexList = new ArrayList<>();
