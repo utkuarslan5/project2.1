@@ -36,8 +36,6 @@ public class MiniMax extends Player {
         val = minimax(this.currentNode, this.depth, this.color);
     }
 
-
-
     public float minimax(Node currentNode, int depth, Color color){
         if(depth==0){
             return tree.getRoot().getHeuristicsValue();

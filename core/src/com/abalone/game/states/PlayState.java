@@ -299,7 +299,6 @@ public class PlayState extends State {
         }
         if(lostP!=0){
             lostBalls[6 + lostP-1].setVisible(true);
-            System.out.println(lostP);
         }
         if (lostP == 6 || lostB == 6) {
             State endState = new EndState(gsm);
