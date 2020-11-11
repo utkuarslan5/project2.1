@@ -3,6 +3,7 @@ package com.abalone.game.gameTree;
 import com.abalone.game.objects.Board;
 import com.abalone.game.objects.Hex;
 import com.abalone.game.objects.Turn;
+import com.abalone.game.utils.Color;
 import com.abalone.game.utils.TurnsFinder;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class Node {
         this.children = new ArrayList();
 
         BoardState boardState = new BoardState(board);
+        heuristics = new Heuristics(board, Color.BLUE);
+        setHeuristicsValue(heuristics.getValue());
         if (depthTree > depth) {
             // If the depth of this node is even, this means it's the state of the board after a move of the human player
             // So we get the purple balls (balls of the AI) because it is the turn of the AI to play
@@ -49,7 +52,7 @@ public class Node {
             }
         }
         this.depth = depth;
-        //setHeuristicsValue(this);
+
     }
 
     /*
@@ -104,8 +107,8 @@ public class Node {
         this.parent = parent;
     }
 
-    public void setHeuristicsValue(Node node){
-        this.value = heuristics.getValue();
+    public void setHeuristicsValue(float value) {
+        this.value = value;
     }
 
     public float getHeuristicsValue(){

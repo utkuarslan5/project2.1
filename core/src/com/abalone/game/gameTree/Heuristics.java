@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class Heuristics {
+
+
     private final Board current;
     private final Timestamp timestamp;
     private final Color player;
@@ -70,6 +72,9 @@ public class Heuristics {
         return value;
     }
 
+    public Board getCurrent() {
+        return current;
+    }
     @Override
     public String toString() {
         return "BoardState{" +

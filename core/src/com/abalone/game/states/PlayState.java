@@ -4,6 +4,7 @@ import com.abalone.game.AbaloneGame;
 import com.abalone.game.gameTree.Tree;
 import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.*;
+import com.abalone.game.players.MiniMax;
 import com.abalone.game.utils.TurnsFinder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -18,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import javax.swing.text.html.MinimalHTMLWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +43,7 @@ public class PlayState extends State {
     private List<Hex> allDestinations = new ArrayList<>();
     private ImageButton[] lostBalls;
     private ImageButton[] circles;
+    private MiniMax miniMax;
 
     private Tree tree;
 
@@ -65,7 +69,7 @@ public class PlayState extends State {
         spriteBatch = new SpriteBatch();
         board = new Board();
 
-        tree = new Tree(board, 2);
+
 
         board.getBoardImage().setPosition(AbaloneGame.width / 2f - (board.getBoardImage().getWidth() / 2), AbaloneGame.height / 2f - (board.getBoardImage().getHeight() / 2));
         Viewport viewport = new FitViewport(AbaloneGame.width, AbaloneGame.height, AbaloneGame.cam);
@@ -198,6 +202,9 @@ public class PlayState extends State {
                                 switchTurnPlayer();
                                 allDestinations.clear();
                                 board.setMovePerformed(false);
+                                tree = new Tree(board, 2);
+                                miniMax = new MiniMax(tree.getRoot(), 2, com.abalone.game.utils.Color.PURPLE, tree);
+                                System.out.println("MINIMAX VALUE " + miniMax.getVal());
                             }
                         }
                     }
