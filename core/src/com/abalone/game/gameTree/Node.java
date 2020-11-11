@@ -49,7 +49,7 @@ public class Node {
             }
         }
         this.depth = depth;
-        setHeuristicsValue(this);
+        //setHeuristicsValue(this);
     }
 
     /*

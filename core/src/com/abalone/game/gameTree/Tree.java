@@ -10,11 +10,12 @@ import java.util.List;
 public class Tree {
 
     private final Node root;
-   // private MiniMax miniMax;
+    private MiniMax miniMax;
+    public float miniMaxValue;
 
     public Tree(Board board, int depthTree) {
         root = new Node(board, depthTree, 0);
-        //miniMax.minimax(root, depthTree, Color.BLUE);
+        //miniMaxValue = miniMax.minimax(root, depthTree, Color.BLUE);
     }
 
     public Node getRoot() {

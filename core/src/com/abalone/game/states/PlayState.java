@@ -18,8 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -214,17 +212,17 @@ public class PlayState extends State {
         lostBalls = new ImageButton[12];
         circles = new ImageButton[12];
         int tempy= 0;
-        int tempy2 =0;
+        int tempy2 = 0;
         float t = 1;
         float t2= 1;
         TextureRegionDrawable circle = new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png")));
         circle.setMinSize(52,52);
-        for(int h = 0;h<lostBalls.length;h++){
+        for(int h = 0; h < lostBalls.length; h++){
             circles[h] = new ImageButton(
                     circle,
                     circle
             );
-            if(h<6){
+            if(h < 6){
                 lostBalls[h] = new ImageButton(
                         ballTextureRegionDrawableBlue,
                         ballTextureRegionDrawableBlue,
@@ -479,9 +477,9 @@ public class PlayState extends State {
                             startHexes.clear();
                             tempdest.clear();
                         }
-                     }
-                 }
-             }
+                    }
+                }
+            }
         }
     }
 }
