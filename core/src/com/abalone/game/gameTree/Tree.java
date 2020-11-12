@@ -12,7 +12,7 @@ public class Tree {
     private final Node root;
 
     public Tree(Board board, int depthTree) {
-        root = new Node(board, depthTree, 0);
+        root = new Node(board, depthTree, 0, null);
     }
 
     public Node getRoot() {

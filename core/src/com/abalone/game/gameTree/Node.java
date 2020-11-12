@@ -11,18 +11,17 @@ import java.util.List;
 
 public class Node {
 
-    //private final BoardState stateData;
     private List<Node> children;
     private Node parent;
     private int depth;
     private float value;
     private Heuristics heuristics;
+    private Turn turn;
 
-    public Node(Board board, int depthTree, int depth) {
+    public Node(Board board, int depthTree, int depth, Turn turn) {
         TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
         this.children = new ArrayList();
 
-        BoardState boardState = new BoardState(board);
         heuristics = new Heuristics(board, Color.PURPLE);
         setHeuristicsValue(heuristics.getValue());
         if (depthTree > depth) {
@@ -43,7 +42,7 @@ public class Node {
                     for(Turn t : ts) {
                         Board newBoard = (Board)board.clone();
                         newBoard.move(t);
-                        this.addChild(new Node(newBoard, depthTree, depth+1));
+                        this.addChild(new Node(newBoard, depthTree, depth+1, t));
                     }
                 }
             }
@@ -51,35 +50,16 @@ public class Node {
                 System.out.println("Clone exception");
             }
         }
-        this.depth = depth;
 
-    }
-
-    /*
-    public Node(BoardState stateData) {
-        this.stateData = stateData;
-    }
-    public Node(BoardState stateData, List<Node<BoardState>> children, Node<BoardState> parent, int depth) {
-        this.stateData = stateData;
-        this.children = children;
-        this.parent = parent;
         this.depth = depth;
+        this.turn = turn;
+        // System.out.printf("d=%d   Value=%.2f\n", depth, value);
     }
-    */
 
     public void addChild(Node child) {
         child.setParent(this);
         this.children.add(child);
     }
-
-    /*
-    public void addChildren(List<Node> children) {
-        this.children = children;
-        for (Node child : this.children) {
-            child.setParent(this);
-        }
-    }
-    */
 
     public boolean isChildOf(Node child) {
         return children.contains(child);
@@ -93,19 +73,20 @@ public class Node {
         return children;
     }
 
-    /*
-    public BoardState getStateData() {
-        return stateData;
-    }
-
-    */
-
     public Node getParent() {
         return parent;
     }
 
     public void setParent(Node parent) {
         this.parent = parent;
+    }
+
+    public Turn getTurn() {
+        return turn;
+    }
+
+    public int getDepth() {
+        return depth;
     }
 
     public void setHeuristicsValue(float value) {

@@ -1,6 +1,7 @@
 package com.abalone.game.states;
 
 import com.abalone.game.AbaloneGame;
+import com.abalone.game.gameTree.Heuristics;
 import com.abalone.game.gameTree.Tree;
 import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.*;
@@ -23,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import javax.swing.text.html.MinimalHTMLWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class PlayState extends State {
     private SpriteBatch spriteBatch;
@@ -68,8 +70,6 @@ public class PlayState extends State {
         skin = new Skin(Gdx.files.internal("cloud-form/skin/cloud-form-ui.json"));
         spriteBatch = new SpriteBatch();
         board = new Board();
-
-
 
         board.getBoardImage().setPosition(AbaloneGame.width / 2f - (board.getBoardImage().getWidth() / 2), AbaloneGame.height / 2f - (board.getBoardImage().getHeight() / 2));
         Viewport viewport = new FitViewport(AbaloneGame.width, AbaloneGame.height, AbaloneGame.cam);
@@ -191,6 +191,9 @@ public class PlayState extends State {
                             if (board.getMovePerformed()) {
                                 switchTurnPlayer();
                                 board.setMovePerformed(false);
+                                if(purplePlayer.isChecked()) {
+                                    AIplays();
+                                }
                             }
                         } else {
                             ballButtons[index].setChecked(false);
@@ -202,9 +205,9 @@ public class PlayState extends State {
                                 switchTurnPlayer();
                                 allDestinations.clear();
                                 board.setMovePerformed(false);
-                                tree = new Tree(board, 2);
-                                miniMax = new MiniMax(tree.getRoot(), 2, com.abalone.game.utils.Color.PURPLE, tree);
-                                System.out.println("MINIMAX VALUE " + miniMax.getVal());
+                                if(purplePlayer.isChecked()) {
+                                    AIplays();
+                                }
                             }
                         }
                     }
@@ -388,6 +391,29 @@ public class PlayState extends State {
         } else {
             purplePlayer.setChecked(true);
         }
+    }
+
+    public void AIplays() {
+        // construction of the tree
+        int depthTree = 2;
+        tree = new Tree(board, depthTree);
+
+        miniMax = new MiniMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
+
+        try
+        {
+            Thread.sleep(500);
+        }
+        catch(InterruptedException ex)
+        {
+            Thread.currentThread().interrupt();
+        }
+
+        board.move(miniMax.getBestNode().getTurn());
+
+        switchTurnPlayer();
+        allDestinations.clear();
+        board.setMovePerformed(false);
     }
 
     public void alignSelection(Hex hex, Ball ball, int index) {

@@ -19,7 +19,7 @@ public class Heuristics {
         timestamp = new Timestamp(System.currentTimeMillis());
         this.current = current;
         this.player = player;
-        this.value = valueFunction(current, 1, 1, 1);
+        this.value = valueFunction(current, 0.5f, 1, 0.05f);
     }
 
     //Heuristics
@@ -54,8 +54,8 @@ public class Heuristics {
         float h1 = w1 * count;
         float h2 = w2 * (totalDistance / count);
         float h3 = w3 * countNeighboursOfEachBall;
-        System.out.println("h1:" + h1 + "h2: " + h2 + "h3: " + h3);
         float value = h1 + h2 + h3;
+        // System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   =   %.2f\n", h1, h2, h3, value);
 
         return value;
     }
@@ -75,6 +75,7 @@ public class Heuristics {
     public Board getCurrent() {
         return current;
     }
+
     @Override
     public String toString() {
         return "BoardState{" +

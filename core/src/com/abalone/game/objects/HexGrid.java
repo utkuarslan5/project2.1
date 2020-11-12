@@ -14,17 +14,6 @@ public class HexGrid implements Cloneable {
 
     public HexGrid() {
         hexList = generateHex();
-        String log = "";
-        for(Hex hex: getHexList()) {
-            Ball ball = hex.getBall();
-            switch (ball.getColor()) {
-                case BLUE: log += "1"; break;
-                case BLANK: log += "0"; break;
-                case PURPLE: log += "2"; break;
-            }
-        }
-        System.out.println(log);
-        System.out.println("hexGrid called");
     }
 
     public HexGrid(ArrayList<Hex> hexList) {

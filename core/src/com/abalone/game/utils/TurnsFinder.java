@@ -23,7 +23,7 @@ public class TurnsFinder {
 
     public List<Turn> findTurns(Hex hex){
 
-        System.out.println("BASE HEX " + hex.toString());
+        // System.out.println("BASE HEX " + hex.toString());
 
         if(hex.getBall().getColor().isBlank()){
             return null;
@@ -150,9 +150,11 @@ public class TurnsFinder {
                 ihh = grid.getMatchedHex(nihh);
             }
 
+            /*
             if(hhh != null && hh != null && ih != null && ihh != null) {
                 System.out.println(hhh.toString() + hh.toString() + h.toString() + hex.toString() + ih.toString() + ihh.toString());
             }
+            */
 
             boolean firstBlock = false;
             boolean secondBlock = false;
@@ -191,21 +193,21 @@ public class TurnsFinder {
                 }
             }
 
-            System.out.println("Ft2="+forceTypeTwo+" Ft3="+forceTypeThree);
+            // System.out.println("Ft2="+forceTypeTwo+" Ft3="+forceTypeThree);
 
             // Get in-line turns from forces
             if(forceTypeTwo > 0 && ih != null){
                 foundTurns.add(new Turn(hex));
                 foundTurns.get(foundTurns.size()-1).addMove(1,hex,h);
                 foundTurns.get(foundTurns.size()-1).addMove(1,ih,hex);
-                System.out.println(foundTurns.get(foundTurns.size()-1).toString());
+                // System.out.println(foundTurns.get(foundTurns.size()-1).toString());
             }
             if(forceTypeThree > 0 && ih != null && ihh != null){
                 foundTurns.add(new Turn(hex));
                 foundTurns.get(foundTurns.size()-1).addMove(2,hex,h);
                 foundTurns.get(foundTurns.size()-1).addMove(2,ih,hex);
                 foundTurns.get(foundTurns.size()-1).addMove(2,ihh,ih);
-                System.out.println(foundTurns.get(foundTurns.size()-1).toString());
+                // System.out.println(foundTurns.get(foundTurns.size()-1).toString());
             }
 
         }

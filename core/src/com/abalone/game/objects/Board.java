@@ -184,7 +184,6 @@ public class Board implements Cloneable {
                     hexGrid.getHexList().get(hexGrid.getBallAt(start3Ball)).setBall(destination3Ball);
 
                 }
-
                 break;
         }
     }

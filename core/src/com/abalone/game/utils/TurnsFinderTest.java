@@ -48,7 +48,7 @@ public class TurnsFinderTest {
             if (h.size() > 0) {
                 System.out.println("Turns for hex " + (i + 1));
                 for (Turn t : h) {
-                    System.out.println(t.toString());
+                    // System.out.println(t.toString());
                     for (Move m : t.getMovesList()) {
                     }
                 }
