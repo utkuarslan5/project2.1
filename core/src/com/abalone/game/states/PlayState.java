@@ -394,26 +394,27 @@ public class PlayState extends State {
     }
 
     public void AIplays() {
-        // construction of the tree
-        int depthTree = 2;
-        tree = new Tree(board, depthTree);
+        if(!SettingsState.miniMaxChecked.isChecked()) {
+            // construction of the tree
+            int depthTree = 2;
+            tree = new Tree(board, depthTree);
 
-        miniMax = new MiniMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
+            miniMax = new MiniMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
 
-        try
-        {
-            Thread.sleep(500);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+
+            board.move(miniMax.getBestNode().getTurn());
+
+            switchTurnPlayer();
+            allDestinations.clear();
+            board.setMovePerformed(false);
+        }else if(!SettingsState.negaMaxChecked.isChecked()){
+            System.out.println("NEGAMAX!!!!!");
         }
-        catch(InterruptedException ex)
-        {
-            Thread.currentThread().interrupt();
-        }
-
-        board.move(miniMax.getBestNode().getTurn());
-
-        switchTurnPlayer();
-        allDestinations.clear();
-        board.setMovePerformed(false);
     }
 
     public void alignSelection(Hex hex, Ball ball, int index) {

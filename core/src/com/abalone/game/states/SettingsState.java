@@ -17,7 +17,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class SettingsState extends State {
     private SpriteBatch spriteBatch;
     private Stage stage;
-    private Skin skin;
     private Image background;
     private BitmapFont gameFontSetting;
     private BitmapFont gameFontMusic;
@@ -26,9 +25,10 @@ public class SettingsState extends State {
     private static ImageButton music1Checked;
     private static ImageButton music2Checked;
     private static ImageButton musicOnOff;
-    private static ImageButton MiniMaxChecked;
-    private static ImageButton NegaMaxChecked;
-    private PlayState playState;
+    public static ImageButton miniMaxChecked;
+    public static ImageButton negaMaxChecked;
+    private boolean help;
+
 
     protected SettingsState(GameStateManager ourGsm) {
         super(ourGsm);
@@ -36,6 +36,9 @@ public class SettingsState extends State {
 
     @Override
     public void init() {
+        help = true;
+        Texture unchecked = new Texture(Gdx.files.internal("checkedCheckBox.png"));
+        Texture checked = new Texture(Gdx.files.internal("uncheckedCheckBox.png"));
         spriteBatch = new SpriteBatch();
         Viewport viewport = new FitViewport(AbaloneGame.width, AbaloneGame.height, AbaloneGame.cam);
         viewport.apply();
@@ -58,7 +61,7 @@ public class SettingsState extends State {
         gameFontSubPoints = gen.generateFont(parameter3);
         gameFontSubPoints.setColor(Color.WHITE);
 
-        skin = new Skin(Gdx.files.internal("cloud-form/skin/cloud-form-ui.json"));
+        Skin skin = new Skin(Gdx.files.internal("cloud-form/skin/cloud-form-ui.json"));
         stage = new Stage(viewport, spriteBatch);
         Texture img = new Texture("aurora.jpg");
         background = new Image(img);
@@ -70,23 +73,23 @@ public class SettingsState extends State {
         returnButton.setScale(0.5f);
         returnButton.setPosition(15, 730);
 
-        music1Checked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
-                new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
-                new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
+        music1Checked = new ImageButton(new TextureRegionDrawable(unchecked),
+                new TextureRegionDrawable(unchecked),
+                new TextureRegionDrawable(checked));
         music1Checked.getImage().setScale(1 / 20f);
         music1Checked.setScale(0.1f);
         music1Checked.setPosition(300, 380);
 
-        music2Checked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
-                new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
-                new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
+        music2Checked = new ImageButton(new TextureRegionDrawable(unchecked),
+                new TextureRegionDrawable(unchecked),
+                new TextureRegionDrawable(checked));
         music2Checked.getImage().setScale(1 / 20f);
         music2Checked.setScale(0.1f);
         music2Checked.setPosition(300, 310);
 
-        musicOnOff = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
-                new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
-                new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
+        musicOnOff = new ImageButton(new TextureRegionDrawable(unchecked),
+                new TextureRegionDrawable(unchecked),
+                new TextureRegionDrawable(checked));
         musicOnOff.getImage().setScale(1 / 20f);
         musicOnOff.setScale(0.1f);
         musicOnOff.setPosition(300, 240);
@@ -101,19 +104,26 @@ public class SettingsState extends State {
             music2Checked.setChecked(!musicOnOff.isChecked());
         }
 
-        MiniMaxChecked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
-                new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
-                new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
-        MiniMaxChecked.getImage().setScale(1 / 20f);
-        MiniMaxChecked.setScale(0.1f);
-        MiniMaxChecked.setPosition(790, 380);
+        miniMaxChecked = new ImageButton(new TextureRegionDrawable(unchecked),
+                new TextureRegionDrawable(unchecked),
+                new TextureRegionDrawable(checked));
+        miniMaxChecked.getImage().setScale(1 / 20f);
+        miniMaxChecked.setScale(0.1f);
+        miniMaxChecked.setPosition(790, 380);
+        miniMaxChecked.setChecked(true);
 
-        NegaMaxChecked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
-                new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
-                new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
-        NegaMaxChecked.getImage().setScale(1 / 20f);
-        NegaMaxChecked.setScale(0.1f);
-        NegaMaxChecked.setPosition(790, 310);
+        negaMaxChecked = new ImageButton(new TextureRegionDrawable(unchecked),
+                new TextureRegionDrawable(unchecked),
+                new TextureRegionDrawable(checked));
+        negaMaxChecked.getImage().setScale(1 / 20f);
+        negaMaxChecked.setScale(0.1f);
+        negaMaxChecked.setPosition(790, 310);
+        negaMaxChecked.setChecked(true);
+
+        System.out.println(negaMaxChecked.isChecked());
+
+
+
     }
 
     @Override
@@ -135,8 +145,8 @@ public class SettingsState extends State {
         stage.addActor(music1Checked);
         stage.addActor(music2Checked);
         stage.addActor(musicOnOff);
-        stage.addActor(MiniMaxChecked);
-        stage.addActor(NegaMaxChecked);
+        stage.addActor(miniMaxChecked);
+        stage.addActor(negaMaxChecked);
 
         stage.draw();
         spriteBatch.begin();
@@ -179,17 +189,17 @@ public class SettingsState extends State {
             music1Checked.setChecked(true);
             musicOnOff.setChecked(true);
         }
-
+        aiHandleInput(this.help);
     }
 
-    public void AIhandleInput() {
-
-        if(!MiniMaxChecked.isChecked() && NegaMaxChecked.isChecked()){
-            playState.AIplays();
-            System.out.println("Minimax is playing");
-        } else if(!NegaMaxChecked.isChecked() && MiniMaxChecked.isChecked()){
-            playState.negaMaxPlays();
-            System.out.println("Negamax is playing");
+    public void aiHandleInput(boolean help) {
+        if(!negaMaxChecked.isChecked() && help){
+            miniMaxChecked.setChecked(true);
+            this.help = false;
+        }
+        if(!miniMaxChecked.isChecked()&& !help) {
+            negaMaxChecked.setChecked(true);
+            this.help= true;
         }
 
     }
