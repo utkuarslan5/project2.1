@@ -120,7 +120,6 @@ public class SettingsState extends State {
         negaMaxChecked.setChecked(true);
 
         System.out.println(negaMaxChecked.isChecked());
-
     }
 
     @Override

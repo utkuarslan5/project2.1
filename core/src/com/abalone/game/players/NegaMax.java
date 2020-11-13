@@ -44,7 +44,6 @@ public class NegaMax {
         }
         return bestNode;
     }
-
     public Node getBestNode() {
         return bestNode;
     }
