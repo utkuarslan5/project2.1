@@ -30,8 +30,8 @@ public class NegaMax {
         if (depth == 0) {
             return tree.getRoot();
         }
+        Node bestNode = null;
         float value = -10000000;
-
         //Assuming the AI is purple player
         for (Node child : currentNode.getChildren()) {
             if (child != null) {

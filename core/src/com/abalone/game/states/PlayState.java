@@ -391,44 +391,48 @@ public class PlayState extends State {
     }
 
     public void AIplays() {
-        // if ! miniMaxChecked.isChecked basically means that miniMax is the selected AI
-        if(!SettingsState.miniMaxChecked.isChecked()) {
-            // construction of the tree
-            int depthTree = 2;
-            tree = new Tree(board, depthTree);
+        try {
+            // if ! miniMaxChecked.isChecked basically means that miniMax is the selected AI
+            if (!SettingsState.miniMaxChecked.isChecked()) {
+                // construction of the tree
+                int depthTree = 2;
+                tree = new Tree(board, depthTree);
 
-            miniMax = new MiniMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
+                miniMax = new MiniMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
 
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+
+                board.move(miniMax.getBestNode().getTurn());
+
+                switchTurnPlayer();
+                allDestinations.clear();
+                board.setMovePerformed(false);
+
+            } else if (!SettingsState.negaMaxChecked.isChecked()) {
+                // construction of the tree
+                int depthTree = 2;
+                tree = new Tree(board, depthTree);
+
+                negaMax = new NegaMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+
+                board.move(negaMax.getBestNode().getTurn());
+
+                switchTurnPlayer();
+                allDestinations.clear();
+                board.setMovePerformed(false);
             }
-
-            board.move(miniMax.getBestNode().getTurn());
-
-            switchTurnPlayer();
-            allDestinations.clear();
-            board.setMovePerformed(false);
-
-        }else if(!SettingsState.negaMaxChecked.isChecked()){
-            // construction of the tree
-            int depthTree = 2;
-            tree = new Tree(board, depthTree);
-
-            negaMax = new NegaMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
-
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-
-            board.move(negaMax.getBestNode().getTurn());
-
-            switchTurnPlayer();
-            allDestinations.clear();
-            board.setMovePerformed(false);
+        }catch(NullPointerException e){
+            //Human mode
         }
     }
 
