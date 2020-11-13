@@ -26,7 +26,9 @@ public class SettingsState extends State {
     private static ImageButton music1Checked;
     private static ImageButton music2Checked;
     private static ImageButton musicOnOff;
-    private static ImageButton aiChecked;
+    private static ImageButton MiniMaxChecked;
+    private static ImageButton NegaMaxChecked;
+    private PlayState playState;
 
     protected SettingsState(GameStateManager ourGsm) {
         super(ourGsm);
@@ -99,14 +101,19 @@ public class SettingsState extends State {
             music2Checked.setChecked(!musicOnOff.isChecked());
         }
 
-
-        aiChecked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
+        MiniMaxChecked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
                 new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
-        aiChecked.getImage().setScale(1 / 20f);
-        aiChecked.setScale(0.1f);
-        aiChecked.setPosition(790, 380);
+        MiniMaxChecked.getImage().setScale(1 / 20f);
+        MiniMaxChecked.setScale(0.1f);
+        MiniMaxChecked.setPosition(790, 380);
 
+        NegaMaxChecked = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
+                new TextureRegionDrawable(new Texture(Gdx.files.internal("checkedCheckBox.png"))),
+                new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png"))));
+        NegaMaxChecked.getImage().setScale(1 / 20f);
+        NegaMaxChecked.setScale(0.1f);
+        NegaMaxChecked.setPosition(790, 310);
     }
 
     @Override
@@ -128,7 +135,8 @@ public class SettingsState extends State {
         stage.addActor(music1Checked);
         stage.addActor(music2Checked);
         stage.addActor(musicOnOff);
-        stage.addActor(aiChecked);
+        stage.addActor(MiniMaxChecked);
+        stage.addActor(NegaMaxChecked);
 
         stage.draw();
         spriteBatch.begin();
@@ -137,7 +145,8 @@ public class SettingsState extends State {
         gameFontMusic.draw(spriteBatch, "AI:", 740, 490);
         gameFontSubPoints.draw(spriteBatch, "Theme 1", 360, 405);
         gameFontSubPoints.draw(spriteBatch, "Theme 2", 360, 335);
-        gameFontSubPoints.draw(spriteBatch, "On/Off", 850, 405);
+        gameFontSubPoints.draw(spriteBatch, "MiniMax", 850, 405);
+        gameFontSubPoints.draw(spriteBatch, "NegaMax", 850, 335);
         gameFontSubPoints.draw(spriteBatch, "Mute", 360, 265);
         spriteBatch.end();
     }
@@ -169,6 +178,18 @@ public class SettingsState extends State {
             AbaloneGame.music2.play();
             music1Checked.setChecked(true);
             musicOnOff.setChecked(true);
+        }
+
+    }
+
+    public void AIhandleInput() {
+
+        if(!MiniMaxChecked.isChecked() && NegaMaxChecked.isChecked()){
+            playState.AIplays();
+            System.out.println("Minimax is playing");
+        } else if(!NegaMaxChecked.isChecked() && MiniMaxChecked.isChecked()){
+            playState.negaMaxPlays();
+            System.out.println("Negamax is playing");
         }
 
     }
