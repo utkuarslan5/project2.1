@@ -46,7 +46,6 @@ public class PlayState extends State {
     private ImageButton[] lostBalls;
     private ImageButton[] circles;
     private MiniMax miniMax;
-
     private Tree tree;
 
 
@@ -394,26 +393,30 @@ public class PlayState extends State {
     }
 
     public void AIplays() {
-        if(!SettingsState.miniMaxChecked.isChecked()) {
-            // construction of the tree
-            int depthTree = 2;
-            tree = new Tree(board, depthTree);
+        try {
+            if (!SettingsState.miniMaxChecked.isChecked()) {
+                // construction of the tree
+                int depthTree = 2;
+                tree = new Tree(board, depthTree);
 
-            miniMax = new MiniMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
+                miniMax = new MiniMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
 
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+
+                board.move(miniMax.getBestNode().getTurn());
+
+                switchTurnPlayer();
+                allDestinations.clear();
+                board.setMovePerformed(false);
+            } else if (!SettingsState.negaMaxChecked.isChecked()) {
+                System.out.println("NEGAMAX!!!!!");
             }
-
-            board.move(miniMax.getBestNode().getTurn());
-
-            switchTurnPlayer();
-            allDestinations.clear();
-            board.setMovePerformed(false);
-        }else if(!SettingsState.negaMaxChecked.isChecked()){
-            System.out.println("NEGAMAX!!!!!");
+        }catch(NullPointerException e){
+            //Human mode
         }
     }
 
