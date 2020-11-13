@@ -29,7 +29,6 @@ public class SettingsState extends State {
     public static ImageButton negaMaxChecked;
     private boolean help;
 
-
     protected SettingsState(GameStateManager ourGsm) {
         super(ourGsm);
     }
@@ -122,8 +121,6 @@ public class SettingsState extends State {
 
         System.out.println(negaMaxChecked.isChecked());
 
-
-
     }
 
     @Override
@@ -201,11 +198,9 @@ public class SettingsState extends State {
             negaMaxChecked.setChecked(true);
             this.help= true;
         }
-
     }
 
     @Override
     public void dispose() {
-
     }
 }

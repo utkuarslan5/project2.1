@@ -1,11 +1,11 @@
 package com.abalone.game.states;
 
 import com.abalone.game.AbaloneGame;
-import com.abalone.game.gameTree.Heuristics;
 import com.abalone.game.gameTree.Tree;
 import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.*;
 import com.abalone.game.players.MiniMax;
+import com.abalone.game.players.NegaMax;
 import com.abalone.game.utils.TurnsFinder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -20,11 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import javax.swing.text.html.MinimalHTMLWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class PlayState extends State {
     private SpriteBatch spriteBatch;
@@ -46,9 +43,8 @@ public class PlayState extends State {
     private ImageButton[] lostBalls;
     private ImageButton[] circles;
     private MiniMax miniMax;
-
+    private NegaMax negaMax;
     private Tree tree;
-
 
     private TextureRegionDrawable ballTextureRegionDrawableBlue;
     private TextureRegionDrawable ballTexturePressedRegionDrawableBlue;
@@ -58,7 +54,6 @@ public class PlayState extends State {
     private TextureRegionDrawable ballTexturePressedRegionDrawableBlank;
     private TextureRegionDrawable ballTextureRegionDrawableBlankDark;
     private TextureRegionDrawable ballTexturePressedRegionDrawableBlankDark;
-
     private ImageButton returnButton;
 
     protected PlayState(GameStateManager ourGsm) {
@@ -308,7 +303,6 @@ public class PlayState extends State {
             gsm.pop();
             gsm.push(endState);
         }
-
     }
 
     @Override
@@ -394,26 +388,48 @@ public class PlayState extends State {
     }
 
     public void AIplays() {
-        if(!SettingsState.miniMaxChecked.isChecked()) {
-            // construction of the tree
-            int depthTree = 2;
-            tree = new Tree(board, depthTree);
+        try {
+            //If !miniMaxChecked.isChecked means basically when miniMax is selected to be the playing AI
+            if (!SettingsState.miniMaxChecked.isChecked()) {
+                // construction of the tree
+                int depthTree = 2;
+                tree = new Tree(board, depthTree);
 
-            miniMax = new MiniMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
+                miniMax = new MiniMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
 
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+
+                board.move(miniMax.getBestNode().getTurn());
+
+                switchTurnPlayer();
+                allDestinations.clear();
+                board.setMovePerformed(false);
+
+            } else if (!SettingsState.negaMaxChecked.isChecked()) {
+                // construction of the tree
+                int depthTree = 2;
+                tree = new Tree(board, depthTree);
+
+                negaMax = new NegaMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+
+                board.move(negaMax.getBestNode().getTurn());
+
+                switchTurnPlayer();
+                allDestinations.clear();
+                board.setMovePerformed(false);
             }
-
-            board.move(miniMax.getBestNode().getTurn());
-
-            switchTurnPlayer();
-            allDestinations.clear();
-            board.setMovePerformed(false);
-        }else if(!SettingsState.negaMaxChecked.isChecked()){
-            System.out.println("NEGAMAX!!!!!");
+        }catch(NullPointerException e){
+            //Human mode
         }
     }
 
