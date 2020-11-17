@@ -27,6 +27,7 @@ public class NegaMax {
     }
 
     private Node negamax(Node currentNode, int depth, Color color) {
+        int counter = 0;
         if (depth == 0) {
             return tree.getRoot();
         }
@@ -36,14 +37,17 @@ public class NegaMax {
         for (Node child : currentNode.getChildren()) {
             if (child != null) {
                 float nodeValue = -negamax(child, depth - 1, Color.BLUE).getHeuristicsValue();
+                counter++;
                 if (nodeValue > value) {
                     value = nodeValue;
                     bestNode = child;
                 }
             }
         }
+        System.out.println("Evaluated nodes :" + counter);
         return bestNode;
     }
+
     public Node getBestNode() {
         return bestNode;
     }
