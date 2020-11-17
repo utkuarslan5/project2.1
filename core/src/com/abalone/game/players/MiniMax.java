@@ -55,6 +55,7 @@ public class MiniMax extends Player {
                     }
                 }
             }
+            return bestNode;
 
         } else {
             float value = 10000000;
@@ -71,9 +72,9 @@ public class MiniMax extends Player {
                     }
                 }
             }
+            return bestNode;
         }
 
-        return bestNode;
     }
 
     public Node getBestNode() {
