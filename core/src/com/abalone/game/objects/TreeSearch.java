@@ -3,11 +3,14 @@ package com.abalone.game.objects;
 import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.Tree;
 
-public interface TreeSearch {
-    int Depth = 0;
+import java.util.List;
 
-    Node search();
+public interface TreeSearch {
+    int maxDepth = 0;
+
+    Node search(Node target, Node current, List<Node> path, int depth);
 
     Tree getTree();
     int getDepth();
+    List<Node> getPath();
 }
