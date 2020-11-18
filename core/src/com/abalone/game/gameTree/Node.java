@@ -28,7 +28,9 @@ public class Node {
             // If the depth of this node is even, this means it's the state of the board after a move of the human player
             // So we get the purple balls (balls of the AI) because it is the turn of the AI to play
             // Otherwise we take the blue balls because it is the turn of the human to play
-            List<Hex> hexes = (depth%2 == 0) ? board.getPurpleHex() : board.getBlueHex();
+            List<Hex> hexes;
+            if (depth % 2 == 0) hexes = board.getPurpleHex();
+            else hexes = board.getBlueHex();
 
             turnsFinder.clearTurns();
             for(Hex hex : hexes) {

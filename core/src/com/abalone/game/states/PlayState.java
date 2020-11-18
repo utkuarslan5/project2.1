@@ -398,7 +398,7 @@ public class PlayState extends State {
                 int depthTree = 2;
                 tree = new Tree(board, depthTree);
 
-                miniMax = new MiniMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
+                miniMax = new MiniMax(tree.getRoot(), depthTree, false, tree);
 
                 try {
                     Thread.sleep(500);
