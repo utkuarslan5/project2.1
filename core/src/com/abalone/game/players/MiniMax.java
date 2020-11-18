@@ -24,27 +24,27 @@ public class MiniMax extends Player {
 
     private Node bestNode;
     private int depth;
-    private Color color;
+    private boolean maximizingPlayer;
     private Tree tree;
 
-    public MiniMax(Node currentNode, int depth, Color color, Tree tree) {
+    public MiniMax(Node currentNode, int depth, boolean maximizingPlayer, Tree tree) {
         this.depth = depth;
-        this.color = color;
+        this.maximizingPlayer = maximizingPlayer;
         this.tree = tree;
-        bestNode = minimax(currentNode, this.depth, -10000000, 10000000, this.color);
+        bestNode = minimax(currentNode, this.depth, -10000000, 10000000, this.maximizingPlayer);
     }
 
-    public Node minimax(Node currentNode, int depth, float alpha, float beta, Color color) {
+    public Node minimax(Node currentNode, int depth, float alpha, float beta, boolean maximizingPlayer) {
         if (depth == 0) {
             return tree.getRoot();
         }
         //Assuming the AI is purple player
         Node bestNode = null;
-        if (color.isBlue()) {
+        if (maximizingPlayer) {
             float value = -10000000;
             for (Node child : currentNode.getChildren()) {
                 if (child != null) {
-                    float nodeValue = minimax(child, depth - 1, alpha, beta, Color.PURPLE).getHeuristicsValue();
+                    float nodeValue = minimax(child, depth - 1, alpha, beta, false).getHeuristicsValue();
                     if (nodeValue > value) {
                         value = nodeValue;
                         bestNode = child;
@@ -61,7 +61,7 @@ public class MiniMax extends Player {
             float value = 10000000;
             for (Node child : currentNode.getChildren()) {
                 if (child != null) {
-                    float nodeValue = minimax(child, depth - 1, alpha, beta, Color.BLUE).getHeuristicsValue();
+                    float nodeValue = minimax(child, depth - 1, alpha, beta, true).getHeuristicsValue();
                     if (nodeValue < value) {
                         value = nodeValue;
                         bestNode = child;
