@@ -13,4 +13,6 @@ public interface TreeSearch {
     Tree getTree();
     int getDepth();
     List<Node> getPath();
+
+    void setDepth(int maxDepth);
 }

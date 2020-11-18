@@ -19,12 +19,18 @@ public class BreadthSearch implements TreeSearch {
     public BreadthSearch(int maxDepth, Tree tree){
         this.maxDepth = maxDepth;
         this.tree = tree;
-        q.add(tree.getRoot());
     }
 
     @Override
     public boolean search(Node target, Node current, List<Node> path, int depth) {
+        // If on first depth
+        if(depth == 1){
+            q.add(tree.getRoot());
+        }
+
+        // Set current
         current = q.remove();
+
         // If target node reached
         if(current.equals(target)){
             this.finalPath = path;
@@ -58,5 +64,10 @@ public class BreadthSearch implements TreeSearch {
     @Override
     public List<Node> getPath() {
         return finalPath;
+    }
+
+    @Override
+    public void setDepth(int maxDepth) {
+        this.maxDepth = maxDepth;
     }
 }

@@ -55,4 +55,9 @@ public class DepthSearch implements TreeSearch {
     public List<Node> getPath() {
         return finalPath;
     }
+
+    @Override
+    public void setDepth(int maxDepth) {
+        this.maxDepth = maxDepth;
+    }
 }
