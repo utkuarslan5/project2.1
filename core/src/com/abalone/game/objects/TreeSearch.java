@@ -8,7 +8,7 @@ import java.util.List;
 public interface TreeSearch {
     int maxDepth = 0;
 
-    Node search(Node target, Node current, List<Node> path, int depth);
+    boolean search(Node target, Node current, List<Node> path, int depth);
 
     Tree getTree();
     int getDepth();
