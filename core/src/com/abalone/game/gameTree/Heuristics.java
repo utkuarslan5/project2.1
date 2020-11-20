@@ -4,6 +4,7 @@ import com.abalone.game.objects.Board;
 import com.abalone.game.objects.Hex;
 import com.abalone.game.utils.Color;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Heuristics {
@@ -18,14 +19,15 @@ public class Heuristics {
         timestamp = new Timestamp(System.currentTimeMillis());
         this.current = current;
         this.player = player;
-        this.value = valueFunction(current, 0.5f, 1, 0.05f);
+        this.value = valueFunction(current, 0.5f, 0.5f, 0.05f,1f,1f);
     }
 
     //Heuristics
-    private float valueFunction(Board board, float w1, float w2, float w3) {
+    private float valueFunction(Board board, float w1, float w2, float w3, float w4, float w5) {
 
         List<Hex> hexlist = board.getHexGrid().getHexList();
         int count = 0;
+        int enemycount = 0;
         float totalDistance = 0;
         int countNeighboursOfEachBall = 0;
 
@@ -35,6 +37,9 @@ public class Heuristics {
                 // Manhattan distance, might be a good idea to add number of ply to get to the center
                 int distance = Math.abs(hex.getX()) + Math.abs(hex.getZ());
                 totalDistance += distance;
+            }
+            if(hex.isOccupied() && !hex.getBall().getColor().equals(player) && !hex.getBall().getColor().equals(Color.BLANK)){
+                enemycount++;
             }
         }
 
@@ -51,10 +56,164 @@ public class Heuristics {
             }
         }
 
+        //Attacking
+        int countAttacks = 0;
+
+        for(int i = -4 ;i<=4 ; i++){
+            ArrayList<Hex> grouped1 = new ArrayList<>();
+            ArrayList<Hex> grouped2 = new ArrayList<>();
+            ArrayList<Hex> grouped3 = new ArrayList<>();
+            for(Hex hexes : hexlist){
+                if(hexes.getX() == i){
+                    grouped1.add(hexes);
+                }else if(hexes.getY() == i ){
+                    grouped2.add(hexes);
+                }else if(hexes.getZ() == i){
+                    grouped3.add(hexes);
+                }
+            }
+
+
+            //finding attacks for 2vs1
+            for(int j = 4;j<grouped1.size();j++){
+                ArrayList<Hex> sublist = new ArrayList<>(grouped1.subList(j-4,j));
+                Color first = sublist.get(0).getBall().getColor();
+                Color second = sublist.get(1).getBall().getColor();
+                Color third = sublist.get(2).getBall().getColor();
+                Color fourth = sublist.get(3).getBall().getColor();
+                if(first.equals(player) && first.equals(second) && !first.equals(third) && !third.equals(Color.BLANK)
+                        && fourth.equals(Color.BLANK)){
+                    countAttacks++;
+                }
+            }
+            for(int j = 4;j<grouped2.size();j++){
+                ArrayList<Hex> sublist = new ArrayList<>(grouped2.subList(j-4,j));
+                Color first = sublist.get(0).getBall().getColor();
+                Color second = sublist.get(1).getBall().getColor();
+                Color third = sublist.get(2).getBall().getColor();
+                Color fourth = sublist.get(3).getBall().getColor();
+                if(first.equals(player) && first.equals(second) && !first.equals(third) && !third.equals(Color.BLANK)
+                        && fourth.equals(Color.BLANK)){
+                    countAttacks++;
+                }
+            }
+            for(int j = 4;j<grouped3.size();j++){
+                ArrayList<Hex> sublist = new ArrayList<>(grouped3.subList(j-4,j));
+                Color first = sublist.get(0).getBall().getColor();
+                Color second = sublist.get(1).getBall().getColor();
+                Color third = sublist.get(2).getBall().getColor();
+                Color fourth = sublist.get(3).getBall().getColor();
+                if(first.equals(player) && first.equals(second) && !first.equals(third) && !third.equals(Color.BLANK)
+                        && fourth.equals(Color.BLANK)){
+                    countAttacks++;
+                }
+            }
+
+            //finding attacks for 3vs1
+            for(int j = 5;j<grouped1.size();j++){
+                ArrayList<Hex> sublist = new ArrayList<>(grouped1.subList(j-5,j));
+                Color first = sublist.get(0).getBall().getColor();
+                Color second = sublist.get(1).getBall().getColor();
+                Color third = sublist.get(2).getBall().getColor();
+                Color fourth = sublist.get(3).getBall().getColor();
+                Color fifth = sublist.get(4).getBall().getColor();
+                if(first.equals(player) && first.equals(second) && first.equals(third)  && !first.equals(fourth)
+                        && !fourth.equals(Color.BLANK) && fifth.equals(Color.BLANK)){
+                    countAttacks++;
+                }
+            }
+
+            for(int j = 5;j<grouped2.size();j++){
+                ArrayList<Hex> sublist = new ArrayList<>(grouped2.subList(j-5,j));
+                Color first = sublist.get(0).getBall().getColor();
+                Color second = sublist.get(1).getBall().getColor();
+                Color third = sublist.get(2).getBall().getColor();
+                Color fourth = sublist.get(3).getBall().getColor();
+                Color fifth = sublist.get(4).getBall().getColor();
+                if(first.equals(player) && first.equals(second) && first.equals(third) && !first.equals(fourth)
+                        && !fourth.equals(Color.BLANK) && fifth.equals(Color.BLANK)){
+                    countAttacks++;
+                }
+            }
+
+            for(int j = 5;j<grouped3.size();j++){
+                ArrayList<Hex> sublist = new ArrayList<>(grouped3.subList(j-5,j));
+                Color first = sublist.get(0).getBall().getColor();
+                Color second = sublist.get(1).getBall().getColor();
+                Color third = sublist.get(2).getBall().getColor();
+                Color fourth = sublist.get(3).getBall().getColor();
+                Color fifth = sublist.get(4).getBall().getColor();
+                if(first.equals(player) && first.equals(second) && first.equals(third) && !first.equals(fourth)
+                        && !fourth.equals(Color.BLANK) && fifth.equals(Color.BLANK)){
+                    countAttacks++;
+                }
+            }
+
+            //finding attacks 3vs2
+            for(int j = 6;j<grouped1.size();j++){
+                ArrayList<Hex> sublist = new ArrayList<>(grouped1.subList(j-6,j));
+                Color first = sublist.get(0).getBall().getColor();
+                Color second = sublist.get(1).getBall().getColor();
+                Color third = sublist.get(2).getBall().getColor();
+                Color fourth = sublist.get(3).getBall().getColor();
+                Color fifth = sublist.get(4).getBall().getColor();
+                Color sixth = sublist.get(5).getBall().getColor();
+                System.out.println(sublist.get(5).getY());
+                if(first.equals(player) && first.equals(second) && first.equals(third)
+                        && !first.equals(fourth) && !first.equals(fifth)
+                        && !fourth.equals(Color.BLANK) && !fifth.equals(Color.BLANK)
+                        && sixth.equals(Color.BLANK)){
+                    countAttacks++;
+                }
+            }
+
+            for(int j = 6;j<grouped2.size();j++){
+                ArrayList<Hex> sublist = new ArrayList<>(grouped2.subList(j-6,j));
+                Color first = sublist.get(0).getBall().getColor();
+                Color second = sublist.get(1).getBall().getColor();
+                Color third = sublist.get(2).getBall().getColor();
+                Color fourth = sublist.get(3).getBall().getColor();
+                Color fifth = sublist.get(4).getBall().getColor();
+                Color sixth = sublist.get(5).getBall().getColor();
+                if(first.equals(player) && first.equals(second) && first.equals(third)
+                        && !first.equals(fourth) && !first.equals(fifth)
+                        && !fourth.equals(Color.BLANK) && !fifth.equals(Color.BLANK)
+                        && sixth.equals(Color.BLANK)){
+                    countAttacks++;
+                }
+            }
+
+            for(int j = 6;j<grouped3.size();j++){
+                ArrayList<Hex> sublist = new ArrayList<>(grouped3.subList(j-6,j));
+                Color first = sublist.get(0).getBall().getColor();
+                Color second = sublist.get(1).getBall().getColor();
+                Color third = sublist.get(2).getBall().getColor();
+                Color fourth = sublist.get(3).getBall().getColor();
+                Color fifth = sublist.get(4).getBall().getColor();
+                Color sixth = sublist.get(5).getBall().getColor();
+                if(first.equals(player) && first.equals(second) && first.equals(third)
+                        && !first.equals(fourth) && !first.equals(fifth)
+                        && !fourth.equals(Color.BLANK) && !fifth.equals(Color.BLANK)
+                        && sixth.equals(Color.BLANK)){
+                    countAttacks++;
+                }
+            }
+
+            grouped1.clear();
+            grouped2.clear();
+            grouped3.clear();
+        }
+        //System.out.println("ATTACK VALUE IS: " + countAttacks);
+
+
+        //System.out.println(enemycount);
+
         float h1 = w1 * count;
         float h2 = w2 * (totalDistance / count);
         float h3 = w3 * countNeighboursOfEachBall;
-        float value = h1 + h2 + h3;
+        float h4 = w4 * countAttacks;
+        float h5 = -w5 * enemycount;
+        float value = h1 + h2 + h3 + h4 + h5;
         // System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   =   %.2f\n", h1, h2, h3, value);
 
         return value;
