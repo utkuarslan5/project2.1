@@ -6,6 +6,7 @@ import com.abalone.game.utils.Color;
 
 public class NegaMax {
     /*
+    PSEUDO CODE FOR NORMAL:
     function negamax(node, depth, color):
         if depth = 0 or node is a terminal node then
             return color & the heuristic value of node
@@ -16,27 +17,27 @@ public class NegaMax {
     */
     private Node bestNode;
     private int depth;
-    private Color color;
+    private boolean maximizingPlayer;
     private Tree tree;
 
-    public NegaMax(Node currentNode, int depth, Color color, Tree tree) {
+    public NegaMax(Node currentNode, int depth, boolean maximizingPlayer, Tree tree) {
         this.depth = depth;
-        this.color = color;
+        this.maximizingPlayer = maximizingPlayer;
         this.tree = tree;
-        bestNode = negamax(currentNode, this.depth, this.color);
+        bestNode = negamax(currentNode, this.depth, this.maximizingPlayer);
     }
 
-    private Node negamax(Node currentNode, int depth, Color color) {
+    private Node negamax(Node currentNode, int depth, boolean maximizingPlayer) {
         int counter = 0;
         if (depth == 0) {
             return tree.getRoot();
         }
         Node bestNode = null;
         float value = -10000000;
-        //Assuming the AI is purple player
+
         for (Node child : currentNode.getChildren()) {
             if (child != null) {
-                float nodeValue = -negamax(child, depth - 1, Color.BLUE).getHeuristicsValue();
+                float nodeValue = -negamax(child, depth - 1, false).getHeuristicsValue();
                 counter++;
                 if (nodeValue > value) {
                     value = nodeValue;

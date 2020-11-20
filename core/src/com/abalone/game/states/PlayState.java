@@ -1,7 +1,6 @@
 package com.abalone.game.states;
 
 import com.abalone.game.AbaloneGame;
-import com.abalone.game.gameTree.Heuristics;
 import com.abalone.game.gameTree.Tree;
 import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.*;
@@ -46,7 +45,6 @@ public class PlayState extends State {
     private MiniMax miniMax;
     private NegaMax negaMax;
     private Tree tree;
-
 
     private TextureRegionDrawable ballTextureRegionDrawableBlue;
     private TextureRegionDrawable ballTexturePressedRegionDrawableBlue;
@@ -291,6 +289,7 @@ public class PlayState extends State {
             gsm.pop();
             gsm.push(MenuState);
         }
+
         purpleLostBalls.setText("Purple Lost: " + lostP);
         blueLostBalls.setText("Blue Lost: " + lostB);
 
@@ -305,7 +304,6 @@ public class PlayState extends State {
             gsm.pop();
             gsm.push(endState);
         }
-
     }
 
     @Override
@@ -417,7 +415,7 @@ public class PlayState extends State {
                 int depthTree = 2;
                 tree = new Tree(board, depthTree);
 
-                negaMax = new NegaMax(tree.getRoot(), depthTree, com.abalone.game.utils.Color.PURPLE, tree);
+                negaMax = new NegaMax(tree.getRoot(), depthTree, false, tree);
 
                 try {
                     Thread.sleep(500);

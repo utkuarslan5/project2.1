@@ -5,7 +5,6 @@ import com.abalone.game.objects.Hex;
 import com.abalone.game.objects.Turn;
 import com.abalone.game.utils.Color;
 import com.abalone.game.utils.TurnsFinder;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +18,13 @@ public class Node {
     private Turn turn;
 
     public Node(Board board, int depthTree, int depth, Turn turn) {
+
         TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
         this.children = new ArrayList();
 
         heuristics = new Heuristics(board, Color.PURPLE);
         setHeuristicsValue(heuristics.getValue());
+
         if (depthTree > depth) {
             // If the depth of this node is even, this means it's the state of the board after a move of the human player
             // So we get the purple balls (balls of the AI) because it is the turn of the AI to play

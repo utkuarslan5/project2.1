@@ -3,7 +3,6 @@ package com.abalone.game.gameTree;
 import com.abalone.game.objects.Board;
 import com.abalone.game.objects.Hex;
 import com.abalone.game.utils.Color;
-
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -24,6 +23,7 @@ public class Heuristics {
 
     //Heuristics
     private float valueFunction(Board board, float w1, float w2, float w3) {
+
         List<Hex> hexlist = board.getHexGrid().getHexList();
         int count = 0;
         float totalDistance = 0;
@@ -78,7 +78,7 @@ public class Heuristics {
 
     @Override
     public String toString() {
-        return "BoardState{" +
+        return "Heuristics{" +
                 "current=" + current +
                 ", timestamp=" + timestamp +
                 ", player=" + player.toString() +

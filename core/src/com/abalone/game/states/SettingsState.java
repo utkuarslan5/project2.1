@@ -193,9 +193,9 @@ public class SettingsState extends State {
             miniMaxChecked.setChecked(true);
             this.help = false;
         }
-        if(!miniMaxChecked.isChecked()&& !help) {
+        if(!miniMaxChecked.isChecked() && !help) {
             negaMaxChecked.setChecked(true);
-            this.help= true;
+            this.help = true;
         }
     }
 
