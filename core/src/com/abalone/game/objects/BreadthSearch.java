@@ -23,6 +23,7 @@ public class BreadthSearch implements TreeSearch {
 
     @Override
     public boolean search(Node target, Node current, List<Node> path, int depth) {
+        path.add(current);
         // If on first depth
         if(depth == 1){
             q.add(tree.getRoot());
@@ -48,7 +49,7 @@ public class BreadthSearch implements TreeSearch {
         q.addAll(current.getChildren());
         List<Node> currentListed = new ArrayList<>();
         currentListed.add(current);
-        return search(target, current, Stream.concat(path.stream(), currentListed.stream()).collect(Collectors.toList()), depth+1);
+        return search(target, current, path, depth+1);
     }
 
     @Override

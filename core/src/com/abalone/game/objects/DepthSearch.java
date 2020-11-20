@@ -20,6 +20,7 @@ public class DepthSearch implements TreeSearch {
 
     @Override
     public boolean search(Node target, Node current, List<Node> path, int depth) {
+        path.add(current);
         // If target node reached
         if(current.equals(target)){
             this.finalPath = path;
@@ -31,10 +32,8 @@ public class DepthSearch implements TreeSearch {
         }
 
         List<Node> children = current.getChildren();
-        List<Node> currentListed = new ArrayList<>();
-        currentListed.add(current);
         for(Node child : children){
-            if(search(target, child, Stream.concat(path.stream(), currentListed.stream()).collect(Collectors.toList()), depth+1)){
+            if(search(target, child, path, depth+1)){
                 return true;
             }
         }
