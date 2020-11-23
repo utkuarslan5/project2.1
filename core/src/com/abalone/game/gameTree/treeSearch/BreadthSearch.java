@@ -1,26 +1,35 @@
-package com.abalone.game.objects;
+package com.abalone.game.gameTree.treeSearch;
 
 import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.Tree;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Queue;
 
-public class DepthSearch implements TreeSearch {
+public class BreadthSearch implements TreeSearch {
     private int maxDepth = 0;
     private Tree tree;
     private List<Node> finalPath;
+    private Queue<Node> q = new ArrayDeque();
 
-    public DepthSearch(int maxDepth, Tree tree){
+    public BreadthSearch(int maxDepth, Tree tree){
         this.maxDepth = maxDepth;
         this.tree = tree;
     }
 
     @Override
     public boolean search(Node target, Node current, List<Node> path, int depth) {
+        // If on first depth
+        if(depth == 0){
+            q.add(tree.getRoot());
+        }
+
+        // Set current
+        current = q.remove();
         path.add(current);
+        depth = current.getDepth();
+
         // If target node reached
         if(current.equals(target)){
             this.finalPath = path;
@@ -30,14 +39,13 @@ public class DepthSearch implements TreeSearch {
         if(depth > maxDepth){
             return false;
         }
-
-        List<Node> children = current.getChildren();
-        for(Node child : children){
-            if(search(target, child, path, depth+1)){
-                return true;
-            }
+        // If q is empty
+        if(q.isEmpty()){
+            return false;
         }
-        return false;
+
+        q.addAll(current.getChildren());
+        return search(target, current, path, depth+1);
     }
 
     @Override

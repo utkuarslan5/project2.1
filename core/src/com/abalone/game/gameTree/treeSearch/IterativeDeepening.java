@@ -1,4 +1,4 @@
-package com.abalone.game.objects;
+package com.abalone.game.gameTree.treeSearch;
 
 import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.Tree;
