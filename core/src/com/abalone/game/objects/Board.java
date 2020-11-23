@@ -207,7 +207,9 @@ public class Board implements Cloneable {
                     selected.clear();
                 } else {
                     System.out.println("Illegal move!");
+                    selected.clear();
                 }
+
                 break;
             case 3:
                 from2 = hexGrid.getBallAt(selected.get(1));
@@ -238,6 +240,7 @@ public class Board implements Cloneable {
                     selected.clear();
                 } else {
                     System.out.println("Illegal move!");
+                    selected.clear();
                 }
                 break;
         }

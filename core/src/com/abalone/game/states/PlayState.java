@@ -204,11 +204,15 @@ public class PlayState extends State {
                                     AIplays();
                                 }
                             }
+                            else{
+                                allDestinations.clear();
+                                switchTurnPlayer();
+                                switchTurnPlayer();
+                            }
                         }
                     }
                 }
             });
-
             ballTextureRegionDrawable.setMinSize(50, 50);
             ballTexturePressedRegionDrawable.setMinSize(50, 50);
             ballButtons[iHex] = ballButton;

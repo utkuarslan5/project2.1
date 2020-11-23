@@ -158,7 +158,6 @@ public class Heuristics {
                 Color fourth = sublist.get(3).getBall().getColor();
                 Color fifth = sublist.get(4).getBall().getColor();
                 Color sixth = sublist.get(5).getBall().getColor();
-                System.out.println(sublist.get(5).getY());
                 if(first.equals(player) && first.equals(second) && first.equals(third)
                         && !first.equals(fourth) && !first.equals(fifth)
                         && !fourth.equals(Color.BLANK) && !fifth.equals(Color.BLANK)

@@ -6,7 +6,7 @@ import com.abalone.game.gameTree.Tree;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IterativeDeepening implements TreeSearch{
+public class IterativeDeepening implements TreeSearch {
     private int depth;
     private int step;
     private List<Node> path;
