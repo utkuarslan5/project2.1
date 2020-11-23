@@ -181,8 +181,8 @@ public class Board implements Cloneable {
                     hexGrid.getHexList().get(to).setBall(selected.get(0));
                     hexGrid.getHexList().get(from).setBall(ballTo);
                     movePerformed = true;
-                    selected.clear();
                 }
+                selected.clear();
                 break;
             case 2:
                 int from2 = hexGrid.getBallAt(selected.get(1));
