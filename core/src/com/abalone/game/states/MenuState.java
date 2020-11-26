@@ -24,6 +24,7 @@ public class MenuState extends State {
     private Image background;
     private BitmapFont gameFont;
     private TextButton playGame;
+    private TextButton experimentsRoom;
     private TextButton settingsMenu;
     private TextButton exit;
 
@@ -49,6 +50,7 @@ public class MenuState extends State {
         Gdx.input.setInputProcessor(stage);
         playGame = new TextButton("Play", skin);
         settingsMenu = new TextButton("Settings", skin);
+        experimentsRoom = new TextButton("Experiments Room",skin);
         exit = new TextButton("Exit", skin);
     }
 
@@ -61,10 +63,12 @@ public class MenuState extends State {
     public void draw() {
         Table table = new Table();
 
-        table.add(playGame).width(250);
-        table.row().pad(20, 0, 20, 0);
-        table.add(settingsMenu).fillX().uniformX();
+        table.add(playGame).width(300);
+        table.row().pad(15, 0, 15, 0);
+        table.add(experimentsRoom).fillX().uniformX();
         table.row();
+        table.add(settingsMenu).fillX().uniformX();
+        table.row().pad(15, 0, 15, 0);
         table.add(exit).fillX().uniformX();
 
         table.setFillParent(true);
@@ -91,7 +95,12 @@ public class MenuState extends State {
             State settingsState = new SettingsState(gsm);
             gsm.pop();
             gsm.push(settingsState);
-        } else if (exit.isPressed()) {
+        }else if(experimentsRoom.isPressed()){
+            State experimentsState = new ExperimentsState(gsm);
+            gsm.pop();
+            gsm.push(experimentsState);
+        }
+        else if (exit.isPressed()) {
             Gdx.app.exit();
         }
     }
