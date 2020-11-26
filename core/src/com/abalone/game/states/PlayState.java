@@ -206,6 +206,7 @@ public class PlayState extends State {
                             }
                             else{
                                 allDestinations.clear();
+                                board.getSelected().clear();
                                 switchTurnPlayer();
                                 switchTurnPlayer();
                             }
@@ -270,6 +271,7 @@ public class PlayState extends State {
                 ballButtons[ball.getId()].setChecked(false);
             }
             selectedList.clear();
+            board.getSelected().clear();
         }
 
         Ball curr = null;
