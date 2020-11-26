@@ -133,7 +133,7 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
 		font: font
-		fontColor: black
+		fontColor: white
 	}
 	title: {
 		font: title
@@ -177,8 +177,9 @@ com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
 		fontColor: black
 		background: select-box
 		scrollStyle: default
-		listStyle: default
-		backgroundOver: select-box-over
+		listStyle: default,
+		background: select-box-over,
+		backgroundOver: select-box-over,
 		backgroundOpen: select-box-pressed
 	}
 }

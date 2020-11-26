@@ -64,14 +64,15 @@ public class ExperimentsState extends State {
         Table mainTable = new Table();
 
         Label value_1 = new Label("Heuristics 1: ", skin);
-        final TextField playerOneField_1 = new TextField("0", skin);
         Label value_2 = new Label("Heuristics 2: ", skin);
-        final TextField playerOneField_2 = new TextField("0", skin);
         Label value_3 = new Label("Heuristics 3: ", skin);
-        final TextField playerOneField_3 = new TextField("0", skin);
         Label value_4 = new Label("Heuristics 4: ", skin);
-        final TextField playerOneField_4 = new TextField("0", skin);
         Label value_5 = new Label("Heuristics 5: ", skin);
+
+        final TextField playerOneField_1 = new TextField("0", skin);
+        final TextField playerOneField_2 = new TextField("0", skin);
+        final TextField playerOneField_3 = new TextField("0", skin);
+        final TextField playerOneField_4 = new TextField("0", skin);
         final TextField playerOneField_5 = new TextField("0", skin);
 
         Label valueTwo_1 = new Label("Heuristics 1: ", skin);

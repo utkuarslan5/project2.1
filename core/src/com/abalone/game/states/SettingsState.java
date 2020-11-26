@@ -27,6 +27,13 @@ public class SettingsState extends State {
     private static ImageButton musicOnOff;
     public static ImageButton miniMaxChecked;
     public static ImageButton negaMaxChecked;
+    public static Table playerOne;
+    public static Image blueBall;
+    public static Image purpleBall;
+    public static SelectBox playerTypeSelectBox1;
+    public static SelectBox AISelectBox1;
+    public static SelectBox playerTypeSelectBox2;
+    public static SelectBox AISelectBox2;
     private boolean help;
 
     protected SettingsState(GameStateManager ourGsm) {
@@ -77,21 +84,21 @@ public class SettingsState extends State {
                 new TextureRegionDrawable(checked));
         music1Checked.getImage().setScale(1 / 20f);
         music1Checked.setScale(0.1f);
-        music1Checked.setPosition(300, 380);
+        music1Checked.setPosition(280, 380);
 
         music2Checked = new ImageButton(new TextureRegionDrawable(unchecked),
                 new TextureRegionDrawable(unchecked),
                 new TextureRegionDrawable(checked));
         music2Checked.getImage().setScale(1 / 20f);
         music2Checked.setScale(0.1f);
-        music2Checked.setPosition(300, 310);
+        music2Checked.setPosition(280, 310);
 
         musicOnOff = new ImageButton(new TextureRegionDrawable(unchecked),
                 new TextureRegionDrawable(unchecked),
                 new TextureRegionDrawable(checked));
         musicOnOff.getImage().setScale(1 / 20f);
         musicOnOff.setScale(0.1f);
-        musicOnOff.setPosition(300, 240);
+        musicOnOff.setPosition(280, 240);
 
         if(AbaloneGame.music1.isPlaying() || AbaloneGame.music2.isPlaying()){
             musicOnOff.setChecked(true);
@@ -108,7 +115,7 @@ public class SettingsState extends State {
                 new TextureRegionDrawable(checked));
         miniMaxChecked.getImage().setScale(1 / 20f);
         miniMaxChecked.setScale(0.1f);
-        miniMaxChecked.setPosition(790, 380);
+        miniMaxChecked.setPosition(790, 180);
         miniMaxChecked.setChecked(true);
 
         negaMaxChecked = new ImageButton(new TextureRegionDrawable(unchecked),
@@ -116,8 +123,64 @@ public class SettingsState extends State {
                 new TextureRegionDrawable(checked));
         negaMaxChecked.getImage().setScale(1 / 20f);
         negaMaxChecked.setScale(0.1f);
-        negaMaxChecked.setPosition(790, 310);
+        negaMaxChecked.setPosition(790, 110);
         negaMaxChecked.setChecked(true);
+
+        playerOne = new Table();
+
+        String[] playerTypeChoices = new String[2];
+        playerTypeChoices[0] = "Human";
+        playerTypeChoices[1] = "AI";
+
+        String[] AIChoices = new String[2];
+        AIChoices[0] = "Minimax";
+        AIChoices[1] = "Negamax";
+
+        // Player 1 / Blue
+        blueBall = new Image(new Texture("blue.png"));
+        blueBall.setSize(30, 30);
+        blueBall.setPosition(740, 380);
+
+        Label playerTypeLabel1 = new Label("Human/AI: ", skin);
+        playerTypeSelectBox1 = new SelectBox<String>(skin);
+        playerTypeSelectBox1.setItems(playerTypeChoices);
+
+        Label AILabel1 = new Label("AI: ", skin);
+        AISelectBox1 = new SelectBox<String>(skin);
+        AISelectBox1.setItems(AIChoices);
+        AISelectBox1.setDisabled(true);
+        AISelectBox1.setColor(Color.GRAY);
+
+        // Player 2 / Purple
+        purpleBall = new Image(new Texture("purple.png"));
+        purpleBall.setSize(30, 30);
+        purpleBall.setPosition(740, 310);
+
+        Label playerTypeLabel2 = new Label("Human/AI: ", skin);
+        playerTypeSelectBox2 = new SelectBox<String>(skin);
+        playerTypeSelectBox2.setItems(playerTypeChoices);
+
+        Label AILabel2 = new Label("AI: ", skin);
+        AISelectBox2 = new SelectBox<String>(skin);
+        AISelectBox2.setItems(AIChoices);
+        AISelectBox2.setDisabled(true);
+        AISelectBox2.setColor(Color.GRAY);
+
+
+        // Player 1 / Blue
+        playerOne.row().pad(25,0,25,0);
+        playerOne.add(playerTypeLabel1);
+        playerOne.add(playerTypeSelectBox1).padRight(20);
+        playerOne.add(AILabel1);
+        playerOne.add(AISelectBox1).padRight(20);
+        // Player 2 / Purple
+        playerOne.row().pad(25,0,25,0);
+        playerOne.add(playerTypeLabel2);
+        playerOne.add(playerTypeSelectBox2).padRight(20);
+        playerOne.add(AILabel2);
+        playerOne.add(AISelectBox2).padRight(20);
+
+        playerOne.setPosition(930, 360);
 
         System.out.println(negaMaxChecked.isChecked());
     }
@@ -134,7 +197,6 @@ public class SettingsState extends State {
 
     @Override
     public void draw() {
-
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.addActor(background);
         stage.addActor(returnButton);
@@ -143,22 +205,46 @@ public class SettingsState extends State {
         stage.addActor(musicOnOff);
         stage.addActor(miniMaxChecked);
         stage.addActor(negaMaxChecked);
+        stage.addActor(playerOne);
+        stage.addActor(blueBall);
+        stage.addActor(purpleBall);
 
         stage.draw();
         spriteBatch.begin();
         gameFontSetting.draw(spriteBatch, "Settings", 390, 750);
         gameFontMusic.draw(spriteBatch, "Music:", 280, 490);
-        gameFontMusic.draw(spriteBatch, "AI:", 740, 490);
-        gameFontSubPoints.draw(spriteBatch, "Theme 1", 360, 405);
-        gameFontSubPoints.draw(spriteBatch, "Theme 2", 360, 335);
-        gameFontSubPoints.draw(spriteBatch, "MiniMax", 850, 405);
-        gameFontSubPoints.draw(spriteBatch, "NegaMax", 850, 335);
-        gameFontSubPoints.draw(spriteBatch, "Mute", 360, 265);
+        gameFontMusic.draw(spriteBatch, "Players:", 740, 490);
+        gameFontSubPoints.draw(spriteBatch, "Theme 1", 340, 405);
+        gameFontSubPoints.draw(spriteBatch, "Theme 2", 340, 335);
+        gameFontSubPoints.draw(spriteBatch, "Mute", 340, 265);
+        gameFontSubPoints.draw(spriteBatch, "MiniMax", 850, 205);
+        gameFontSubPoints.draw(spriteBatch, "NegaMax", 850, 135);
         spriteBatch.end();
     }
 
     @Override
     public void handleInput() {
+        switch((String)playerTypeSelectBox1.getSelected()) {
+            case "Human":
+                AISelectBox1.setDisabled(true);
+                AISelectBox1.setColor(Color.GRAY);
+                break;
+            case "AI":
+                AISelectBox1.setDisabled(false);
+                AISelectBox1.setColor(Color.WHITE);
+                break;
+        }
+
+        switch((String)playerTypeSelectBox2.getSelected()) {
+            case "Human":
+                AISelectBox2.setDisabled(true);
+                AISelectBox2.setColor(Color.GRAY);
+                break;
+            case "AI":
+                AISelectBox2.setDisabled(false);
+                AISelectBox2.setColor(Color.WHITE);
+                break;
+        }
 
         if (!musicOnOff.isChecked() && (!music1Checked.isChecked() || !music2Checked.isChecked()) &&
                 (AbaloneGame.music1.isPlaying() || AbaloneGame.music2.isPlaying())) {
