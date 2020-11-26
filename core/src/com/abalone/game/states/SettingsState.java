@@ -2,6 +2,7 @@ package com.abalone.game.states;
 
 import com.abalone.game.AbaloneGame;
 import com.abalone.game.managers.GameStateManager;
+import com.abalone.game.utils.AI;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,16 +26,13 @@ public class SettingsState extends State {
     private static ImageButton music1Checked;
     private static ImageButton music2Checked;
     private static ImageButton musicOnOff;
-    public static ImageButton miniMaxChecked;
-    public static ImageButton negaMaxChecked;
     public static Table playerOne;
     public static Image blueBall;
     public static Image purpleBall;
-    public static SelectBox playerTypeSelectBox1;
-    public static SelectBox AISelectBox1;
-    public static SelectBox playerTypeSelectBox2;
-    public static SelectBox AISelectBox2;
-    private boolean help;
+    public static SelectBox bluePlayerTypeSelectBox;
+    public static SelectBox blueAISelectBox;
+    public static SelectBox purplePlayerTypeSelectBox;
+    public static SelectBox purpleAISelectBox;
 
     protected SettingsState(GameStateManager ourGsm) {
         super(ourGsm);
@@ -42,7 +40,6 @@ public class SettingsState extends State {
 
     @Override
     public void init() {
-        help = true;
         Texture unchecked = new Texture(Gdx.files.internal("checkedCheckBox.png"));
         Texture checked = new Texture(Gdx.files.internal("uncheckedCheckBox.png"));
         spriteBatch = new SpriteBatch();
@@ -110,22 +107,6 @@ public class SettingsState extends State {
             music2Checked.setChecked(!musicOnOff.isChecked());
         }
 
-        miniMaxChecked = new ImageButton(new TextureRegionDrawable(unchecked),
-                new TextureRegionDrawable(unchecked),
-                new TextureRegionDrawable(checked));
-        miniMaxChecked.getImage().setScale(1 / 20f);
-        miniMaxChecked.setScale(0.1f);
-        miniMaxChecked.setPosition(790, 180);
-        miniMaxChecked.setChecked(true);
-
-        negaMaxChecked = new ImageButton(new TextureRegionDrawable(unchecked),
-                new TextureRegionDrawable(unchecked),
-                new TextureRegionDrawable(checked));
-        negaMaxChecked.getImage().setScale(1 / 20f);
-        negaMaxChecked.setScale(0.1f);
-        negaMaxChecked.setPosition(790, 110);
-        negaMaxChecked.setChecked(true);
-
         playerOne = new Table();
 
         String[] playerTypeChoices = new String[2];
@@ -136,53 +117,82 @@ public class SettingsState extends State {
         AIChoices[0] = "Minimax";
         AIChoices[1] = "Negamax";
 
-        // Player 1 / Blue
+        // Blue Player
         blueBall = new Image(new Texture("blue.png"));
         blueBall.setSize(30, 30);
         blueBall.setPosition(740, 380);
 
-        Label playerTypeLabel1 = new Label("Human/AI: ", skin);
-        playerTypeSelectBox1 = new SelectBox<String>(skin);
-        playerTypeSelectBox1.setItems(playerTypeChoices);
+        Label bluePlayerTypeLabel = new Label("Human/AI: ", skin);
+        bluePlayerTypeSelectBox = new SelectBox<String>(skin);
+        bluePlayerTypeSelectBox.setItems(playerTypeChoices);
 
-        Label AILabel1 = new Label("AI: ", skin);
-        AISelectBox1 = new SelectBox<String>(skin);
-        AISelectBox1.setItems(AIChoices);
-        AISelectBox1.setDisabled(true);
-        AISelectBox1.setColor(Color.GRAY);
+        Label blueAILabel = new Label("AI: ", skin);
+        blueAISelectBox = new SelectBox<String>(skin);
+        blueAISelectBox.setItems(AIChoices);
+        blueAISelectBox.setDisabled(true);
+        blueAISelectBox.setColor(Color.GRAY);
+        if(AbaloneGame.isBluePlayerAI) {
+            bluePlayerTypeSelectBox.setSelected("AI");
+            blueAISelectBox.setDisabled(false);
+        }
+        else {
+            bluePlayerTypeSelectBox.setSelected("Human");
+            blueAISelectBox.setDisabled(true);
+        }
+        switch(AbaloneGame.bluePlayerAI) {
+            case MINIMAX:
+                blueAISelectBox.setSelected("Minimax");
+                break;
+            case NEGAMAX:
+                blueAISelectBox.setSelected("Negamax");
+                break;
+        }
 
-        // Player 2 / Purple
+        // Purple Player
         purpleBall = new Image(new Texture("purple.png"));
         purpleBall.setSize(30, 30);
         purpleBall.setPosition(740, 310);
 
-        Label playerTypeLabel2 = new Label("Human/AI: ", skin);
-        playerTypeSelectBox2 = new SelectBox<String>(skin);
-        playerTypeSelectBox2.setItems(playerTypeChoices);
+        Label purplePlayerTypeLabel = new Label("Human/AI: ", skin);
+        purplePlayerTypeSelectBox = new SelectBox<String>(skin);
+        purplePlayerTypeSelectBox.setItems(playerTypeChoices);
 
-        Label AILabel2 = new Label("AI: ", skin);
-        AISelectBox2 = new SelectBox<String>(skin);
-        AISelectBox2.setItems(AIChoices);
-        AISelectBox2.setDisabled(true);
-        AISelectBox2.setColor(Color.GRAY);
+        Label purpleAILabel = new Label("AI: ", skin);
+        purpleAISelectBox = new SelectBox<String>(skin);
+        purpleAISelectBox.setItems(AIChoices);
+        purpleAISelectBox.setDisabled(true);
+        purpleAISelectBox.setColor(Color.GRAY);
+        if(AbaloneGame.isPurplePlayerAI) {
+            purplePlayerTypeSelectBox.setSelected("AI");
+            purpleAISelectBox.setDisabled(false);
+        }
+        else {
+            purplePlayerTypeSelectBox.setSelected("Human");
+            purpleAISelectBox.setDisabled(true);
+        }
+        switch(AbaloneGame.purplePlayerAI) {
+            case MINIMAX:
+                purpleAISelectBox.setSelected("Minimax");
+                break;
+            case NEGAMAX:
+                purpleAISelectBox.setSelected("Negamax");
+                break;
+        }
 
-
-        // Player 1 / Blue
+        // Blue Player
         playerOne.row().pad(25,0,25,0);
-        playerOne.add(playerTypeLabel1);
-        playerOne.add(playerTypeSelectBox1).padRight(20);
-        playerOne.add(AILabel1);
-        playerOne.add(AISelectBox1).padRight(20);
-        // Player 2 / Purple
+        playerOne.add(bluePlayerTypeLabel);
+        playerOne.add(bluePlayerTypeSelectBox).padRight(20);
+        playerOne.add(blueAILabel);
+        playerOne.add(blueAISelectBox).padRight(20);
+        // Purple Player
         playerOne.row().pad(25,0,25,0);
-        playerOne.add(playerTypeLabel2);
-        playerOne.add(playerTypeSelectBox2).padRight(20);
-        playerOne.add(AILabel2);
-        playerOne.add(AISelectBox2).padRight(20);
+        playerOne.add(purplePlayerTypeLabel);
+        playerOne.add(purplePlayerTypeSelectBox).padRight(20);
+        playerOne.add(purpleAILabel);
+        playerOne.add(purpleAISelectBox).padRight(20);
 
         playerOne.setPosition(930, 360);
-
-        System.out.println(negaMaxChecked.isChecked());
     }
 
     @Override
@@ -203,8 +213,6 @@ public class SettingsState extends State {
         stage.addActor(music1Checked);
         stage.addActor(music2Checked);
         stage.addActor(musicOnOff);
-        stage.addActor(miniMaxChecked);
-        stage.addActor(negaMaxChecked);
         stage.addActor(playerOne);
         stage.addActor(blueBall);
         stage.addActor(purpleBall);
@@ -217,33 +225,47 @@ public class SettingsState extends State {
         gameFontSubPoints.draw(spriteBatch, "Theme 1", 340, 405);
         gameFontSubPoints.draw(spriteBatch, "Theme 2", 340, 335);
         gameFontSubPoints.draw(spriteBatch, "Mute", 340, 265);
-        gameFontSubPoints.draw(spriteBatch, "MiniMax", 850, 205);
-        gameFontSubPoints.draw(spriteBatch, "NegaMax", 850, 135);
         spriteBatch.end();
     }
 
     @Override
     public void handleInput() {
-        switch((String)playerTypeSelectBox1.getSelected()) {
-            case "Human":
-                AISelectBox1.setDisabled(true);
-                AISelectBox1.setColor(Color.GRAY);
-                break;
-            case "AI":
-                AISelectBox1.setDisabled(false);
-                AISelectBox1.setColor(Color.WHITE);
-                break;
+        if(bluePlayerIsAI()) {
+            AbaloneGame.isBluePlayerAI = true;
+            blueAISelectBox.setColor(Color.WHITE);
+            blueAISelectBox.setDisabled(false);
+            switch(getBlueAI()) {
+                case MINIMAX:
+                    AbaloneGame.bluePlayerAI = AI.MINIMAX;
+                    break;
+                case NEGAMAX:
+                    AbaloneGame.bluePlayerAI = AI.NEGAMAX;
+                    break;
+            }
+        }
+        else {
+            AbaloneGame.isBluePlayerAI = false;
+            blueAISelectBox.setColor(Color.GRAY);
+            blueAISelectBox.setDisabled(true);
         }
 
-        switch((String)playerTypeSelectBox2.getSelected()) {
-            case "Human":
-                AISelectBox2.setDisabled(true);
-                AISelectBox2.setColor(Color.GRAY);
-                break;
-            case "AI":
-                AISelectBox2.setDisabled(false);
-                AISelectBox2.setColor(Color.WHITE);
-                break;
+        if(purplePlayerIsAI()) {
+            AbaloneGame.isPurplePlayerAI = true;
+            purpleAISelectBox.setColor(Color.WHITE);
+            purpleAISelectBox.setDisabled(false);
+            switch(getPurpleAI()) {
+                case MINIMAX:
+                    AbaloneGame.purplePlayerAI = AI.MINIMAX;
+                    break;
+                case NEGAMAX:
+                    AbaloneGame.purplePlayerAI = AI.NEGAMAX;
+                    break;
+            }
+        }
+        else {
+            AbaloneGame.isPurplePlayerAI = false;
+            purpleAISelectBox.setColor(Color.GRAY);
+            purpleAISelectBox.setDisabled(true);
         }
 
         if (!musicOnOff.isChecked() && (!music1Checked.isChecked() || !music2Checked.isChecked()) &&
@@ -271,21 +293,47 @@ public class SettingsState extends State {
             music1Checked.setChecked(true);
             musicOnOff.setChecked(true);
         }
-        aiHandleInput(this.help);
-    }
-
-    public void aiHandleInput(boolean help) {
-        if(!negaMaxChecked.isChecked() && help){
-            miniMaxChecked.setChecked(true);
-            this.help = false;
-        }
-        if(!miniMaxChecked.isChecked() && !help) {
-            negaMaxChecked.setChecked(true);
-            this.help = true;
-        }
     }
 
     @Override
     public void dispose() {
+    }
+
+    public static boolean bluePlayerIsAI() {
+        return (bluePlayerTypeSelectBox.getSelected() == "AI");
+    }
+
+    public static boolean purplePlayerIsAI() {
+        return (purplePlayerTypeSelectBox.getSelected() == "AI");
+    }
+
+    public static AI getBlueAI() {
+        AI value;
+        switch ((String) blueAISelectBox.getSelected()) {
+            case "Minimax":
+                value = AI.MINIMAX;
+            break;
+            case "Negamax":
+                value = AI.NEGAMAX;
+            break;
+            default:
+                value = AI.MINIMAX;
+        }
+        return value;
+    }
+
+    public static AI getPurpleAI() {
+        AI value;
+        switch ((String) purpleAISelectBox.getSelected()) {
+            case "Minimax":
+                value = AI.MINIMAX;
+                break;
+            case "Negamax":
+                value = AI.NEGAMAX;
+                break;
+            default:
+                value = AI.MINIMAX;
+        }
+        return value;
     }
 }

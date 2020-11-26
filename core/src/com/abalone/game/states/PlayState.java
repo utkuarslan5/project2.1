@@ -6,6 +6,7 @@ import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.*;
 import com.abalone.game.players.MiniMax;
 import com.abalone.game.players.NegaMax;
+import com.abalone.game.utils.AI;
 import com.abalone.game.utils.TurnsFinder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -396,8 +397,9 @@ public class PlayState extends State {
 
     public void AIplays() {
         try {
+            System.out.println(SettingsState.getBlueAI());
             // if ! miniMaxChecked.isChecked basically means that miniMax is the selected AI
-            if (!SettingsState.miniMaxChecked.isChecked()) {
+            if (AbaloneGame.isPurplePlayerAI && AbaloneGame.purplePlayerAI == AI.MINIMAX) {
                 // construction of the tree
                 int depthTree = 2;
                 tree = new Tree(board, depthTree);
@@ -416,7 +418,7 @@ public class PlayState extends State {
                 allDestinations.clear();
                 board.setMovePerformed(false);
 
-            } else if (!SettingsState.negaMaxChecked.isChecked()) {
+            } else if (AbaloneGame.isPurplePlayerAI && AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
                 // construction of the tree
                 int depthTree = 2;
                 tree = new Tree(board, depthTree);

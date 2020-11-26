@@ -1,6 +1,7 @@
 package com.abalone.game;
 
 import com.abalone.game.managers.GameStateManager;
+import com.abalone.game.utils.AI;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -18,7 +19,10 @@ public class AbaloneGame extends ApplicationAdapter {
 	public static GameStateManager gsm;
 	public static Music music1;
 	public static Music music2;
-
+	public static boolean isBluePlayerAI = false;
+	public static AI bluePlayerAI = AI.MINIMAX;
+	public static boolean isPurplePlayerAI = false;
+	public static AI purplePlayerAI = AI.NEGAMAX;
 
 	@Override
 	public void create () {
