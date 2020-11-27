@@ -22,7 +22,7 @@ public class AbaloneGame extends ApplicationAdapter {
 	public static boolean isBluePlayerAI = false;
 	public static AI bluePlayerAI = AI.MINIMAX;
 	public static boolean isPurplePlayerAI = false;
-	public static AI purplePlayerAI = AI.NEGAMAX;
+	public static AI purplePlayerAI = AI.MINIMAX;
 
 	@Override
 	public void create () {

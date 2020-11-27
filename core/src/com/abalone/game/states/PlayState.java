@@ -402,15 +402,17 @@ public class PlayState extends State {
             if (AbaloneGame.isPurplePlayerAI && AbaloneGame.purplePlayerAI == AI.MINIMAX) {
                 // construction of the tree
                 int depthTree = 2;
-                tree = new Tree(board, depthTree);
+                tree = new Tree(board, depthTree, com.abalone.game.utils.Color.PURPLE);
 
                 miniMax = new MiniMax(tree.getRoot(), depthTree, false, tree);
 
+                /*
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
+                */
 
                 board.move(miniMax.getBestNode().getTurn());
 
@@ -421,7 +423,7 @@ public class PlayState extends State {
             } else if (AbaloneGame.isPurplePlayerAI && AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
                 // construction of the tree
                 int depthTree = 2;
-                tree = new Tree(board, depthTree);
+                tree = new Tree(board, depthTree, com.abalone.game.utils.Color.PURPLE);
 
                 negaMax = new NegaMax(tree.getRoot(), depthTree, false, tree);
 
