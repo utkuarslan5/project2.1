@@ -131,10 +131,20 @@ public class Board implements Cloneable {
                 destinationBall = destination.getBall();
                 if ((startBall.getColor().isBlue() && destinationBall.getColor().isPurple()) ||
                         startBall.getColor().isPurple() && destinationBall.getColor().isBlue()) {
-                    selected.clear();
-                    selected.add(hexGrid.getMatchedHex(start).getBall());
-                    selected.add(hexGrid.getMatchedHex(start2).getBall());
-                    pushBalls(hexGrid.getMatchedHex(destination).getBall());
+                    if((start.getBall().getColor().isPurple() && start2.getBall().getColor().isPurple()) ||
+                            (start.getBall().getColor().isBlue() && start2.getBall().getColor().isBlue())) {
+                        selected.clear();
+                        selected.add(hexGrid.getMatchedHex(start).getBall());
+                        selected.add(hexGrid.getMatchedHex(start2).getBall());
+                        pushBalls(hexGrid.getMatchedHex(destination).getBall());
+                    }
+                    else{
+                        System.out.println("fuck off");
+                        System.out.println("The move was : ");
+                        System.out.println("Start 1 X : " + start.getX() + " Z:" + start.getZ() + " COLOR :" + start.getBall().getColor());
+                        System.out.println("Start 2 X : " + start2.getX() + " Z:" + start2.getZ() + " COLOR : " + start2.getBall().getColor());
+                        System.out.println("Destination  X : " + destination.getX() + " Z:" + destination.getZ() + " COLOR : " + destination.getBall().getColor());
+                    }
                 } else {
                     selected.clear();
                     selected.add(hexGrid.getMatchedHex(start).getBall());
@@ -153,11 +163,22 @@ public class Board implements Cloneable {
                 destinationBall = destination.getBall();
                 if ((startBall.getColor().isBlue() && destinationBall.getColor().isPurple()) ||
                         startBall.getColor().isPurple() && destinationBall.getColor().isBlue()) {
-                    selected.clear();
-                    selected.add(hexGrid.getMatchedHex(start).getBall());
-                    selected.add(hexGrid.getMatchedHex(start2).getBall());
-                    selected.add(hexGrid.getMatchedHex(start3).getBall());
-                    pushBalls(hexGrid.getMatchedHex(destination).getBall());
+                    if((start.getBall().getColor().isPurple() && start2.getBall().getColor().isPurple() && start3.getBall().getColor().isPurple()) ||
+                            (start.getBall().getColor().isBlue() && start2.getBall().getColor().isBlue() && start3.getBall().getColor().isBlue())) {
+                        selected.clear();
+                        selected.add(hexGrid.getMatchedHex(start).getBall());
+                        selected.add(hexGrid.getMatchedHex(start2).getBall());
+                        selected.add(hexGrid.getMatchedHex(start3).getBall());
+                        pushBalls(hexGrid.getMatchedHex(destination).getBall());
+                    }
+                    else{
+                        System.out.println("fuck off");
+                        System.out.println("The move was : ");
+                        System.out.println("Start 1 X : " + start.getX() + " Z:" + start.getZ() + " COLOR :" + start.getBall().getColor());
+                        System.out.println("Start 2 X : " + start2.getX() + " Z:" + start2.getZ() + " COLOR : " + start2.getBall().getColor());
+                        System.out.println("Start 3 X : " + start3.getX() + " Z:" + start3.getZ() + " COLOR : " + start3.getBall().getColor());
+                        System.out.println("Destination  X : " + destination.getX() + " Z:" + destination.getZ() + " COLOR : " + destination.getBall().getColor());
+                    }
                 } else {
                     selected.clear();
                     selected.add(hexGrid.getMatchedHex(start).getBall());
