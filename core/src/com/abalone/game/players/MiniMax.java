@@ -34,17 +34,17 @@ public class MiniMax extends Player {
         bestNode = minimax(currentNode, this.depth, -10000000, 10000000, this.maximizingPlayer);
     }
 
-    public Node minimax(Node currentNode, int depth, float alpha, float beta, boolean maximizingPlayer) {
+    public Node minimax(Node currentNode, int depth, double alpha, double beta, boolean maximizingPlayer) {
         if (depth == 0) {
             return tree.getRoot();
         }
         //Assuming the AI is purple player
         Node bestNode = null;
         if (maximizingPlayer) {
-            float value = -10000000;
+            double value = -10000000;
             for (Node child : currentNode.getChildren()) {
                 if (child != null) {
-                    float nodeValue = minimax(child, depth - 1, alpha, beta, false).getHeuristicsValue();
+                    double nodeValue = minimax(child, depth - 1, alpha, beta, false).getHeuristicsValue();
                     if (nodeValue > value) {
                         value = nodeValue;
                         bestNode = child;
@@ -58,10 +58,10 @@ public class MiniMax extends Player {
             return bestNode;
 
         } else {
-            float value = 10000000;
+            double value = 10000000;
             for (Node child : currentNode.getChildren()) {
                 if (child != null) {
-                    float nodeValue = minimax(child, depth - 1, alpha, beta, true).getHeuristicsValue();
+                    double nodeValue = minimax(child, depth - 1, alpha, beta, true).getHeuristicsValue();
                     if (nodeValue < value) {
                         value = nodeValue;
                         bestNode = child;

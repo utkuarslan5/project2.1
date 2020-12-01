@@ -33,11 +33,11 @@ public class NegaMax extends Player {
             return tree.getRoot();
         }
         Node bestNode = null;
-        float value = -10000000;
+        double value = -10000000;
 
         for (Node child : currentNode.getChildren()) {
             if (child != null) {
-                float nodeValue = -negamax(child, depth - 1, false).getHeuristicsValue();
+                double nodeValue = -negamax(child, depth - 1, false).getHeuristicsValue();
                 counter++;
                 if (nodeValue > value) {
                     value = nodeValue;

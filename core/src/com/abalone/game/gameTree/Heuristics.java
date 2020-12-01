@@ -14,18 +14,18 @@ public class Heuristics {
     private final Timestamp timestamp;
     private final Color playerColorToPlay;
     private final Node parentNode;
-    public final float value;
+    public final double value;
 
     public Heuristics(Board current, Color playerColorToPlay, Node parentNode) {
         this.current = current;
         this.timestamp = new Timestamp(System.currentTimeMillis());
         this.playerColorToPlay = playerColorToPlay;
         this.parentNode = parentNode;
-        this.value = valueFunction(current, 0.5f, 0.5f, 0.05f,1f,1f);
+        this.value = valueFunction(current, 0.5, -3, 0.05,1,1, 1);
     }
 
     //Heuristics
-    private float valueFunction(Board board, float w1, float w2, float w3, float w4, float w5) {
+    private double valueFunction(Board board, double w1, double w2, double w3, double w4, double w5, double w6) {
 
         List<Hex> hexlist = board.getHexGrid().getHexList();
         int count = 0;
@@ -213,17 +213,17 @@ public class Heuristics {
         int pushPoints = 0;
         if(current.getBlueHex().size() < parentNode.getNumberBlueBalls()) {
             if(playerColorToPlay.isPurple()) {
-                pushPoints += 9900;
+                // pushPoints += 9900;
             }
         }
 
-        float h1 = w1 * count;
-        float h2 = w2 * (totalDistance / count);
-        float h3 = w3 * countNeighboursOfEachBall;
+        double h1 = w1 * count;
+        double h2 = w2 * (totalDistance / count);
+        double h3 = w3 * countNeighboursOfEachBall;
         // float h4 = w4 * countAttacks;
         // float h5 = -w5 * enemycount;
-        float value = h1 + h2 + h3 + pushPoints;
-        // System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   pp: %d   =   %.2f\n", h1, h2, h3, pushPoints, value);
+        double value = h1 + h2 + h3 + pushPoints;
+        System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   pp: %d   =   %.2f\n", h1, h2, h3, pushPoints, value);
 
         return value;
     }
@@ -236,7 +236,7 @@ public class Heuristics {
         return timestamp;
     }
 
-    public float getValue() {
+    public double getValue() {
         return value;
     }
 

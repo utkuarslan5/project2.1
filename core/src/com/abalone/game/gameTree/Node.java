@@ -13,7 +13,7 @@ public class Node {
     private List<Node> children;
     private Node parent;
     private int depth;
-    private float value;
+    private double value;
     private Heuristics heuristics;
     private Turn turn;
     private Color playerColorToPlay;
@@ -55,11 +55,13 @@ public class Node {
                 Color nextColor = (playerColorToPlay == Color.BLUE)?Color.PURPLE:Color.BLUE;
                 for(List<Turn> ts : allTurns) {
                     for(Turn t : ts) {
-                        Board newBoard = (Board)board.clone();
-                        newBoard.move(t);
-                        Node newNode = new Node(newBoard, depthTree, depth+1, t, nextColor);
-                        this.addChild(newNode);
-                        newNode.calculateHeuristicsValue();
+                        if(t.getTurnType() >= 1) {
+                            Board newBoard = (Board)board.clone();
+                            newBoard.move(t);
+                            Node newNode = new Node(newBoard, depthTree, depth+1, t, nextColor);
+                            this.addChild(newNode);
+                            newNode.calculateHeuristicsValue();
+                        }
                     }
                 }
             }
@@ -67,7 +69,7 @@ public class Node {
                 System.out.println("Clone exception");
             }
         }
-        // System.out.printf("d=%d   Value=%.2f\n", depth, value);
+        System.out.printf("d=%d   Value=%.2f\n", depth, value);
     }
 
     public void addChild(Node child) {
@@ -108,11 +110,11 @@ public class Node {
         this.setHeuristicsValue(heuristics.getValue());
     }
 
-    public void setHeuristicsValue(float value) {
+    public void setHeuristicsValue(double value) {
         this.value = value;
     }
 
-    public float getHeuristicsValue(){
+    public double getHeuristicsValue(){
         return this.value;
     }
 

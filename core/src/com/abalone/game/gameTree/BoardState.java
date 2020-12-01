@@ -26,7 +26,7 @@ public class BoardState {
         return turnsFinder.getTurns();
     }
 
-    public float getValue(){
+    public double getValue(){
         return heuristics.value;
     }
 
