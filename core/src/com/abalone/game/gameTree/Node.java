@@ -37,8 +37,12 @@ public class Node {
             // So we get the purple balls (balls of the AI) because it is the turn of the AI to play
             // Otherwise we take the blue balls because it is the turn of the human to play
             List<Hex> hexes;
-            if (depth % 2 == 0) hexes = board.getPurpleHex();
-            else hexes = board.getBlueHex();
+            if(playerColorToPlay == Color.PURPLE) {
+                hexes = board.getPurpleHex();
+            }
+            else {
+                hexes = board.getBlueHex();
+            }
 
             turnsFinder.clearTurns();
             for(Hex hex : hexes) {
@@ -48,7 +52,7 @@ public class Node {
             // get every calculated turns for all hexes
             List<List<Turn>> allTurns = turnsFinder.getTurns();
             try {
-                Color nextColor = (playerColorToPlay.isBlue())?Color.PURPLE:Color.BLUE;
+                Color nextColor = (playerColorToPlay == Color.BLUE)?Color.PURPLE:Color.BLUE;
                 for(List<Turn> ts : allTurns) {
                     for(Turn t : ts) {
                         Board newBoard = (Board)board.clone();

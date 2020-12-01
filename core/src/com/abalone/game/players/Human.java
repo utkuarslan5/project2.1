@@ -1,4 +1,6 @@
 package com.abalone.game.players;
 
-public class Human extends Player {
+import com.abalone.game.gameTree.Node;
+
+public class Human {
 }

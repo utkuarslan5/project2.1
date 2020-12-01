@@ -223,7 +223,7 @@ public class Heuristics {
         // float h4 = w4 * countAttacks;
         // float h5 = -w5 * enemycount;
         float value = h1 + h2 + h3 + pushPoints;
-        System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   pp: %d   =   %.2f\n", h1, h2, h3, pushPoints, value);
+        // System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   pp: %d   =   %.2f\n", h1, h2, h3, pushPoints, value);
 
         return value;
     }

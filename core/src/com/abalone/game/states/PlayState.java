@@ -6,6 +6,7 @@ import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.*;
 import com.abalone.game.players.MiniMax;
 import com.abalone.game.players.NegaMax;
+import com.abalone.game.players.Player;
 import com.abalone.game.utils.AI;
 import com.abalone.game.utils.TurnsFinder;
 import com.badlogic.gdx.Gdx;
@@ -187,9 +188,11 @@ public class PlayState extends State {
                             if (board.getMovePerformed()) {
                                 switchTurnPlayer();
                                 board.setMovePerformed(false);
+                                /*
                                 if(purplePlayer.isChecked()) {
                                     AIplays();
                                 }
+                                */
                             }
                         } else {
                             ballButtons[index].setChecked(false);
@@ -201,9 +204,11 @@ public class PlayState extends State {
                                 switchTurnPlayer();
                                 allDestinations.clear();
                                 board.setMovePerformed(false);
+                                /*
                                 if(purplePlayer.isChecked()) {
                                     AIplays();
                                 }
+                                */
                             }
                             else{
                                 allDestinations.clear();
@@ -228,12 +233,12 @@ public class PlayState extends State {
         float t2= 1;
         TextureRegionDrawable circle = new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png")));
         circle.setMinSize(52,52);
-        for(int h = 0; h < lostBalls.length; h++){
+        for (int h = 0; h < lostBalls.length; h++) {
             circles[h] = new ImageButton(
                     circle,
                     circle
             );
-            if(h < 6){
+            if(h < 6) {
                 lostBalls[h] = new ImageButton(
                         ballTextureRegionDrawableBlue,
                         ballTextureRegionDrawableBlue,
@@ -243,7 +248,7 @@ public class PlayState extends State {
                 circles[h].setPosition(240 + t,418 + tempy);
                 t += 31;
                 tempy += 55;
-            }else{
+            } else {
                 lostBalls[h] = new ImageButton(
                         ballTextureRegionDrawablePurple,
                         ballTextureRegionDrawablePurple,
@@ -310,6 +315,13 @@ public class PlayState extends State {
             State endState = new EndState(gsm);
             gsm.pop();
             gsm.push(endState);
+        }
+
+        if(bluePlayer.isChecked() && AbaloneGame.isBluePlayerAI) {
+            blueAIplays();
+        }
+        if(purplePlayer.isChecked() && AbaloneGame.isPurplePlayerAI) {
+            purpleAIplays();
         }
     }
 
@@ -395,53 +407,40 @@ public class PlayState extends State {
         }
     }
 
-    public void AIplays() {
-        try {
-            System.out.println(SettingsState.getBlueAI());
-            // if ! miniMaxChecked.isChecked basically means that miniMax is the selected AI
-            if (AbaloneGame.isPurplePlayerAI && AbaloneGame.purplePlayerAI == AI.MINIMAX) {
-                // construction of the tree
-                int depthTree = 2;
-                tree = new Tree(board, depthTree, com.abalone.game.utils.Color.PURPLE);
-
-                miniMax = new MiniMax(tree.getRoot(), depthTree, false, tree);
-
-                /*
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
-                */
-
-                board.move(miniMax.getBestNode().getTurn());
-
-                switchTurnPlayer();
-                allDestinations.clear();
-                board.setMovePerformed(false);
-
-            } else if (AbaloneGame.isPurplePlayerAI && AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
-                // construction of the tree
-                int depthTree = 2;
-                tree = new Tree(board, depthTree, com.abalone.game.utils.Color.PURPLE);
-
-                negaMax = new NegaMax(tree.getRoot(), depthTree, false, tree);
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
-
-                board.move(negaMax.getBestNode().getTurn());
-
-                switchTurnPlayer();
-                allDestinations.clear();
-                board.setMovePerformed(false);
-            }
-        }catch(NullPointerException e){
-            //Human mode
+    public void blueAIplays() {
+        int depthTree = 2;
+        Player player;
+        tree = new Tree(board, depthTree, com.abalone.game.utils.Color.BLUE);
+        if(AbaloneGame.bluePlayerAI == AI.MINIMAX) {
+            player = new MiniMax(tree.getRoot(), depthTree, false, tree);
+            board.move(player.getBestNode().getTurn());
         }
+        else if(AbaloneGame.bluePlayerAI == AI.NEGAMAX) {
+            player = new NegaMax(tree.getRoot(), depthTree, false, tree);
+            board.move(player.getBestNode().getTurn());
+        }
+
+        switchTurnPlayer();
+        allDestinations.clear();
+        board.setMovePerformed(false);
+    }
+
+    public void purpleAIplays() {
+        int depthTree = 2;
+        Player player;
+        tree = new Tree(board, depthTree, com.abalone.game.utils.Color.PURPLE);
+        if(AbaloneGame.purplePlayerAI == AI.MINIMAX) {
+            player = new MiniMax(tree.getRoot(), depthTree, false, tree);
+            board.move(player.getBestNode().getTurn());
+        }
+        else if(AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
+            player = new NegaMax(tree.getRoot(), depthTree, false, tree);
+            board.move(player.getBestNode().getTurn());
+        }
+
+        switchTurnPlayer();
+        allDestinations.clear();
+        board.setMovePerformed(false);
     }
 
     public void alignSelection(Hex hex, Ball ball, int index) {

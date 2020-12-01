@@ -4,7 +4,7 @@ import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.Tree;
 import com.abalone.game.utils.Color;
 
-public class NegaMax {
+public class NegaMax extends Player {
     /*
     PSEUDO CODE FOR NORMAL:
     function negamax(node, depth, color):
