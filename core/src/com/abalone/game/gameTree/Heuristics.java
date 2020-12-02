@@ -20,7 +20,7 @@ public class Heuristics {
         this.timestamp = new Timestamp(System.currentTimeMillis());
         this.playerColorToPlay = playerColorToPlay;
         this.parentNode = parentNode;
-        this.value = valueFunction(current, 5, -10, 1,1,1, 9900);
+        this.value = valueFunction(current, 5, -10, 1,1,1, 500);
     }
 
     //Heuristics
@@ -28,46 +28,33 @@ public class Heuristics {
 
         List<Hex> hexlist = board.getHexGrid().getHexList();
         int count = 0;
-        int enemycount = 0;
+        int enemyCount = 0;
         int countAttacks = 0;
         double totalDistance = 0;
         int countNeighboursOfEachBall = 0;
 
         Color otherColor = (playerColorToPlay.isBlue())?Color.PURPLE:Color.BLUE;
         for (Hex hex : hexlist) {
-            if (hex.isOccupied() && hex.getBall().getColor().equals(playerColorToPlay)) {
-                count++;
-                // Manhattan distance, might be a good idea to add number of ply to get to the center
-                int distance = Math.abs(hex.getX()) + Math.abs(hex.getZ());
-                totalDistance += distance;
+            if (hex.isOccupied()) {
+                if(hex.getBall().getColor().equals(playerColorToPlay)) {
+                    count++;
+                    // Manhattan distance, might be a good idea to add number of ply to get to the center
+                    int distance = Math.abs(hex.getX()) + Math.abs(hex.getZ());
+                    totalDistance += distance;
 
-                //For the cohesion we count every neighbour of each ball, and add these up
-                if(!hex.getNeighbors().isEmpty()) {
-                    for (int i = 0; i <= hex.getNeighbors().size(); i++) {
-                        countNeighboursOfEachBall += 1;
+                    //For the cohesion we count every neighbour of each ball, and add these up
+                    if(!hex.getNeighbors().isEmpty()) {
+                        for (int i = 0; i <= hex.getNeighbors().size(); i++) {
+                            countNeighboursOfEachBall += 1;
+                        }
+                    } else {
+                        countNeighboursOfEachBall++;
                     }
-                } else {
-                    countNeighboursOfEachBall++;
+                }
+                else if (hex.getBall().getColor().equals(otherColor)){
+                    enemyCount++;
                 }
             }
-            /*
-            if(hex.isOccupied() && !hex.getBall().getColor().equals(player) && !hex.getBall().getColor().equals(Color.BLANK)){
-                enemycount++;
-            }
-            */
-        }
-
-        boolean ballPushed = false;
-        if(playerColorToPlay.isBlue()) {
-            if(current.getBlueHex().size() < parentNode.getNumberBlueBalls()) {
-                ballPushed = true;
-            }
-        }
-        else {
-            if(current.getPurpleHex().size() < parentNode.getNumberPurpleBalls()) {
-                ballPushed = true;
-            }
-
         }
 
         /*
@@ -226,8 +213,9 @@ public class Heuristics {
         double h3 = w3 * countNeighboursOfEachBall;
         // double h4 = w4 * countAttacks;
         // double h5 = -w5 * enemycount;
-        // Heuristic 6: (if ballPushed its better, so + weight)
-        double h6 = w6 * (ballPushed?1:0);
+
+        // Heuristic 6
+        double h6 = w6 * -enemyCount / 14;
         double value = h1 + h2 + h3 + h6;
         System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   pp: %.2f   =   %.2f\n", h1, h2, h3, h6, value);
 
