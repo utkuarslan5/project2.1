@@ -37,7 +37,7 @@ public class NegaMax extends Player {
 
         for (Node child : currentNode.getChildren()) {
             if (child != null) {
-                double nodeValue = -negamax(child, depth - 1, false).getHeuristicsValue();
+                double nodeValue = negamax(child, depth - 1, false).getHeuristicsValue();
                 counter++;
                 if (nodeValue > value) {
                     value = nodeValue;
