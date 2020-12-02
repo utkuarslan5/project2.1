@@ -55,11 +55,13 @@ public class Node {
                 Color nextColor = (playerColorToPlay == Color.BLUE)?Color.PURPLE:Color.BLUE;
                 for(List<Turn> ts : allTurns) {
                     for(Turn t : ts) {
-                            Board newBoard = (Board)board.clone();
+                        if(t.getTurnType() >= 2) {
+                            Board newBoard = (Board) board.clone();
                             newBoard.move(t);
-                            Node newNode = new Node(newBoard, depthTree, depth+1, t, nextColor);
+                            Node newNode = new Node(newBoard, depthTree, depth + 1, t, nextColor);
                             this.addChild(newNode);
                             newNode.calculateHeuristicsValue();
+                        }
                     }
                 }
             }

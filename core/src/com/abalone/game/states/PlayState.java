@@ -398,7 +398,7 @@ public class PlayState extends State {
     }
 
     public void blueAIplays() {
-        int depthTree = 2;
+        int depthTree = 3;
         Player player;
         tree = new Tree(board, depthTree, com.abalone.game.utils.Color.BLUE);
         if(AbaloneGame.bluePlayerAI == AI.MINIMAX) {
@@ -416,7 +416,7 @@ public class PlayState extends State {
     }
 
     public void purpleAIplays() {
-        int depthTree = 2;
+        int depthTree = 3;
         Player player;
         tree = new Tree(board, depthTree, com.abalone.game.utils.Color.PURPLE);
         if(AbaloneGame.purplePlayerAI == AI.MINIMAX) {

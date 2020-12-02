@@ -20,7 +20,7 @@ public class Heuristics {
         this.timestamp = new Timestamp(System.currentTimeMillis());
         this.playerColorToPlay = playerColorToPlay;
         this.parentNode = parentNode;
-        this.value = valueFunction(current, 5, -10, 1,1,1, 1);
+        this.value = valueFunction(current, 5, -10, 1,1,1, 9900);
     }
 
     //Heuristics
@@ -55,6 +55,19 @@ public class Heuristics {
                 enemycount++;
             }
             */
+        }
+
+        boolean ballPushed = false;
+        if(playerColorToPlay.isBlue()) {
+            if(current.getBlueHex().size() < parentNode.getNumberBlueBalls()) {
+                ballPushed = true;
+            }
+        }
+        else {
+            if(current.getPurpleHex().size() < parentNode.getNumberPurpleBalls()) {
+                ballPushed = true;
+            }
+
         }
 
         /*
@@ -205,26 +218,6 @@ public class Heuristics {
         //System.out.println("ATTACK VALUE IS: " + countAttacks);
         */
 
-        /*
-        // TODO: Not finished yet
-        boolean ballPushed = false;
-        if(playerColorToPlay.isBlue()) {
-            if(current.getBlueHex().size() < parentNode.getNumberBlueBalls()) {
-                if(playerColorToPlay.isPurple()) {
-                    ballPushed = true;
-                }
-            }
-        }
-        else {
-            if(current.getBlueHex().size() < parentNode.getNumberBlueBalls()) {
-                if(playerColorToPlay.isPurple()) {
-                    ballPushed = true;
-                }
-            }
-        }
-        */
-
-
         // Number of balls  (the more the better, so + weight)
         double h1 = w1 * count;
         // Total distance from  (the less the better, so - weight)
@@ -233,10 +226,10 @@ public class Heuristics {
         double h3 = w3 * countNeighboursOfEachBall;
         // double h4 = w4 * countAttacks;
         // double h5 = -w5 * enemycount;
-        // Neighbors of the same color  (the more the better, so + weight)
-        // double h6 = w6 * (ballPushed?1:0);
-        double value = h1 + h2 + h3;
-        System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   =   %.2f\n", h1, h2, h3, value);
+        // Heuristic 6: (if ballPushed its better, so + weight)
+        double h6 = w6 * (ballPushed?1:0);
+        double value = h1 + h2 + h3 + h6;
+        System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   pp: %.2f   =   %.2f\n", h1, h2, h3, h6, value);
 
         return value;
     }
