@@ -402,13 +402,11 @@ public class PlayState extends State {
         Player player;
         tree = new Tree(board, depthTree, com.abalone.game.utils.Color.BLUE);
         if(AbaloneGame.bluePlayerAI == AI.MINIMAX) {
-            player = new MiniMax(tree.getRoot(), depthTree, false, tree);
-            System.out.println("BEST NODE VALUE: " + player.getBestNode().getHeuristicsValue());
+            player = new MiniMax(tree.getRoot(), depthTree, true, tree);
             board.move(player.getBestNode().getTurn());
         }
         else if(AbaloneGame.bluePlayerAI == AI.NEGAMAX) {
-            player = new NegaMax(tree.getRoot(), depthTree, false, tree);
-            System.out.println("BEST NODE VALUE: " + player.getBestNode().getHeuristicsValue());
+            player = new NegaMax(tree.getRoot(), depthTree, true, tree);
             board.move(player.getBestNode().getTurn());
         }
 
@@ -422,13 +420,11 @@ public class PlayState extends State {
         Player player;
         tree = new Tree(board, depthTree, com.abalone.game.utils.Color.PURPLE);
         if(AbaloneGame.purplePlayerAI == AI.MINIMAX) {
-            player = new MiniMax(tree.getRoot(), depthTree, false, tree);
-            System.out.println("BEST NODE VALUE: " + player.getBestNode().getHeuristicsValue());
+            player = new MiniMax(tree.getRoot(), depthTree, true, tree);
             board.move(player.getBestNode().getTurn());
         }
         else if(AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
-            player = new NegaMax(tree.getRoot(), depthTree, false, tree);
-            System.out.println("BEST NODE VALUE: " + player.getBestNode().getHeuristicsValue());
+            player = new NegaMax(tree.getRoot(), depthTree, true, tree);
             board.move(player.getBestNode().getTurn());
         }
 

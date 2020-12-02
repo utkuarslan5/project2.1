@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Heuristics {
 
-
     private final Board current;
     private final Timestamp timestamp;
     private final Color playerColorToPlay;
@@ -21,7 +20,7 @@ public class Heuristics {
         this.timestamp = new Timestamp(System.currentTimeMillis());
         this.playerColorToPlay = playerColorToPlay;
         this.parentNode = parentNode;
-        this.value = valueFunction(current, 0.5, 0.5, 0.05,1,1, 1);
+        this.value = valueFunction(current, 5, -10, 1,1,1, 1);
     }
 
     //Heuristics
@@ -50,7 +49,7 @@ public class Heuristics {
 
         //For the cohesion we count every neighbour of each ball, and add these up
         for (Hex hex : hexlist){
-            if(hex.isOccupied() && hex.getBall().getColor().equals(playerColorToPlay)){
+            if(hex.isOccupied() && hex.getBall().getColor().equals(playerColorToPlay)) {
                 if(!hex.getNeighbors().isEmpty()) {
                     for (int i = 0; i <= hex.getNeighbors().size(); i++) {
                         countNeighboursOfEachBall += 1;
@@ -217,8 +216,11 @@ public class Heuristics {
             }
         }
 
+        // Number of balls  (the more the better, so + weight)
         double h1 = w1 * count;
+        // Total distance from  (the less the better, so - weight)
         double h2 = w2 * (totalDistance / count);
+        // Neighbors of the same color  (the more the better, so + weight)
         double h3 = w3 * countNeighboursOfEachBall;
         // float h4 = w4 * countAttacks;
         // float h5 = -w5 * enemycount;
