@@ -21,7 +21,7 @@ public class Heuristics {
         this.timestamp = new Timestamp(System.currentTimeMillis());
         this.playerColorToPlay = playerColorToPlay;
         this.parentNode = parentNode;
-        this.value = valueFunction(current, 0.5, -3, 0.05,1,1, 1);
+        this.value = valueFunction(current, 0.5, 0.5, 0.05,1,1, 1);
     }
 
     //Heuristics

@@ -106,7 +106,7 @@ public class Node {
     }
 
     public void calculateHeuristicsValue() {
-        this.heuristics = new Heuristics(board, Color.PURPLE, parent);
+        this.heuristics = new Heuristics(board, playerColorToPlay, parent);
         this.setHeuristicsValue(heuristics.getValue());
     }
 

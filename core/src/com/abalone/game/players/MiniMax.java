@@ -38,7 +38,6 @@ public class MiniMax extends Player {
         if (depth == 0) {
             return tree.getRoot();
         }
-        //Assuming the AI is purple player
         Node bestNode = null;
         if (maximizingPlayer) {
             double value = -10000000;
