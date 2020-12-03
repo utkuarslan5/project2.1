@@ -8,6 +8,7 @@ import java.util.List;
 public class Turn {
     private final List<Move> movesList = new ArrayList<>();
     private int turnType;
+    private int turnRole;
     private Hex baseHex;
     private List<Hex> baseHexList;
     private Color color;
@@ -17,9 +18,10 @@ public class Turn {
         this.color = baseHex.getBall().getColor();
     }
 
-    public void addMove(int moveType, Hex start, Hex destination) {
-        movesList.add(new Move(moveType, start, destination));
+    public void addMove(int moveType, int moveRole, Hex start, Hex destination) {
+        movesList.add(new Move(moveType, moveRole, start, destination));
         turnType = moveType;
+        turnRole = moveRole;
     }
 
     @Override
@@ -49,5 +51,9 @@ public class Turn {
 
     public int getTurnType() {
         return turnType;
+    }
+
+    public int getTurnRole() {
+        return turnRole;
     }
 }

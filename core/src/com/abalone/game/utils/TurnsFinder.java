@@ -50,7 +50,7 @@ public class TurnsFinder {
             /** Onestep Moves **/
             if(h.getBall().getColor().isBlank()){
                 foundTurns.add(new Turn(hex));
-                foundTurns.get(foundTurns.size()-1).addMove(0,hex,h);
+                foundTurns.get(foundTurns.size()-1).addMove(0,1,hex,h);
             }
 
             /** Broadside turns **/
@@ -85,8 +85,8 @@ public class TurnsFinder {
                             // Check if targets are empty
                             if (layerOneTarget.getBall().getColor().isBlank() && layerTwoTarget.getBall().getColor().isBlank()) {
                                 foundTurns.add(new Turn(hex));
-                                foundTurns.get(foundTurns.size() - 1).addMove(1,hex, layerOneTarget);
-                                foundTurns.get(foundTurns.size() - 1).addMove(1,candidates.get(1), layerTwoTarget);
+                                foundTurns.get(foundTurns.size() - 1).addMove(1,1,hex, layerOneTarget);
+                                foundTurns.get(foundTurns.size() - 1).addMove(1,1,candidates.get(1), layerTwoTarget);
 
                                 // Check third layer
                                 Hex nhhh = candidates.get(1).getNeighbors().get(neighborId);
@@ -99,9 +99,9 @@ public class TurnsFinder {
                                         // Check if third layer ball isn't  blocked
                                         if (layerThreeTarget.getBall().getColor().isBlank()) {
                                             foundTurns.add(new Turn(hex));
-                                            foundTurns.get(foundTurns.size() - 1).addMove(2,hex, layerOneTarget);
-                                            foundTurns.get(foundTurns.size() - 1).addMove(2,candidates.get(1), layerTwoTarget);
-                                            foundTurns.get(foundTurns.size() - 1).addMove(2,hhh, layerThreeTarget);
+                                            foundTurns.get(foundTurns.size() - 1).addMove(2,1,hex, layerOneTarget);
+                                            foundTurns.get(foundTurns.size() - 1).addMove(2,1,candidates.get(1), layerTwoTarget);
+                                            foundTurns.get(foundTurns.size() - 1).addMove(2,1,hhh, layerThreeTarget);
                                         }
                                     }
                                 }
@@ -198,15 +198,15 @@ public class TurnsFinder {
             // Get in-line turns from forces
             if(forceTypeTwo > 0 && ih != null){
                 foundTurns.add(new Turn(hex));
-                foundTurns.get(foundTurns.size()-1).addMove(1,hex,h);
-                foundTurns.get(foundTurns.size()-1).addMove(1,ih,hex);
+                foundTurns.get(foundTurns.size()-1).addMove(1,0,hex,h);
+                foundTurns.get(foundTurns.size()-1).addMove(1,0,ih,hex);
                 // System.out.println(foundTurns.get(foundTurns.size()-1).toString());
             }
             if(forceTypeThree > 0 && ih != null && ihh != null){
                 foundTurns.add(new Turn(hex));
-                foundTurns.get(foundTurns.size()-1).addMove(2,hex,h);
-                foundTurns.get(foundTurns.size()-1).addMove(2,ih,hex);
-                foundTurns.get(foundTurns.size()-1).addMove(2,ihh,ih);
+                foundTurns.get(foundTurns.size()-1).addMove(2,0,hex,h);
+                foundTurns.get(foundTurns.size()-1).addMove(2,0,ih,hex);
+                foundTurns.get(foundTurns.size()-1).addMove(2,0,ihh,ih);
                 // System.out.println(foundTurns.get(foundTurns.size()-1).toString());
             }
 
