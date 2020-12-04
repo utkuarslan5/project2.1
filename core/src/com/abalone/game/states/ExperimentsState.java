@@ -1,7 +1,14 @@
 package com.abalone.game.states;
 
 import com.abalone.game.AbaloneGame;
+import com.abalone.game.gameTree.Heuristics;
+import com.abalone.game.gameTree.Tree;
 import com.abalone.game.managers.GameStateManager;
+import com.abalone.game.objects.Board;
+import com.abalone.game.players.MiniMax;
+import com.abalone.game.players.NegaMax;
+import com.abalone.game.players.Player;
+import com.abalone.game.utils.AI;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -87,42 +94,42 @@ public class ExperimentsState extends State {
         final TextField playerTwoField_4 = new TextField("0", skin);
         final TextField playerTwoField_5 = new TextField("0", skin);
 
-        playerOne.row().pad(10,0,10,0);
+        playerOne.row().pad(10, 0, 10, 0);
         playerOne.add(value_1);
         playerOne.add(playerOneField_1).padRight(20);
-        playerOne.row().pad(10,0,10,0);
+        playerOne.row().pad(10, 0, 10, 0);
         playerOne.add(value_2);
         playerOne.add(playerOneField_2).padRight(20);
-        playerOne.row().pad(10,0,10,0);
+        playerOne.row().pad(10, 0, 10, 0);
         playerOne.add(value_3);
         playerOne.add(playerOneField_3).padRight(20);
-        playerOne.row().pad(10,0,10,0);
+        playerOne.row().pad(10, 0, 10, 0);
         playerOne.add(value_4);
         playerOne.add(playerOneField_4).padRight(20);
-        playerOne.row().pad(10,0,10,0);
+        playerOne.row().pad(10, 0, 10, 0);
         playerOne.add(value_5);
         playerOne.add(playerOneField_5).padRight(20);
 
-        playerTwo.row().pad(10,0,10,0);
+        playerTwo.row().pad(10, 0, 10, 0);
         playerTwo.add(valueTwo_1);
         playerTwo.add(playerTwoField_1).padRight(20);
-        playerTwo.row().pad(10,0,10,0);
+        playerTwo.row().pad(10, 0, 10, 0);
         playerTwo.add(valueTwo_2);
         playerTwo.add(playerTwoField_2).padRight(20);
-        playerTwo.row().pad(10,0,10,0);
+        playerTwo.row().pad(10, 0, 10, 0);
         playerTwo.add(valueTwo_3);
         playerTwo.add(playerTwoField_3).padRight(20);
-        playerTwo.row().pad(10,0,10,0);
+        playerTwo.row().pad(10, 0, 10, 0);
         playerTwo.add(valueTwo_4);
         playerTwo.add(playerTwoField_4).padRight(20);
-        playerTwo.row().pad(10,0,10,0);
+        playerTwo.row().pad(10, 0, 10, 0);
         playerTwo.add(valueTwo_5);
         playerTwo.add(playerTwoField_5).padRight(20);
 
         Label numberOfGames = new Label("Number of games : ", skin);
         final TextField nrOfGames = new TextField("0", skin);
 
-        simulations.row().pad(10,0,10,0);
+        simulations.row().pad(10, 0, 10, 0);
         simulations.add(numberOfGames);
         simulations.row();
         simulations.add(nrOfGames);
@@ -172,6 +179,24 @@ public class ExperimentsState extends State {
                             valueTwo_4 + " " + valueTwo_5);
                     System.out.println();
                     System.out.println("Nr of games wanted : " + nrOfSimulations);
+
+                    Board simulation = new Board();
+                    while (simulation.getBlueHex().size() > 8 && simulation.getPurpleHex().size() > 8) {
+                        Heuristics miniMaxH = new Heuristics(simulation, com.abalone.game.utils.Color.BLUE, valueOne_1, valueOne_2,
+                                valueOne_3, valueOne_4, valueOne_5, 1000);
+                        Tree miniMax = new Tree(simulation, 2, com.abalone.game.utils.Color.BLUE, miniMaxH);
+                        Player player = new MiniMax(miniMax.getRoot(), 2, true, miniMax);
+                        simulation.move(player.getBestNode().getTurn());
+                        simulation.setMovePerformed(false);
+                        Heuristics negaMaxH = new Heuristics(simulation, com.abalone.game.utils.Color.PURPLE, valueTwo_1, valueTwo_2,
+                                valueTwo_3, valueTwo_4, valueTwo_5, 1000);
+                        Tree negaMax = new Tree(simulation, 2, com.abalone.game.utils.Color.PURPLE, negaMaxH);
+                        Player player2 = new NegaMax(negaMax.getRoot(), 2, true, negaMax);
+                        simulation.move(player2.getBestNode().getTurn());
+                        simulation.setMovePerformed(false);
+                        System.out.println("MinMax Balls  :  " + simulation.getBlueHex().size());
+                        System.out.println("NegaMax Balls  :  " + simulation.getPurpleHex().size());
+                    }
                 }
             }
         };
@@ -203,9 +228,9 @@ public class ExperimentsState extends State {
         stage.draw();
 
         spriteBatch.begin();
-        experimentsFont.draw(spriteBatch,"Experiments Room",330,750);
-        aiNameFont.draw(spriteBatch,"MiniMax",295,570);
-        aiNameFont.draw(spriteBatch,"NegaMax",838,570);
+        experimentsFont.draw(spriteBatch, "Experiments Room", 330, 750);
+        aiNameFont.draw(spriteBatch, "MiniMax", 295, 570);
+        aiNameFont.draw(spriteBatch, "NegaMax", 838, 570);
         spriteBatch.end();
     }
 

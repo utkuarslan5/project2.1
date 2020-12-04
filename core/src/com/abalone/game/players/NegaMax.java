@@ -45,7 +45,6 @@ public class NegaMax extends Player {
                 }
             }
         }
-        System.out.println("Evaluated nodes :" + counter);
         return bestNode;
     }
 

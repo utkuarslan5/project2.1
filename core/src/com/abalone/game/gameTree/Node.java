@@ -1,10 +1,9 @@
 package com.abalone.game.gameTree;
 
-import com.abalone.game.objects.Board;
-import com.abalone.game.objects.Hex;
-import com.abalone.game.objects.Turn;
+import com.abalone.game.objects.*;
 import com.abalone.game.utils.Color;
 import com.abalone.game.utils.TurnsFinder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +18,10 @@ public class Node {
     private Color playerColorToPlay;
     private int numberBlueBalls;
     private int numberPurpleBalls;
+    private double[] weights;
 
-    public Node(Board board, int depthTree, int depth, Turn turn, Color playerColorToPlay) {
+
+    public Node(Board board, int depthTree, int depth, Turn turn, Color playerColorToPlay,Heuristics heuristics) {
         this.board = board;
         this.depth = depth;
         this.turn = turn;
@@ -28,53 +29,78 @@ public class Node {
         this.children = new ArrayList();
         this.numberBlueBalls = board.getBlueHex().size();
         this.numberPurpleBalls = board.getPurpleHex().size();
+        this.weights = heuristics.getWeights();
+        this.heuristics = new Heuristics(this.board,playerColorToPlay,weights[0],weights[1],weights[2],weights[3],weights[4],weights[5]);
 
-        TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
+
+
         // setHeuristicsValue(heuristics.getValue());
-
+        calculateHeuristicsValue();
         if (depthTree > depth) {
             // If the depth of this node is even, this means it's the state of the board after a move of the human player
             // So we get the purple balls (balls of the AI) because it is the turn of the AI to play
             // Otherwise we take the blue balls because it is the turn of the human to play
             List<Hex> hexes;
-            if(playerColorToPlay == Color.PURPLE) {
+            TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
+            if (playerColorToPlay == Color.PURPLE) {
                 hexes = board.getPurpleHex();
-            }
-            else {
+            } else {
                 hexes = board.getBlueHex();
             }
 
             turnsFinder.clearTurns();
-            for(Hex hex : hexes) {
+            for (Hex hex : hexes) {
                 // calculate all turns for each hex
                 turnsFinder.findTurns(hex);
             }
             // get every calculated turns for all hexes
             List<List<Turn>> allTurns = turnsFinder.getTurns();
+
             try {
-                Color nextColor = (playerColorToPlay == Color.BLUE)?Color.PURPLE:Color.BLUE;
-                for(List<Turn> ts : allTurns) {
-                    for(Turn t : ts) {
-                        if(t.getTurnType() >= 2) {
-                            Board newBoard = (Board) board.clone();
-                            newBoard.move(t);
-                            Node newNode = new Node(newBoard, depthTree, depth + 1, t, nextColor);
-                            this.addChild(newNode);
-                            newNode.calculateHeuristicsValue();
-                        }
+                Color nextColor = (playerColorToPlay == Color.BLUE) ? Color.PURPLE : Color.BLUE;
+                for (List<Turn> ts : allTurns) {
+                    for (Turn t : ts) {
+                        Board newBoard = (Board) board.clone();
+                        newBoard.move(t);
+                        Node newNode = new Node(newBoard, depthTree, depth + 1, t, nextColor,heuristics);
+                        this.addChild(newNode);
                     }
                 }
-            }
-            catch (CloneNotSupportedException e) {
+            } catch (CloneNotSupportedException e) {
                 System.out.println("Clone exception");
             }
         }
-        System.out.printf("d=%d   Value=%.2f\n", depth, value);
     }
 
     public void addChild(Node child) {
         child.setParent(this);
         this.children.add(child);
+    }
+
+    public boolean legalTurn(Turn currentTurn) {
+        boolean legal = true;
+        if (currentTurn != null) {
+            List<Move> moveList = currentTurn.getMovesList();
+            if (currentTurn.getTurnType() == 0) {
+                if (moveList.get(0).getStart().getBall().getColor().isBlank() || !moveList.get(0).getDestination().getBall().getColor().isBlank()) {
+                    legal = false;
+                }
+            } else if (currentTurn.getTurnType() == 1) {
+                Ball start1 = moveList.get(0).getStart().getBall();
+                Ball start2 = moveList.get(1).getStart().getBall();
+                if (!(start1.getColor() == start2.getColor())) {
+                    legal = false;
+                }
+            } else {
+                Ball start1 = moveList.get(0).getStart().getBall();
+                Ball start2 = moveList.get(1).getStart().getBall();
+                Ball start3 = moveList.get(2).getStart().getBall();
+                if (!(start1.getColor() == start2.getColor()) && !(start2.getColor() == start3.getColor())) {
+                    legal = false;
+                }
+            }
+        }
+        return legal;
     }
 
     public boolean isChildOf(Node child) {
@@ -106,15 +132,16 @@ public class Node {
     }
 
     public void calculateHeuristicsValue() {
-        this.heuristics = new Heuristics(board, playerColorToPlay, parent);
+        heuristics.valueFunction(this.board);
         this.setHeuristicsValue(heuristics.getValue());
     }
+
 
     public void setHeuristicsValue(double value) {
         this.value = value;
     }
 
-    public double getHeuristicsValue(){
+    public double getHeuristicsValue() {
         return this.value;
     }
 

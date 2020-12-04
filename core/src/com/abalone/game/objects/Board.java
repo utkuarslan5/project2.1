@@ -26,6 +26,13 @@ public class Board implements Cloneable {
         turnsFinder = new TurnsFinder(hexGrid);
     }
 
+    public Board(HexGrid grid){
+        this.movePerformed = false;
+        this.hexGrid = grid;
+        selected = new ArrayList<>();
+        turnsFinder = new TurnsFinder(hexGrid);
+    }
+
     //For TESTING
     public Board(int x) {
         hexGrid = new HexGrid();
@@ -140,11 +147,14 @@ public class Board implements Cloneable {
                         selected.add(hexGrid.getMatchedHex(start2).getBall());
                         pushBalls(hexGrid.getMatchedHex(destination).getBall());
                     } else {
+                        /*
                         System.out.println("fuck off");
                         System.out.println("The move was : ");
                         System.out.println("Start 1 X : " + start.getX() + " Z:" + start.getZ() + " COLOR :" + start.getBall().getColor());
                         System.out.println("Start 2 X : " + start2.getX() + " Z:" + start2.getZ() + " COLOR : " + start2.getBall().getColor());
                         System.out.println("Destination  X : " + destination.getX() + " Z:" + destination.getZ() + " COLOR : " + destination.getBall().getColor());
+
+                         */
                     }
                 } else {
                     selected.clear();
@@ -174,12 +184,15 @@ public class Board implements Cloneable {
                         selected.add(hexGrid.getMatchedHex(start3).getBall());
                         pushBalls(hexGrid.getMatchedHex(destination).getBall());
                     } else {
+                        /*
                         System.out.println("fuck off");
                         System.out.println("The move was : ");
                         System.out.println("Start 1 X : " + start.getX() + " Z:" + start.getZ() + " COLOR :" + start.getBall().getColor());
                         System.out.println("Start 2 X : " + start2.getX() + " Z:" + start2.getZ() + " COLOR : " + start2.getBall().getColor());
                         System.out.println("Start 3 X : " + start3.getX() + " Z:" + start3.getZ() + " COLOR : " + start3.getBall().getColor());
                         System.out.println("Destination  X : " + destination.getX() + " Z:" + destination.getZ() + " COLOR : " + destination.getBall().getColor());
+
+                         */
                     }
                 } else {
                     selected.clear();

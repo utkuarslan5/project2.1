@@ -12,19 +12,26 @@ public class Heuristics {
     private final Board current;
     private final Timestamp timestamp;
     private final Color playerColorToPlay;
-    private final Node parentNode;
     public final double value;
+    private double w1,w2,w3,w4,w5,w6;
+    private double[] weights;
 
-    public Heuristics(Board current, Color playerColorToPlay, Node parentNode) {
+    public Heuristics(Board current, Color playerColorToPlay,double w1,double w2,double w3,double w4,double w5,double w6) {
         this.current = current;
         this.timestamp = new Timestamp(System.currentTimeMillis());
         this.playerColorToPlay = playerColorToPlay;
-        this.parentNode = parentNode;
-        this.value = valueFunction(current, 5, -10, 1,1,1, 500);
+        this.w1 = w1;
+        this.w2 = w2;
+        this.w3 = w3;
+        this.w4 = w4;
+        this.w5 = w5;
+        this.w6 = w6;
+        this.weights = new double[]{w1,w2,w3,w4,w5,w6};
+        this.value = valueFunction(current);
     }
 
     //Heuristics
-    private double valueFunction(Board board, double w1, double w2, double w3, double w4, double w5, double w6) {
+    public double valueFunction(Board board) {
 
         List<Hex> hexlist = board.getHexGrid().getHexList();
         int count = 0;
@@ -217,7 +224,7 @@ public class Heuristics {
         // Heuristic 6
         double h6 = w6 * -enemyCount / 14;
         double value = h1 + h2 + h3 + h6;
-        System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   pp: %.2f   =   %.2f\n", h1, h2, h3, h6, value);
+       // System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   pp: %.2f   =   %.2f\n", h1, h2, h3, h6, value);
 
         return value;
     }
@@ -236,6 +243,10 @@ public class Heuristics {
 
     public Board getCurrent() {
         return current;
+    }
+
+    public double[] getWeights(){
+        return this.weights;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.abalone.game.states;
 
 import com.abalone.game.AbaloneGame;
+import com.abalone.game.gameTree.Heuristics;
 import com.abalone.game.gameTree.Tree;
 import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.*;
@@ -398,9 +399,10 @@ public class PlayState extends State {
     }
 
     public void blueAIplays() {
-        int depthTree = 3;
+        int depthTree = 2;
         Player player;
-        tree = new Tree(board, depthTree, com.abalone.game.utils.Color.BLUE);
+        Heuristics heuristics = new Heuristics(board,com.abalone.game.utils.Color.BLUE,0.5,-1,0.5,0,0,1000);
+        tree = new Tree(board, depthTree, com.abalone.game.utils.Color.BLUE,heuristics);
         if(AbaloneGame.bluePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
             board.move(player.getBestNode().getTurn());
@@ -416,9 +418,10 @@ public class PlayState extends State {
     }
 
     public void purpleAIplays() {
-        int depthTree = 3;
+        int depthTree = 2;
         Player player;
-        tree = new Tree(board, depthTree, com.abalone.game.utils.Color.PURPLE);
+        Heuristics heuristics = new Heuristics(board,com.abalone.game.utils.Color.PURPLE,0.5,-1,0.5,0,0,1000);
+        tree = new Tree(board, depthTree, com.abalone.game.utils.Color.PURPLE,heuristics);
         if(AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
             board.move(player.getBestNode().getTurn());
