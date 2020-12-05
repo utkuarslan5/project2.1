@@ -21,7 +21,7 @@ public class Node {
     private double[] weights;
 
 
-    public Node(Board board, int depthTree, int depth, Turn turn, Color playerColorToPlay,Heuristics heuristics) {
+    public Node(Board board, int depthTree, int depth, Turn turn, Color playerColorToPlay, Heuristics heuristics) {
         this.board = board;
         this.depth = depth;
         this.turn = turn;
@@ -30,12 +30,10 @@ public class Node {
         this.numberBlueBalls = board.getBlueHex().size();
         this.numberPurpleBalls = board.getPurpleHex().size();
         this.weights = heuristics.getWeights();
-        this.heuristics = new Heuristics(this.board,playerColorToPlay,weights[0],weights[1],weights[2],weights[3],weights[4],weights[5]);
-
+        this.heuristics = new Heuristics(this.board, playerColorToPlay, weights[0], weights[1], weights[2], weights[3], weights[4], weights[5]);
 
 
         // setHeuristicsValue(heuristics.getValue());
-        calculateHeuristicsValue();
         if (depthTree > depth) {
             // If the depth of this node is even, this means it's the state of the board after a move of the human player
             // So we get the purple balls (balls of the AI) because it is the turn of the AI to play
@@ -62,8 +60,9 @@ public class Node {
                     for (Turn t : ts) {
                         Board newBoard = (Board) board.clone();
                         newBoard.move(t);
-                        Node newNode = new Node(newBoard, depthTree, depth + 1, t, nextColor,heuristics);
+                        Node newNode = new Node(newBoard, depthTree, depth + 1, t, nextColor, heuristics);
                         this.addChild(newNode);
+                        newNode.calculateHeuristicsValue();
                     }
                 }
             } catch (CloneNotSupportedException e) {
