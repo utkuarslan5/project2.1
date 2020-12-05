@@ -24,25 +24,26 @@ public class NegaMax extends Player {
         this.depth = depth;
         this.maximizingPlayer = maximizingPlayer;
         this.tree = tree;
-        bestNode = negamax(currentNode, this.depth, this.maximizingPlayer,-100000000f,10000000f);
+        bestNode = negamax(currentNode, this.depth, this.maximizingPlayer, -100000000f, 10000000f);
     }
 
-    private Node negamax(Node currentNode, int depth, boolean maximizingPlayer,double alpha,double beta) {
+    private Node negamax(Node currentNode, int depth, boolean maximizingPlayer, double alpha, double beta) {
         if (depth == 0) {
             return tree.getRoot();
         }
         Node bestNode = null;
         double value = -10000000;
 
+
         for (Node child : currentNode.getChildren()) {
             if (child != null) {
-                double nodeValue = negamax(child, depth - 1, !maximizingPlayer,-beta,-alpha).getHeuristicsValue();
+                double nodeValue = negamax(child, depth - 1, !maximizingPlayer, beta, alpha).getHeuristicsValue();
                 if (nodeValue > value) {
                     value = nodeValue;
                     bestNode = child;
                 }
-                alpha = Math.max(alpha,value);
-                if(alpha >= beta){
+                alpha = Math.max(alpha, value);
+                if (alpha >= beta) {
                     break;
                 }
 
