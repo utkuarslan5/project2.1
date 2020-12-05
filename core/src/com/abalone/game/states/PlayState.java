@@ -185,10 +185,20 @@ public class PlayState extends State {
                             ballButtons[index].setChecked(false);
                             System.out.println("PUSH NEEDED");
                             board.pushBalls(ball);
-                            allDestinations.clear();
-                            if (board.getMovePerformed()) {
-                                switchTurnPlayer();
-                                board.setMovePerformed(false);
+                            if(board.getPushPossible()) {
+                                allDestinations.clear();
+                                if (board.getMovePerformed()) {
+                                    switchTurnPlayer();
+                                    board.setMovePerformed(false);
+                                }
+                            }else{
+                                for (Ball aha : board.getSelected()) {
+                                    int ffs = board.getHexGrid().getBallAt(aha);
+                                    ballButtons[ffs].setChecked(false);
+                                }
+                                board.getSelected().clear();
+                                board.setPushPossible(true);
+                                allDestinations.clear();
                             }
                         } else {
                             ballButtons[index].setChecked(false);
@@ -265,7 +275,8 @@ public class PlayState extends State {
         // doesn't allow more than 3 balls to be selected
         if (selectedList.size() > 3) {
             for (Ball ball : selectedList) {
-                ballButtons[ball.getId()].setChecked(false);
+                int ffs = board.getHexGrid().getBallAt(ball);
+                ballButtons[ffs].setChecked(false);
             }
             selectedList.clear();
             board.getSelected().clear();

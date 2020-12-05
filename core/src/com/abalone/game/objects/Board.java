@@ -15,9 +15,11 @@ public class Board implements Cloneable {
     private ArrayList<Ball> selected;
     private TurnsFinder turnsFinder;
     private boolean movePerformed;
+    private boolean pushPossible;
 
     public Board() {
         this.movePerformed = false;
+        this.pushPossible = true;
         Texture img = new Texture("abalone.png");
         this.board = new Image(img);
 
@@ -370,6 +372,8 @@ public class Board implements Cloneable {
                         hexGrid.getHexList().get(to).setBall(tempBall2);
                         hexGrid.getHexList().get(from2).setBall(ballTo);
                         requestMove(tempBall2);
+                    }else{
+                        pushPossible = false;
                     }
                 } else if (emptyNeighbor == null) {
                     //System.out.println("OUT OF BOARD");
@@ -397,7 +401,8 @@ public class Board implements Cloneable {
 
                 if (nonEmptyNeighbor != null && emptyNeighbor != null
                         && emptyNeighbor.getBall() != null && nonEmptyNeighbor.getBall() != null) {
-                    if (!nonEmptyNeighbor.getBall().getColor().isBlank() && emptyNeighbor.getBall().getColor().isBlank()) {
+                    if (!nonEmptyNeighbor.getBall().getColor().isBlank() && emptyNeighbor.getBall().getColor().isBlank()
+                            &&!selected.get(0).getColor().equals(nonEmptyNeighbor.getBall().getColor())) {
                         Ball tempBall = emptyNeighbor.getBall();
                         int fromTemp = hexGrid.getBallAt(tempBall);
                         Ball tempBall2 = nonEmptyNeighbor.getBall();
@@ -406,12 +411,15 @@ public class Board implements Cloneable {
                         hexGrid.getHexList().get(fromTemp).setBall(tempBall2);
                         hexGrid.getHexList().get(fromTemp2).setBall(ballTo);
                         requestMove(tempBall);
-                    } else {
+                        //SOLVED SANDWICH MOVE
+                    } else if(nonEmptyNeighbor.getBall().getColor().isBlank()) {
                         Ball tempBall2 = nonEmptyNeighbor.getBall();
                         int fromTemp2 = hexGrid.getBallAt(tempBall2);
                         hexGrid.getHexList().get(to).setBall(tempBall2);
                         hexGrid.getHexList().get(fromTemp2).setBall(ballTo);
                         requestMove(tempBall2);
+                    }else{
+                        pushPossible = false;
                     }
 
                 } else if (nonEmptyNeighbor != null && emptyNeighbor == null && nonEmptyNeighbor.getBall() != null) {
@@ -446,6 +454,14 @@ public class Board implements Cloneable {
 
     public boolean getMovePerformed() {
         return movePerformed;
+    }
+
+    public boolean getPushPossible(){
+        return pushPossible;
+    }
+
+    public void setPushPossible(boolean pushPossible){
+        this.pushPossible = pushPossible;
     }
 
     @Override
