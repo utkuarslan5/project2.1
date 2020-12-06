@@ -48,6 +48,8 @@ public class PlayState extends State {
     private MiniMax miniMax;
     private NegaMax negaMax;
     private Tree tree;
+    private boolean blueFinished;
+    private boolean purpleFinished;
 
     private TextureRegionDrawable ballTextureRegionDrawableBlue;
     private TextureRegionDrawable ballTexturePressedRegionDrawableBlue;
@@ -65,6 +67,8 @@ public class PlayState extends State {
 
     @Override
     public void init() {
+        blueFinished = true;
+        purpleFinished = true;
         skin = new Skin(Gdx.files.internal("cloud-form/skin/cloud-form-ui.json"));
         spriteBatch = new SpriteBatch();
         board = new Board();
@@ -104,6 +108,7 @@ public class PlayState extends State {
         purplePlayer.setTransform(true);
         purplePlayer.setScale(1.5f);
         purplePlayer.getLabel().setFontScale(0.5f);
+        //purplePlayer.setChecked(true);
 
         colorSelectPlayer = new ButtonGroup<>(bluePlayer, purplePlayer);
         colorSelectPlayer.setMaxCheckCount(1);
@@ -270,7 +275,7 @@ public class PlayState extends State {
         lostP = 14-board.getPurpleHex().size();
 
         ArrayList<Ball> selectedList = board.getSelected();
-        assert selectedList != null;
+        //assert selectedList != null;
 
         // doesn't allow more than 3 balls to be selected
         if (selectedList.size() > 3) {
@@ -319,10 +324,10 @@ public class PlayState extends State {
             gsm.push(endState);
         }
 
-        if(bluePlayer.isChecked() && AbaloneGame.isBluePlayerAI) {
+        if(bluePlayer.isChecked() && AbaloneGame.isBluePlayerAI && blueFinished) {
             blueAIplays();
         }
-        if(purplePlayer.isChecked() && AbaloneGame.isPurplePlayerAI) {
+        else if(purplePlayer.isChecked() && AbaloneGame.isPurplePlayerAI && purpleFinished) {
             purpleAIplays();
         }
     }
@@ -410,41 +415,102 @@ public class PlayState extends State {
     }
 
     public void blueAIplays() {
+        blueFinished = false;
+        System.out.println("blue playing");
         int depthTree = 2;
         Player player;
-        Heuristics heuristics = new Heuristics(board,com.abalone.game.utils.Color.BLUE,0.5,-1,0.5,0,0,1000);
-        tree = new Tree(board, depthTree, com.abalone.game.utils.Color.BLUE,heuristics);
+        Heuristics heuristics = new Heuristics(this.board,com.abalone.game.utils.Color.BLUE,0.5,-1,0.5,0,0,1000);
+        tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE,heuristics);
         if(AbaloneGame.bluePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
-            board.move(player.getBestNode().getTurn());
+            System.out.println(player.getBestNode().getTurn());
+            Turn turn =player.getBestNode().getTurn();
+            board.move(turn);
         }
         else if(AbaloneGame.bluePlayerAI == AI.NEGAMAX) {
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
-            board.move(player.getBestNode().getTurn());
+            Turn turn =player.getBestNode().getTurn();
+            board.move(turn);
         }
 
-        switchTurnPlayer();
-        allDestinations.clear();
-        board.setMovePerformed(false);
+        if(board.getMovePerformed()) {
+            switchTurnPlayer();
+            allDestinations.clear();
+            board.setMovePerformed(false);
+            blueFinished = true;
+        }else{
+            Heuristics heuristics2 = new Heuristics(this.board,com.abalone.game.utils.Color.BLUE,0,100,1,1,1,10000);
+            tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE,heuristics2);
+            if(AbaloneGame.bluePlayerAI == AI.MINIMAX) {
+                player = new MiniMax(tree.getRoot(), depthTree, true, tree);
+                //System.out.println(player.getBestNode().getTurn());
+                Turn turn =player.getBestNode().getTurn();
+                board.move(turn);
+            }
+            else if(AbaloneGame.bluePlayerAI == AI.NEGAMAX) {
+                player = new NegaMax(tree.getRoot(), depthTree, true, tree);
+                Turn turn =player.getBestNode().getTurn();
+                board.move(turn);
+            }
+
+            if(board.getMovePerformed()) {
+                switchTurnPlayer();
+                allDestinations.clear();
+                board.setMovePerformed(false);
+                blueFinished = true;
+            }else{
+                //System.out.println("ffs1");
+            }
+        }
     }
 
     public void purpleAIplays() {
+        purpleFinished = false;
+        System.out.println("purple playing");
         int depthTree = 2;
         Player player;
-        Heuristics heuristics = new Heuristics(board,com.abalone.game.utils.Color.PURPLE,0.5,-1,0.5,0,0,1000);
-        tree = new Tree(board, depthTree, com.abalone.game.utils.Color.PURPLE,heuristics);
+        Heuristics heuristics = new Heuristics(this.board,com.abalone.game.utils.Color.PURPLE,0.5,-1,0.5,0,0,1000);
+        tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE,heuristics);
         if(AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
-            board.move(player.getBestNode().getTurn());
+            System.out.println(player.getBestNode().getTurn().getTurnType());
+            Turn turn =player.getBestNode().getTurn();
+            board.move(turn);
         }
         else if(AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
-            board.move(player.getBestNode().getTurn());
+            Turn turn =player.getBestNode().getTurn();
+            board.move(turn);
         }
+        if(board.getMovePerformed()) {
+            switchTurnPlayer();
+            allDestinations.clear();
+            board.setMovePerformed(false);
+            purpleFinished = true;
+        }else{
+            Heuristics heuristics2 = new Heuristics(this.board,com.abalone.game.utils.Color.PURPLE,0,100,1,1,1,10000);
+            tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE,heuristics2);
+            if(AbaloneGame.purplePlayerAI == AI.MINIMAX) {
+                player = new MiniMax(tree.getRoot(), depthTree, true, tree);
+                //System.out.println(player.getBestNode().getTurn());
+                Turn turn =player.getBestNode().getTurn();
+                board.move(turn);
+            }
+            else if(AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
+                player = new NegaMax(tree.getRoot(), depthTree, true, tree);
+                Turn turn =player.getBestNode().getTurn();
+                board.move(turn);
+            }
 
-        switchTurnPlayer();
-        allDestinations.clear();
-        board.setMovePerformed(false);
+            if(board.getMovePerformed()) {
+                switchTurnPlayer();
+                allDestinations.clear();
+                board.setMovePerformed(false);
+                purpleFinished = true;
+            }else{
+                //System.out.println("ffs2");
+            }
+        }
     }
 
     public void alignSelection(Hex hex, Ball ball, int index) {
