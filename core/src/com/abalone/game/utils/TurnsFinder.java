@@ -10,7 +10,7 @@ public class TurnsFinder {
     private HexGrid grid;
     private List<Hex> hexes = new ArrayList<>();
     private List<List<Turn>> turns = new ArrayList<>();
-    private Color currentColor;
+    private  Color currentColor;
 
     public TurnsFinder(HexGrid grid){
         this.grid = grid;

@@ -449,11 +449,13 @@ public class Board implements Cloneable {
                             hexGrid.getHexList().get(to).setBall(tempBall);
                             requestMove(tempBall);
                         }
-                    } else {
+                    } else if(nonEmptyNeighbor.getBall().getColor().equals(ballTo.getColor())) {
                         //ballTo = new Ball(Color.BLANK, to);
                         Ball ballTo2 = hexBallTo.getBall();
                         ballTo2.setColor(Color.BLANK);
                         requestMove(ballTo2);
+                    }else{
+                        pushPossible = false;
                     }
                 } else if ((nonEmptyNeighbor == null && emptyNeighbor == null)) {
 
