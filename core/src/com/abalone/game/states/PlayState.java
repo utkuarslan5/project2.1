@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,8 +115,8 @@ public class PlayState extends State {
         colorSelectPlayer.setMaxCheckCount(1);
         colorSelectPlayer.setMinCheckCount(1);
 
-        highlight = new CheckBox("Highlight Possible Moves",skin);
-        highlight.setPosition(830,650);
+        highlight = new CheckBox("Highlight Possible Moves", skin);
+        highlight.setPosition(830, 650);
         highlight.setTransform(true);
         highlight.setScale(1.5f);
         highlight.getLabel().setFontScale(0.5f);
@@ -190,13 +191,13 @@ public class PlayState extends State {
                             ballButtons[index].setChecked(false);
                             System.out.println("PUSH NEEDED");
                             board.pushBalls(ball);
-                            if(board.getPushPossible()) {
+                            if (board.getPushPossible()) {
                                 allDestinations.clear();
                                 if (board.getMovePerformed()) {
                                     switchTurnPlayer();
                                     board.setMovePerformed(false);
                                 }
-                            }else{
+                            } else {
                                 for (Ball aha : board.getSelected()) {
                                     int ffs = board.getHexGrid().getBallAt(aha);
                                     ballButtons[ffs].setChecked(false);
@@ -215,8 +216,7 @@ public class PlayState extends State {
                                 switchTurnPlayer();
                                 allDestinations.clear();
                                 board.setMovePerformed(false);
-                            }
-                            else{
+                            } else {
                                 allDestinations.clear();
                                 board.getSelected().clear();
                                 switchTurnPlayer();
@@ -233,25 +233,25 @@ public class PlayState extends State {
 
         lostBalls = new ImageButton[12];
         circles = new ImageButton[12];
-        int tempy= 0;
+        int tempy = 0;
         int tempy2 = 0;
         float t = 1;
-        float t2= 1;
+        float t2 = 1;
         TextureRegionDrawable circle = new TextureRegionDrawable(new Texture(Gdx.files.internal("uncheckedCheckBox.png")));
-        circle.setMinSize(52,52);
+        circle.setMinSize(52, 52);
         for (int h = 0; h < lostBalls.length; h++) {
             circles[h] = new ImageButton(
                     circle,
                     circle
             );
-            if(h < 6) {
+            if (h < 6) {
                 lostBalls[h] = new ImageButton(
                         ballTextureRegionDrawableBlue,
                         ballTextureRegionDrawableBlue,
                         ballTexturePressedRegionDrawableBlue
                 );
-                lostBalls[h].setPosition(240 + t,418 + tempy);
-                circles[h].setPosition(240 + t,418 + tempy);
+                lostBalls[h].setPosition(240 + t, 418 + tempy);
+                circles[h].setPosition(240 + t, 418 + tempy);
                 t += 31;
                 tempy += 55;
             } else {
@@ -260,7 +260,7 @@ public class PlayState extends State {
                         ballTextureRegionDrawablePurple,
                         ballTexturePressedRegionDrawablePurple
                 );
-                lostBalls[h].setPosition(240 + t2,328 - tempy2);
+                lostBalls[h].setPosition(240 + t2, 328 - tempy2);
                 circles[h].setPosition(240 + t2, 328 - tempy2);
                 t2 += 31;
                 tempy2 += 55;
@@ -271,8 +271,8 @@ public class PlayState extends State {
 
     @Override
     public void update(float dt) {
-        lostB = 14-board.getBlueHex().size();
-        lostP = 14-board.getPurpleHex().size();
+        lostB = 14 - board.getBlueHex().size();
+        lostP = 14 - board.getPurpleHex().size();
 
         ArrayList<Ball> selectedList = board.getSelected();
         //assert selectedList != null;
@@ -312,11 +312,11 @@ public class PlayState extends State {
         purpleLostBalls.setText("Purple Lost: " + lostP);
         blueLostBalls.setText("Blue Lost: " + lostB);
 
-        if(lostB!=0) {
-            lostBalls[lostB-1].setVisible(true);
+        if (lostB != 0) {
+            lostBalls[lostB - 1].setVisible(true);
         }
-        if(lostP!=0){
-            lostBalls[6 + lostP-1].setVisible(true);
+        if (lostP != 0) {
+            lostBalls[6 + lostP - 1].setVisible(true);
         }
         if (lostP == 6 || lostB == 6) {
             State endState = new EndState(gsm);
@@ -324,27 +324,11 @@ public class PlayState extends State {
             gsm.push(endState);
         }
 
-        if(bluePlayer.isChecked() && AbaloneGame.isBluePlayerAI && blueFinished) {
+        if (bluePlayer.isChecked() && AbaloneGame.isBluePlayerAI && blueFinished) {
             blueAIplays();
-            try
-            {
-                Thread.sleep(500);
-            }
-            catch(InterruptedException ex)
-            {
-                Thread.currentThread().interrupt();
-            }
         }
-        else if(purplePlayer.isChecked() && AbaloneGame.isPurplePlayerAI && purpleFinished) {
+        else if (purplePlayer.isChecked() && AbaloneGame.isPurplePlayerAI && purpleFinished) {
             purpleAIplays();
-            try
-            {
-                Thread.sleep(500);
-            }
-            catch(InterruptedException ex)
-            {
-                Thread.currentThread().interrupt();
-            }
         }
     }
 
@@ -394,10 +378,10 @@ public class PlayState extends State {
             stage.addActor(ballButtons[i]);
             temp = y;
         }
-        for(ImageButton lostBalls : lostBalls){
+        for (ImageButton lostBalls : lostBalls) {
             stage.addActor(lostBalls);
         }
-        for(ImageButton circles : circles){
+        for (ImageButton circles : circles) {
             stage.addActor(circles);
         }
         stage.addActor(bluePlayer);
@@ -435,47 +419,44 @@ public class PlayState extends State {
         System.out.println("blue playing");
         int depthTree = 2;
         Player player;
-        Heuristics heuristics = new Heuristics(this.board,com.abalone.game.utils.Color.BLUE,0.5,-1,0.5,1000);
-        tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE,heuristics);
-        if(AbaloneGame.bluePlayerAI == AI.MINIMAX) {
+        Heuristics heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 0.5, -1, 0.5, 0, 0, 1000);
+        tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
+        if (AbaloneGame.bluePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
             System.out.println(player.getBestNode().getTurn());
-            Turn turn =player.getBestNode().getTurn();
+            Turn turn = player.getBestNode().getTurn();
             board.move(turn);
-        }
-        else if(AbaloneGame.bluePlayerAI == AI.NEGAMAX) {
+        } else if (AbaloneGame.bluePlayerAI == AI.NEGAMAX) {
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
-            Turn turn =player.getBestNode().getTurn();
+            Turn turn = player.getBestNode().getTurn();
             board.move(turn);
         }
 
-        if(board.getMovePerformed()) {
+        if (board.getMovePerformed()) {
             switchTurnPlayer();
             allDestinations.clear();
             board.setMovePerformed(false);
             blueFinished = true;
-        }else{
-            Heuristics heuristics2 = new Heuristics(this.board,com.abalone.game.utils.Color.BLUE,0,100,1,10000);
-            tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE,heuristics2);
-            if(AbaloneGame.bluePlayerAI == AI.MINIMAX) {
-                player = new MiniMax(tree.getRoot(), depthTree, true, tree);
-                //System.out.println(player.getBestNode().getTurn());
-                Turn turn =player.getBestNode().getTurn();
-                board.move(turn);
+        } else {
+            List<Hex> hexes = board.getBlueHex();
+            TurnsFinder generator = new TurnsFinder(board.getHexGrid());
+            generator.clearTurns();
+            for (Hex hex : hexes) {
+                generator.findTurns(hex);
             }
-            else if(AbaloneGame.bluePlayerAI == AI.NEGAMAX) {
-                player = new NegaMax(tree.getRoot(), depthTree, true, tree);
-                Turn turn =player.getBestNode().getTurn();
-                board.move(turn);
+            List<List<Turn>> turns = generator.getTurns();
+            if (turns.size() > 0) {
+                int i = (int) (turns.size() * Math.random());
+                int j = (int) (turns.get(i).size() * Math.random());
+                board.move(turns.get(i).get(j));
             }
 
-            if(board.getMovePerformed()) {
+            if (board.getMovePerformed()) {
+                System.out.println("moved");
                 switchTurnPlayer();
                 allDestinations.clear();
                 board.setMovePerformed(false);
                 blueFinished = true;
-            }else{
-                //System.out.println("ffs1");
             }
         }
     }
@@ -485,46 +466,45 @@ public class PlayState extends State {
         System.out.println("purple playing");
         int depthTree = 2;
         Player player;
-        Heuristics heuristics = new Heuristics(this.board,com.abalone.game.utils.Color.PURPLE,0.5,-1,0.5,1000);
-        tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE,heuristics);
-        if(AbaloneGame.purplePlayerAI == AI.MINIMAX) {
+        Heuristics heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 0.5, -1, 0.5, 0, 0, 1000);
+        tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
+        if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
             System.out.println(player.getBestNode().getTurn().getTurnType());
-            Turn turn =player.getBestNode().getTurn();
+            Turn turn = player.getBestNode().getTurn();
             board.move(turn);
-        }
-        else if(AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
+        } else if (AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
-            Turn turn =player.getBestNode().getTurn();
+            Turn turn = player.getBestNode().getTurn();
             board.move(turn);
         }
-        if(board.getMovePerformed()) {
+        if (board.getMovePerformed()) {
             switchTurnPlayer();
             allDestinations.clear();
             board.setMovePerformed(false);
             purpleFinished = true;
-        }else{
-            Heuristics heuristics2 = new Heuristics(this.board,com.abalone.game.utils.Color.PURPLE,0,100,1,10000);
-            tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE,heuristics2);
-            if(AbaloneGame.purplePlayerAI == AI.MINIMAX) {
-                player = new MiniMax(tree.getRoot(), depthTree, true, tree);
-                //System.out.println(player.getBestNode().getTurn());
-                Turn turn =player.getBestNode().getTurn();
-                board.move(turn);
+        } else {
+            List<Hex> hexes = board.getPurpleHex();
+            TurnsFinder generator = new TurnsFinder(board.getHexGrid());
+            generator.clearTurns();
+            for (Hex hex : hexes) {
+                generator.findTurns(hex);
             }
-            else if(AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
-                player = new NegaMax(tree.getRoot(), depthTree, true, tree);
-                Turn turn =player.getBestNode().getTurn();
-                board.move(turn);
+            List<List<Turn>> turns = generator.getTurns();
+            if (turns.size() > 0) {
+                int i = (int) (turns.size() * Math.random());
+                int j = (int) (turns.get(i).size() * Math.random());
+                board.move(turns.get(i).get(j));
             }
-
-            if(board.getMovePerformed()) {
+            else{
+                System.out.println("blabla");
+            }
+            if (board.getMovePerformed()) {
+                System.out.println("moved");
                 switchTurnPlayer();
                 allDestinations.clear();
                 board.setMovePerformed(false);
                 purpleFinished = true;
-            }else{
-                //System.out.println("ffs2");
             }
         }
     }
