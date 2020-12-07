@@ -454,26 +454,10 @@ public class PlayState extends State {
             board.setMovePerformed(false);
             blueFinished = true;
         } else {
-            List<Hex> hexes = board.getBlueHex();
-            TurnsFinder generator = new TurnsFinder(board.getHexGrid());
-            generator.clearTurns();
-            for (Hex hex : hexes) {
-                generator.findTurns(hex);
-            }
-            List<List<Turn>> turns = generator.getTurns();
-            if (turns.size() > 0) {
-                int i = (int) (turns.size() * Math.random());
-                int j = (int) (turns.get(i).size() * Math.random());
-                board.move(turns.get(i).get(j));
-            }
+            System.out.println("Blue random");
+            tryRandomUntilWorks(false,true);
 
-            if (board.getMovePerformed()) {
-                System.out.println("moved");
-                switchTurnPlayer();
-                allDestinations.clear();
-                board.setMovePerformed(false);
-                blueFinished = true;
-            }
+
         }
     }
 
@@ -500,28 +484,9 @@ public class PlayState extends State {
             board.setMovePerformed(false);
             purpleFinished = true;
         } else {
-            List<Hex> hexes = board.getPurpleHex();
-            TurnsFinder generator = new TurnsFinder(board.getHexGrid());
-            generator.clearTurns();
-            for (Hex hex : hexes) {
-                generator.findTurns(hex);
-            }
-            List<List<Turn>> turns = generator.getTurns();
-            if (turns.size() > 0) {
-                int i = (int) (turns.size() * Math.random());
-                int j = (int) (turns.get(i).size() * Math.random());
-                board.move(turns.get(i).get(j));
-            }
-            else{
-                System.out.println("blabla");
-            }
-            if (board.getMovePerformed()) {
-                System.out.println("moved");
-                switchTurnPlayer();
-                allDestinations.clear();
-                board.setMovePerformed(false);
-                purpleFinished = true;
-            }
+            System.out.println("Purple random");
+            tryRandomUntilWorks(true, false);
+
         }
     }
 
@@ -590,6 +555,45 @@ public class PlayState extends State {
                 board.removeBall(ball);
                 ballButtons[index].setChecked(false);
             }
+        }
+    }
+
+    public void tryRandomUntilWorks(boolean p, boolean b){
+        List<Hex> hexes = null;
+        if(p) {
+            hexes = board.getPurpleHex();
+        }else if(b){
+            hexes = board.getBlueHex();
+        }
+        TurnsFinder generator = new TurnsFinder(board.getHexGrid());
+        generator.clearTurns();
+        for (Hex hex : hexes) {
+            generator.findTurns(hex);
+        }
+        List<List<Turn>> turns = generator.getTurns();
+        if (turns.size() > 0) {
+            int i = (int) ((turns.size()-1) * Math.random());
+            int j = (int) ((turns.get(i).size()-1) * Math.random());
+            if(turns.get(i).size()!=0) {
+                board.move(turns.get(i).get(j));
+            }
+            if (board.getMovePerformed()) {
+                System.out.println("moved");
+                switchTurnPlayer();
+                allDestinations.clear();
+                board.setMovePerformed(false);
+                if(p){
+                    purpleFinished = true;
+                }else{
+                    blueFinished = true;
+                }
+
+            }else{
+                tryRandomUntilWorks(p,b);
+            }
+        }
+        else{
+            System.out.println("you shouldn't see this");
         }
     }
 

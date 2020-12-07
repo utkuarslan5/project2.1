@@ -92,7 +92,7 @@ public class HexGrid implements Cloneable {
                 return temp;
             }
         }
-        System.out.println("null return");
+        //System.out.println("null return");
         return null;
     }
 
