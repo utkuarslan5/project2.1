@@ -326,9 +326,25 @@ public class PlayState extends State {
 
         if(bluePlayer.isChecked() && AbaloneGame.isBluePlayerAI && blueFinished) {
             blueAIplays();
+            try
+            {
+                Thread.sleep(500);
+            }
+            catch(InterruptedException ex)
+            {
+                Thread.currentThread().interrupt();
+            }
         }
         else if(purplePlayer.isChecked() && AbaloneGame.isPurplePlayerAI && purpleFinished) {
             purpleAIplays();
+            try
+            {
+                Thread.sleep(500);
+            }
+            catch(InterruptedException ex)
+            {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
