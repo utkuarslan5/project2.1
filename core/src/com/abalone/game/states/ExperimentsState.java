@@ -183,13 +183,13 @@ public class ExperimentsState extends State {
                     Board simulation = new Board();
                     while (simulation.getBlueHex().size() > 8 && simulation.getPurpleHex().size() > 8) {
                         Heuristics miniMaxH = new Heuristics(simulation, com.abalone.game.utils.Color.BLUE, valueOne_1, valueOne_2,
-                                valueOne_3, valueOne_4, valueOne_5, 1000);
+                                valueOne_3, 1000);
                         Tree miniMax = new Tree(simulation, 2, com.abalone.game.utils.Color.BLUE, miniMaxH);
                         Player player = new MiniMax(miniMax.getRoot(), 2, true, miniMax);
                         simulation.move(player.getBestNode().getTurn());
                         simulation.setMovePerformed(false);
                         Heuristics negaMaxH = new Heuristics(simulation, com.abalone.game.utils.Color.PURPLE, valueTwo_1, valueTwo_2,
-                                valueTwo_3, valueTwo_4, valueTwo_5, 1000);
+                                valueTwo_3, 1000);
                         Tree negaMax = new Tree(simulation, 2, com.abalone.game.utils.Color.PURPLE, negaMaxH);
                         Player player2 = new NegaMax(negaMax.getRoot(), 2, true, negaMax);
                         simulation.move(player2.getBestNode().getTurn());

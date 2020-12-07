@@ -435,7 +435,7 @@ public class PlayState extends State {
         System.out.println("blue playing");
         int depthTree = 2;
         Player player;
-        Heuristics heuristics = new Heuristics(this.board,com.abalone.game.utils.Color.BLUE,0.5,-1,0.5,0,0,1000);
+        Heuristics heuristics = new Heuristics(this.board,com.abalone.game.utils.Color.BLUE,0.5,-1,0.5,1000);
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE,heuristics);
         if(AbaloneGame.bluePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
@@ -455,7 +455,7 @@ public class PlayState extends State {
             board.setMovePerformed(false);
             blueFinished = true;
         }else{
-            Heuristics heuristics2 = new Heuristics(this.board,com.abalone.game.utils.Color.BLUE,0,100,1,1,1,10000);
+            Heuristics heuristics2 = new Heuristics(this.board,com.abalone.game.utils.Color.BLUE,0,100,1,10000);
             tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE,heuristics2);
             if(AbaloneGame.bluePlayerAI == AI.MINIMAX) {
                 player = new MiniMax(tree.getRoot(), depthTree, true, tree);
@@ -485,7 +485,7 @@ public class PlayState extends State {
         System.out.println("purple playing");
         int depthTree = 2;
         Player player;
-        Heuristics heuristics = new Heuristics(this.board,com.abalone.game.utils.Color.PURPLE,0.5,-1,0.5,0,0,1000);
+        Heuristics heuristics = new Heuristics(this.board,com.abalone.game.utils.Color.PURPLE,0.5,-1,0.5,1000);
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE,heuristics);
         if(AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
@@ -504,7 +504,7 @@ public class PlayState extends State {
             board.setMovePerformed(false);
             purpleFinished = true;
         }else{
-            Heuristics heuristics2 = new Heuristics(this.board,com.abalone.game.utils.Color.PURPLE,0,100,1,1,1,10000);
+            Heuristics heuristics2 = new Heuristics(this.board,com.abalone.game.utils.Color.PURPLE,0,100,1,10000);
             tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE,heuristics2);
             if(AbaloneGame.purplePlayerAI == AI.MINIMAX) {
                 player = new MiniMax(tree.getRoot(), depthTree, true, tree);

@@ -30,7 +30,7 @@ public class Node {
         this.numberBlueBalls = board.getBlueHex().size();
         this.numberPurpleBalls = board.getPurpleHex().size();
         this.weights = heuristics.getWeights();
-        this.heuristics = new Heuristics(this.board, playerColorToPlay, weights[0], weights[1], weights[2], weights[3], weights[4], weights[5]);
+        this.heuristics = new Heuristics(this.board, playerColorToPlay, weights[0], weights[1], weights[2], weights[3]);
 
 
         // setHeuristicsValue(heuristics.getValue());
