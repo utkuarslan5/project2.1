@@ -2,6 +2,7 @@ package com.abalone.game.states;
 
 import com.abalone.game.AbaloneGame;
 import com.abalone.game.gameTree.Heuristics;
+import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.Tree;
 import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.*;
@@ -439,12 +440,14 @@ public class PlayState extends State {
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
         if (AbaloneGame.bluePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
-            System.out.println(player.getBestNode().getTurn());
+            //System.out.println(player.getBestNode().getTurn());
             Turn turn = player.getBestNode().getTurn();
+            Node.theListRemember.add(turn);
             board.move(turn);
         } else if (AbaloneGame.bluePlayerAI == AI.NEGAMAX) {
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
             Turn turn = player.getBestNode().getTurn();
+            Node.theListRemember.add(turn);
             board.move(turn);
         }
 
@@ -470,13 +473,15 @@ public class PlayState extends State {
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
-            System.out.println(player.getBestNode().getTurn());
+            //System.out.println(player.getBestNode().getTurn());
             Turn turn = player.getBestNode().getTurn();
+            Node.theListRemember.add(turn);
             board.move(turn);
         } else if (AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
-            System.out.println(player.getBestNode().getTurn());
+            //System.out.println(player.getBestNode().getTurn());
             Turn turn = player.getBestNode().getTurn();
+            Node.theListRemember.add(turn);
             board.move(turn);
         }
         if (board.getMovePerformed()) {

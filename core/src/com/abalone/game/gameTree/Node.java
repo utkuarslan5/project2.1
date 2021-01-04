@@ -19,6 +19,7 @@ public class Node {
     private int numberBlueBalls;
     private int numberPurpleBalls;
     private double[] weights;
+    public static ArrayList<Turn> theListRemember = new ArrayList<>();
 
 
     public Node(Board board, int depthTree, int depth, Turn turn, Color playerColorToPlay, Heuristics heuristics) {
@@ -55,12 +56,14 @@ public class Node {
             }
             // get every calculated turns for all hexes
             List<List<Turn>> allTurns = turnsFinder.getTurns();
-
+            if(theListRemember.size()>10){
+                theListRemember.remove(0);
+            }
             try {
                 Color nextColor = (playerColorToPlay == Color.BLUE) ? Color.PURPLE : Color.BLUE;
                 for (List<Turn> ts : allTurns) {
                     for (Turn t : ts) {
-                        if(legalTurn(t)) {
+                        if(!doneBefore(t) && legalTurn(t)) {
                             Board newBoard = (Board) board.clone();
                             newBoard.move(t);
                             if(newBoard.getPushPossible()) {
@@ -105,6 +108,25 @@ public class Node {
             }
         }
         return legal;
+    }
+
+    public boolean doneBefore(Turn turn){
+        if (turn != null) {
+            List<Move> moveList = turn.getMovesList();
+            for(Turn t : theListRemember){
+                if (turn.getTurnType() == 0 && t.getTurnType() == 0) {
+                    int startt1 = t.getMovesList().get(0).getStart().getBall().getId();
+                    int turns1 = moveList.get(0).getStart().getBall().getId();
+                    int destt1 = t.getMovesList().get(0).getDestination().getBall().getId();
+                    int turnd1 = moveList.get(0).getDestination().getBall().getId();
+
+                    if( startt1 == turns1 && destt1 == turnd1){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public boolean isChildOf(Node child) {
