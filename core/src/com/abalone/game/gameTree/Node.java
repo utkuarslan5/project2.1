@@ -31,6 +31,8 @@ public class Node {
         this.numberPurpleBalls = board.getPurpleHex().size();
         this.weights = heuristics.getWeights();
         this.heuristics = new Heuristics(this.board, playerColorToPlay, weights[0], weights[1], weights[2], weights[3]);
+        this.calculateHeuristicsValue();
+
 
 
         // setHeuristicsValue(heuristics.getValue());
@@ -64,7 +66,6 @@ public class Node {
                             if(newBoard.getPushPossible()) {
                                 Node newNode = new Node(newBoard, depthTree, depth + 1, t, nextColor, heuristics);
                                 this.addChild(newNode);
-                                newNode.calculateHeuristicsValue();
                             }
                         }
                     }

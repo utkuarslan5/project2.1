@@ -16,7 +16,7 @@ public class Heuristics {
     private double w1,w2,w3,w4;
     private double[] weights;
 
-    public Heuristics(Board current, Color playerColorToPlay,double w1,double w2,double w3,double w4) {
+    public Heuristics(Board current, Color playerColorToPlay, double w1, double w2, double w3, double w4) {
         this.current = current;
         this.timestamp = new Timestamp(System.currentTimeMillis());
         this.playerColorToPlay = playerColorToPlay;
@@ -24,7 +24,7 @@ public class Heuristics {
         this.w2 = w2;
         this.w3 = w3;
         this.w4 = w4;
-        this.weights = new double[]{w1,w2,w3,w4};
+        this.weights = new double[] {w1, w2, w3, w4};
         this.value = valueFunction(current);
     }
 
@@ -34,7 +34,6 @@ public class Heuristics {
         List<Hex> hexlist = board.getHexGrid().getHexList();
         int count = 0;
         int enemyCount = 0;
-        int countAttacks = 0;
         double totalDistance = 0;
         int countNeighboursOfEachBall = 0;
 
@@ -62,17 +61,17 @@ public class Heuristics {
             }
         }
 
-        // Number of balls  (the more the better, so + weight)
+        // Number of balls  (the bigger the better, so + weight)
         double h1 = w1 * count;
-        // Total distance from  (the less the better, so - weight)
+        // Total distance to the center (the smaller the better, so - weight)
         double h2 = w2 * (totalDistance / count);
-        // Neighbors of the same color  (the more the better, so + weight)
+        // Neighbors of the same color  (the bigger the better, so + weight)
         double h3 = w3 * countNeighboursOfEachBall;
-        // Enemy count
-        double h4 = w4 * -enemyCount / 14;
+        // Enemy count (the smaller the better, so - weight)
+        double h4 = w4 * enemyCount / 14;
 
         double value = h1 + h2 + h3 + h4;
-       // System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   h4: %.2f   =   %.2f\n", h1, h2, h3, h4, value);
+        // System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   h4: %.2f   =   %.2f\n", h1, h2, h3, h4, value);
 
         return value;
     }
