@@ -58,11 +58,15 @@ public class Node {
                 Color nextColor = (playerColorToPlay == Color.BLUE) ? Color.PURPLE : Color.BLUE;
                 for (List<Turn> ts : allTurns) {
                     for (Turn t : ts) {
-                        Board newBoard = (Board) board.clone();
-                        newBoard.move(t);
-                        Node newNode = new Node(newBoard, depthTree, depth + 1, t, nextColor, heuristics);
-                        this.addChild(newNode);
-                        newNode.calculateHeuristicsValue();
+                        if(legalTurn(t)) {
+                            Board newBoard = (Board) board.clone();
+                            newBoard.move(t);
+                            if(newBoard.getPushPossible()) {
+                                Node newNode = new Node(newBoard, depthTree, depth + 1, t, nextColor, heuristics);
+                                this.addChild(newNode);
+                                newNode.calculateHeuristicsValue();
+                            }
+                        }
                     }
                 }
             } catch (CloneNotSupportedException e) {
@@ -94,7 +98,7 @@ public class Node {
                 Ball start1 = moveList.get(0).getStart().getBall();
                 Ball start2 = moveList.get(1).getStart().getBall();
                 Ball start3 = moveList.get(2).getStart().getBall();
-                if (!(start1.getColor() == start2.getColor()) && !(start2.getColor() == start3.getColor())) {
+                if (!(start1.getColor() == start2.getColor()) || !(start2.getColor() == start3.getColor())) {
                     legal = false;
                 }
             }

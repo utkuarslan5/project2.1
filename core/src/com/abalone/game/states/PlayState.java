@@ -328,7 +328,7 @@ public class PlayState extends State {
             blueAIplays();
             try
             {
-                Thread.sleep(500);
+                Thread.sleep(200);
             }
             catch(InterruptedException ex)
             {
@@ -339,7 +339,7 @@ public class PlayState extends State {
             purpleAIplays();
             try
             {
-                Thread.sleep(500);
+                Thread.sleep(200);
             }
             catch(InterruptedException ex)
             {
@@ -435,7 +435,7 @@ public class PlayState extends State {
         System.out.println("blue playing");
         int depthTree = 2;
         Player player;
-        Heuristics heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 0.5, -1, 0.5, 1000);
+        Heuristics heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -10, -10, 100);
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
         if (AbaloneGame.bluePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
@@ -455,7 +455,7 @@ public class PlayState extends State {
             blueFinished = true;
         } else {
             System.out.println("Blue random");
-            tryRandomUntilWorks(false,true);
+            //tryRandomUntilWorks(false,true);
 
 
         }
@@ -466,15 +466,16 @@ public class PlayState extends State {
         System.out.println("purple playing");
         int depthTree = 2;
         Player player;
-        Heuristics heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 0.5, -1, 0.5, 1000);
+        Heuristics heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 1, -100, -10, 5000);
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
-            System.out.println(player.getBestNode().getTurn().getTurnType());
+            System.out.println(player.getBestNode().getTurn());
             Turn turn = player.getBestNode().getTurn();
             board.move(turn);
         } else if (AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
+            System.out.println(player.getBestNode().getTurn());
             Turn turn = player.getBestNode().getTurn();
             board.move(turn);
         }
@@ -484,8 +485,9 @@ public class PlayState extends State {
             board.setMovePerformed(false);
             purpleFinished = true;
         } else {
+
             System.out.println("Purple random");
-            tryRandomUntilWorks(true, false);
+            //tryRandomUntilWorks(true, false);
 
         }
     }

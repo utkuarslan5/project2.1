@@ -164,7 +164,16 @@ public class Board implements Cloneable {
                     if ((start.getBall().getColor() == start2.getBall().getColor()) && destination.getBall().getColor().isBlank()) {
                         selected.add(hexGrid.getMatchedHex(start).getBall());
                         selected.add(hexGrid.getMatchedHex(start2).getBall());
-                        requestMove(hexGrid.getMatchedHex(destination).getBall());
+                        Hex dest2 = moveList.get(1).getDestination();
+                        if((destination.getZ() == dest2.getZ() && destination.getZ()-start.getZ()==1  && start.getX()< start2.getX())
+                                || (destination.getZ() == dest2.getZ() && destination.getZ()-start.getZ()==-1  && start.getX()> start2.getX())
+                                || (destination.getY() == dest2.getY() && destination.getZ()-start.getZ()==1  && start.getX()> start2.getX())
+                                || (destination.getY() == dest2.getY() && destination.getZ()-start.getZ()==-1  && start.getX()< start2.getX())){
+                            requestMove(hexGrid.getMatchedHex(dest2).getBall());
+                        }else {
+                            requestMove(hexGrid.getMatchedHex(destination).getBall());
+                        }
+
                     }
                 }
                 break;
@@ -205,7 +214,16 @@ public class Board implements Cloneable {
                         selected.add(hexGrid.getMatchedHex(start).getBall());
                         selected.add(hexGrid.getMatchedHex(start2).getBall());
                         selected.add(hexGrid.getMatchedHex(start3).getBall());
-                        requestMove(hexGrid.getMatchedHex(destination).getBall());
+                        Hex dest2 = moveList.get(1).getDestination();
+                        Hex dest3 = moveList.get(2).getDestination();
+                        if((destination.getZ() == dest2.getZ() && destination.getZ()-start.getZ()==1 && start.getX()< start2.getX())
+                                || (destination.getZ() == dest2.getZ() && destination.getZ()-start.getZ()==-1  && start.getX()> start2.getX())
+                                || (destination.getY() == dest2.getY() && destination.getZ()-start.getZ()==1  && start.getX()> start2.getX())
+                                || (destination.getY() == dest2.getY() && destination.getZ()-start.getZ()==-1  && start.getX()< start2.getX())){
+                            requestMove(hexGrid.getMatchedHex(dest3).getBall());
+                        }else {
+                            requestMove(hexGrid.getMatchedHex(destination).getBall());
+                        }
                     }
                 }
                 break;
