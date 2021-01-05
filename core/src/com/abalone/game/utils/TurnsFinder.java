@@ -197,14 +197,14 @@ public class TurnsFinder {
                 foundTurns.add(new Turn(hex));
                 foundTurns.get(foundTurns.size()-1).addMove(1,0,hex,h);
                 foundTurns.get(foundTurns.size()-1).addMove(1,0,ih,hex);
-                // System.out.println(foundTurns.get(foundTurns.size()-1).toString());
+                System.out.println(foundTurns.get(foundTurns.size()-1).toString());
             }
             if(forceTypeThree > 2 && ih != null && ihh != null){
                 foundTurns.add(new Turn(hex));
                 foundTurns.get(foundTurns.size()-1).addMove(2,0,hex,h);
                 foundTurns.get(foundTurns.size()-1).addMove(2,0,ih,hex);
                 foundTurns.get(foundTurns.size()-1).addMove(2,0,ihh,ih);
-                // System.out.println(foundTurns.get(foundTurns.size()-1).toString());
+                System.out.println(foundTurns.get(foundTurns.size()-1).toString());
             }
 
         }

@@ -84,10 +84,13 @@ public class MCTS {
     }
 
     public static Node findBestUCT(Node node, int parentVisit) {
-
+        /*
         return Collections.max(
                 node.getChildren(),
                 Comparator.comparing(c -> uctValue(parentVisit, c.getWinScore(), c.getVisitCount())));
+
+         */
+        return null;
     }
 
     private Node bestChild(Node root) {
