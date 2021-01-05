@@ -2,6 +2,7 @@ package com.abalone.game.utils;
 
 import com.abalone.game.objects.Hex;
 import com.abalone.game.objects.HexGrid;
+import com.abalone.game.objects.Move;
 import com.abalone.game.objects.Turn;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ public class TurnsFinder {
     private HexGrid grid;
     private List<Hex> hexes = new ArrayList<>();
     private List<List<Turn>> turns = new ArrayList<>();
-    private  Color currentColor;
+    private Color currentColor;
 
     public TurnsFinder(HexGrid grid){
         this.grid = grid;
@@ -97,11 +98,11 @@ public class TurnsFinder {
                                     if(grid.onBoard(nlayerThreeTarget) && !hhh.getBall().getColor().isBlank()){
                                         Hex layerThreeTarget = grid.getMatchedHex(nlayerThreeTarget);
                                         // Check if third layer ball isn't  blocked
-                                        if (layerThreeTarget.getBall().getColor().isBlank()) {
+                                        if (layerThreeTarget.getBall().getColor().isBlank() && candidates.size() >= 3) {
                                             foundTurns.add(new Turn(hex));
                                             foundTurns.get(foundTurns.size() - 1).addMove(2,1,hex, layerOneTarget);
                                             foundTurns.get(foundTurns.size() - 1).addMove(2,1,candidates.get(1), layerTwoTarget);
-                                            foundTurns.get(foundTurns.size() - 1).addMove(2,1,hhh, layerThreeTarget);
+                                            foundTurns.get(foundTurns.size() - 1).addMove(2,1,candidates.get(2), layerThreeTarget);
                                         }
                                     }
                                 }
@@ -110,6 +111,9 @@ public class TurnsFinder {
                     }
                 }
             }
+
+
+
 
             /** In-line turns **/
 
@@ -150,59 +154,52 @@ public class TurnsFinder {
                 ihh = grid.getMatchedHex(nihh);
             }
 
-            /*
-            if(hhh != null && hh != null && ih != null && ihh != null) {
-                System.out.println(hhh.toString() + hh.toString() + h.toString() + hex.toString() + ih.toString() + ihh.toString());
-            }
-            */
-
             boolean firstBlock = false;
             boolean secondBlock = false;
             boolean firstPush = false;
 
             if(h != null){ // First block
-                if(!h.getBall().getColor().isBlank() && h.getBall().getColor() != hex.getBall().getColor()){
+                if(!h.getBall().getColor().isBlank() && !h.getBall().getColor().equals(hex.getBall().getColor())){
                     forceTypeTwo--;
                     forceTypeThree--;
                     firstBlock = true;
                 }
             }
             if(hh != null){ // Second block - First block must succeed
-                if(!hh.getBall().getColor().isBlank() && hh.getBall().getColor() != hex.getBall().getColor() && firstBlock){
+                if(!hh.getBall().getColor().isBlank() && !hh.getBall().getColor().equals(hex.getBall().getColor()) && firstBlock){
                     forceTypeTwo--;
                     forceTypeThree--;
                     secondBlock = true;
                 }
             }
             if(hhh != null){ // Third block - Second block must succeed
-                if(!hhh.getBall().getColor().isBlank() && hhh.getBall().getColor() != hex.getBall().getColor() && secondBlock){
+                if(!hhh.getBall().getColor().isBlank() && !hhh.getBall().getColor().equals(hex.getBall().getColor()) && secondBlock){
                     forceTypeTwo--;
                     forceTypeThree--;
                 }
             }
             if(ih != null){ // First push
-                if(ih.getBall().getColor() == hex.getBall().getColor()){
+                if(ih.getBall().getColor().equals(hex.getBall().getColor())){
                     forceTypeTwo++;
                     forceTypeThree++;
                     firstPush = true;
                 }
             }
             if(ihh != null){ // Second push - First push must succeed
-                if(ihh.getBall().getColor() == hex.getBall().getColor() && firstPush){
+                if(ihh.getBall().getColor().equals(hex.getBall().getColor()) && firstPush){
                     forceTypeThree++;
                 }
             }
 
-            // System.out.println("Ft2="+forceTypeTwo+" Ft3="+forceTypeThree);
 
             // Get in-line turns from forces
-            if(forceTypeTwo > 0 && ih != null){
+            if(forceTypeTwo > 1 && ih != null){
                 foundTurns.add(new Turn(hex));
                 foundTurns.get(foundTurns.size()-1).addMove(1,0,hex,h);
                 foundTurns.get(foundTurns.size()-1).addMove(1,0,ih,hex);
                 // System.out.println(foundTurns.get(foundTurns.size()-1).toString());
             }
-            if(forceTypeThree > 0 && ih != null && ihh != null){
+            if(forceTypeThree > 2 && ih != null && ihh != null){
                 foundTurns.add(new Turn(hex));
                 foundTurns.get(foundTurns.size()-1).addMove(2,0,hex,h);
                 foundTurns.get(foundTurns.size()-1).addMove(2,0,ih,hex);
@@ -210,6 +207,19 @@ public class TurnsFinder {
                 // System.out.println(foundTurns.get(foundTurns.size()-1).toString());
             }
 
+        }
+
+        for(Turn t : foundTurns){
+            Color c = t.getColor();
+            int wrongColors = 0;
+            for(Move m : t.getMovesList()){
+                if(m.getStart().getBall().getColor() != c){
+                    wrongColors++;
+                }
+            }
+            if(wrongColors > 0){
+                System.out.println("COLOURBLIND TURN " + wrongColors + " " + t.toString());
+            }
         }
 
         turns.add(foundTurns);
