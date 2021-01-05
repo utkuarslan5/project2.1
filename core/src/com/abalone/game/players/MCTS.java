@@ -40,7 +40,7 @@ public class MCTS {
     private Node select(Node root) {
         Node node = root;
         while (node.getChildren().size() != 0) {
-            node = findBestUCT(node);
+            node = findBestUCT(node, node.getParent().getVisitCount());
         }
         // STEP 2
         if(node.getChildren() == null) {
@@ -80,25 +80,26 @@ public class MCTS {
         if (nodeVisit == 0) {
             return Integer.MAX_VALUE;
         }
-        return ((double) winScore / (double) nodeVisit) + 2 * Math.sqrt(Math.log(totalVisitOfParent) / (double) nodeVisit);
+        return ((double) winScore / (double) nodeVisit) + 1.41 * Math.sqrt(Math.log(totalVisitOfParent) / (double) nodeVisit);
     }
 
-    //TODO main objective: find the Node with the highest UCT value
-    public static Node findBestUCT(Node node) {
+    public static Node findBestUCT(Node node, int parentVisit) {
 
-       /*     ### This is from the internet:
-
-        int parentVisit = node.getState().getVisitCount();
         return Collections.max(
-                node.getChildArray(),
-                Comparator.comparing(c -> uctValue(parentVisit, c.getState().getWinScore(), c.getState().getVisitCount())));
-        **/
-        return null;
+                node.getChildren(),
+                Comparator.comparing(c -> uctValue(parentVisit, c.getWinScore(), c.getVisitCount())));
     }
 
-    //TODO return child with highest number of visits
     private Node bestChild(Node root) {
-        return null; //for the sake of no errors
+        int bestValue = 0;
+        Node bestNode = root.getChildren().get(0);
+        for(Node n : root.getChildren()){
+           if((n.getWinScore()/n.getVisitCount()) >= bestValue) {
+               bestValue = n.getWinScore()/n.getVisitCount();
+               bestNode = n;
+           }
+        }
+        return bestNode;
     }
 
 }

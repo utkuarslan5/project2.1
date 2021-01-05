@@ -21,6 +21,10 @@ public class Node {
     private double[] weights;
     public static ArrayList<Turn> theListRemember = new ArrayList<>();
 
+    // MCTS Stuff
+    private int winScore = 0;
+    private int visitCount = 0;
+
 
     public Node(Board board, int depthTree, int depth, Turn turn, Color playerColorToPlay, Heuristics heuristics) {
         this.board = board;
@@ -177,5 +181,15 @@ public class Node {
 
     public int getNumberPurpleBalls() {
         return numberPurpleBalls;
+    }
+
+    // MCTS Stuff
+
+    public int getWinScore() {
+        return winScore;
+    }
+
+    public int getVisitCount() {
+        return visitCount;
     }
 }
