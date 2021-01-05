@@ -193,21 +193,35 @@ public class TurnsFinder {
 
 
             // Get in-line turns from forces
-            if(forceTypeTwo > 1 && ih != null){
+            if(forceTypeTwo >= 1 && ih != null && hex.getBall().getColor().equals(ih.getBall().getColor())){
                 foundTurns.add(new Turn(hex));
                 foundTurns.get(foundTurns.size()-1).addMove(1,0,hex,h);
                 foundTurns.get(foundTurns.size()-1).addMove(1,0,ih,hex);
-                System.out.println(foundTurns.get(foundTurns.size()-1).toString());
+                if(!h.getBall().getColor().isBlank()){
+                    //System.out.println("Two ball push turn generated.");
+                }
             }
-            if(forceTypeThree > 2 && ih != null && ihh != null){
+            if(forceTypeThree >= 2 && ih != null && ihh != null && hex.getBall().getColor().equals(ih.getBall().getColor()) && hex.getBall().getColor().equals(ihh.getBall().getColor())){
                 foundTurns.add(new Turn(hex));
                 foundTurns.get(foundTurns.size()-1).addMove(2,0,hex,h);
                 foundTurns.get(foundTurns.size()-1).addMove(2,0,ih,hex);
                 foundTurns.get(foundTurns.size()-1).addMove(2,0,ihh,ih);
-                System.out.println(foundTurns.get(foundTurns.size()-1).toString());
+                if(!h.getBall().getColor().isBlank()){
+                    //System.out.println("Three ball push turn generated.");
+                }
             }
 
         }
+
+        /*
+        for(Turn t : foundTurns){
+            for(Move m : t.getMovesList()){
+                if(!m.getStart().getBall().getColor().equals(t.getColor())){
+                    System.out.println("FUCK");
+                }
+            }
+        }
+        */
 
         turns.add(foundTurns);
         return foundTurns;
