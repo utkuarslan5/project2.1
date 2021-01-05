@@ -6,6 +6,8 @@ import com.abalone.game.gameTree.Tree;
 import java.util.*;
 
 /**
+ * Now following https://www.baeldung.com/java-monte-carlo-tree-search
+ *
  * MCTS has 4 steps: Selection / Traversal,  Expansion,  Random Simulation / RollOut,  Backpropagation
  *
  * while within some weird time         ->   see: https://www.geeksforgeeks.org/ml-monte-carlo-tree-search-mcts/
@@ -20,18 +22,23 @@ public class MCTS {
 
     private Tree tree;
     private Node root;
+    private int maxRuntimeMilliSec = 5000;
+    private final int WIN_SCORE = 10;
 
-    public MCTS(Node root){
-        root = tree.getRoot();
-        this.root = root;
+    public MCTS(Tree tree){
+        this.tree = tree;
+        this.root = tree.getRoot();
     }
 
-    public Node mainFunction(Node root){
+    public Node findNextMove(Node root){
 
-        //TODO while within some weird time
-        Node leaf = select(root);
-        Node rollOutResult = simulation(leaf);
-        backpropagate(leaf, rollOutResult);
+        int endTime = (int) (System.currentTimeMillis() + maxRuntimeMilliSec);
+
+        while(((int) System.currentTimeMillis() < endTime)) {
+            Node leaf = select(root);
+            Node rollOutResult = simulation(leaf);
+            backpropagate(leaf, rollOutResult);
+        }
 
         return bestChild(root);
     }
@@ -70,10 +77,15 @@ public class MCTS {
     // TODO
     // STEP 4
     private void backpropagate(Node leaf, Node rollOutResult) {
+        Node tempNode = leaf;
+        while(tempNode != null){
+            tempNode.incrementVisit();
+            if(true){ // TODO: If the tempNode contains a turn for the player that is maximizing in current MCTS
+                tempNode.addScore(WIN_SCORE);
+            }
+            tempNode = tempNode.getParent();
+        }
     }
-
-
-
 
 
     public static double uctValue(int totalVisitOfParent, double winScore, int nodeVisit) {
@@ -84,13 +96,19 @@ public class MCTS {
     }
 
     public static Node findBestUCT(Node node, int parentVisit) {
-        /*
-        return Collections.max(
-                node.getChildren(),
-                Comparator.comparing(c -> uctValue(parentVisit, c.getWinScore(), c.getVisitCount())));
 
-         */
-        return null;
+        double bestValue = uctValue(parentVisit, node.getChildren().get(0).getWinScore(), node.getChildren().get(0).getVisitCount());
+        Node bestNode = node.getChildren().get(0);
+
+        for(Node c : node.getChildren()){
+            double uctval = uctValue(parentVisit, c.getWinScore(), c.getVisitCount());
+            if(uctval >= bestValue){
+                bestNode = c;
+                bestValue = uctval;
+            }
+        }
+
+        return bestNode;
     }
 
     private Node bestChild(Node root) {

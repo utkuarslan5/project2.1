@@ -192,4 +192,12 @@ public class Node {
     public int getVisitCount() {
         return visitCount;
     }
+
+    public void incrementVisit(){
+        this.visitCount++;
+    }
+
+    public void addScore(int score){
+        this.winScore += score;
+    }
 }
