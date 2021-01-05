@@ -209,19 +209,6 @@ public class TurnsFinder {
 
         }
 
-        for(Turn t : foundTurns){
-            Color c = t.getColor();
-            int wrongColors = 0;
-            for(Move m : t.getMovesList()){
-                if(m.getStart().getBall().getColor() != c){
-                    wrongColors++;
-                }
-            }
-            if(wrongColors > 0){
-                System.out.println("COLOURBLIND TURN " + wrongColors + " " + t.toString());
-            }
-        }
-
         turns.add(foundTurns);
         return foundTurns;
 
