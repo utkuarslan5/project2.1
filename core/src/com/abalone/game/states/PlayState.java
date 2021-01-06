@@ -40,8 +40,10 @@ public class PlayState extends State {
     private CheckBox purplePlayer;
     private CheckBox highlight;
     private ButtonGroup<CheckBox> colorSelectPlayer;
+    private Label turnNumberLabel;
     private Label purpleLostBalls;
     private Label blueLostBalls;
+    public static int turnNumber;
     public static int lostP;
     public static int lostB;
     private List<Hex> allDestinations = new ArrayList<>();
@@ -124,8 +126,12 @@ public class PlayState extends State {
         highlight.getStyle().fontColor = Color.WHITE;
         highlight.setChecked(true);
 
+        turnNumber = 1;
         lostP = 0;
         lostB = 0;
+        turnNumberLabel = new Label("Turn number: " + turnNumber, skin);
+        turnNumberLabel.setFontScale(1.5f);
+        turnNumberLabel.setPosition(530, 750);
         purpleLostBalls = new Label("Purple Lost: " + lostP, skin);
         purpleLostBalls.setFontScale(1.5f);
         purpleLostBalls.getStyle().fontColor = Color.WHITE;
@@ -310,6 +316,7 @@ public class PlayState extends State {
             gsm.push(MenuState);
         }
 
+        turnNumberLabel.setText("Turn number: " + turnNumber);
         purpleLostBalls.setText("Purple Lost: " + lostP);
         blueLostBalls.setText("Blue Lost: " + lostB);
 
@@ -405,6 +412,7 @@ public class PlayState extends State {
         stage.addActor(purplePlayer);
         stage.addActor(highlight);
         stage.addActor(returnButton);
+        stage.addActor(turnNumberLabel);
         stage.addActor(purpleLostBalls);
         stage.addActor(blueLostBalls);
         stage.draw();
@@ -436,7 +444,16 @@ public class PlayState extends State {
         System.out.println("blue playing");
         int depthTree = 2;
         Player player;
-        Heuristics heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -10, 10, -100);
+
+        // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
+        Heuristics heuristics;
+        if(turnNumber < 20) {
+            heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -10, 10, -100);
+        }
+        else {
+            heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -10, 10, -1000);
+        }
+
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
         if (AbaloneGame.bluePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
@@ -459,9 +476,8 @@ public class PlayState extends State {
         } else {
             System.out.println("Blue random");
             //tryRandomUntilWorks(false,true);
-
-
         }
+        this.turnNumber++;
     }
 
     public void purpleAIplays() {
@@ -469,7 +485,16 @@ public class PlayState extends State {
         System.out.println("purple playing");
         int depthTree = 2;
         Player player;
-        Heuristics heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 1, -100, 10, -5000);
+
+        // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
+        Heuristics heuristics;
+        if(turnNumber < 20) {
+            heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 1, -100, 10, -500);
+        }
+        else {
+            heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 1, -10, 10, -5000);
+        }
+
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
@@ -490,11 +515,10 @@ public class PlayState extends State {
             board.setMovePerformed(false);
             purpleFinished = true;
         } else {
-
             System.out.println("Purple random");
             //tryRandomUntilWorks(true, false);
-
         }
+        this.turnNumber++;
     }
 
     public void alignSelection(Hex hex, Ball ball, int index) {
