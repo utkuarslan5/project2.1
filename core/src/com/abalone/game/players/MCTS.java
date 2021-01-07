@@ -30,7 +30,7 @@ public class MCTS {
         this.root = tree.getRoot();
     }
 
-    public Node findNextMove(Node root){
+    public Node findNextMove(){
 
         int endTime = (int) (System.currentTimeMillis() + maxRuntimeMilliSec);
 
