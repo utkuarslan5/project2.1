@@ -53,8 +53,14 @@ public class MCTS {
         if(node.getChildren() == null) {
             return node;
         } else {
-          //TODO  return node.getChildren().unvisitedOnes;
-            return null; //for sake of no errors
+            List<Node> unvisitedChilderen = new ArrayList<>();
+            for(Node n : node.getChildren()){
+                if(n.getVisitCount() <= 0){
+                    unvisitedChilderen.add(n);
+                }
+            }
+            int selected = (int)(Math.random() * unvisitedChilderen.size());
+            return unvisitedChilderen.get(selected);
         }
     }
 
