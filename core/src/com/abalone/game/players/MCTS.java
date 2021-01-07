@@ -35,7 +35,7 @@ public class MCTS {
         int endTime = (int) (System.currentTimeMillis() + maxRuntimeMilliSec);
 
         while(((int) System.currentTimeMillis() < endTime)) {
-            Node leaf = select(root);
+            Node leaf = select();
             Node rollOutResult = simulation(leaf);
             backpropagate(leaf, rollOutResult);
         }
@@ -44,7 +44,7 @@ public class MCTS {
     }
 
     // STEP 1
-    private Node select(Node root) {
+    private Node select() {
         Node node = root;
         while (node.getChildren().size() != 0) {
             node = findBestUCT(node, node.getParent().getVisitCount());
@@ -80,13 +80,12 @@ public class MCTS {
         return randomChild;
     }
 
-    // TODO
     // STEP 4
     private void backpropagate(Node leaf, Node rollOutResult) {
         Node tempNode = leaf;
         while(tempNode != null){
             tempNode.incrementVisit();
-            if(true){ // TODO: If the tempNode contains a turn for the player that is maximizing in current MCTS
+            if(tempNode.getPlayerColorToPlay().equals(this.root.getPlayerColorToPlay())){
                 tempNode.addScore(WIN_SCORE);
             }
             tempNode = tempNode.getParent();

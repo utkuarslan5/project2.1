@@ -200,4 +200,8 @@ public class Node {
     public void addScore(int score){
         this.winScore += score;
     }
+
+    public Color getPlayerColorToPlay() {
+        return playerColorToPlay;
+    }
 }
