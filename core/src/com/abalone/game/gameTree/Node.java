@@ -22,7 +22,7 @@ public class Node {
     public static ArrayList<Turn> theListRemember = new ArrayList<>();
 
     // MCTS Stuff
-    private int winScore = 0;
+    private double winScore = 0;
     private int visitCount = 0;
 
 
@@ -218,7 +218,7 @@ public class Node {
 
     // MCTS Stuff
 
-    public int getWinScore() {
+    public double getWinScore() {
         return winScore;
     }
 
@@ -230,7 +230,7 @@ public class Node {
         this.visitCount++;
     }
 
-    public void addScore(int score){
+    public void addScore(double score){
         this.winScore += score;
     }
 
