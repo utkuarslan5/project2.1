@@ -88,7 +88,7 @@ public class MCTS {
     // STEP 4
     private void backpropagate(Node leaf, Node rollOutResult) {
 
-        Heuristics HLeaf = new Heuristics(rollOutResult.getBoard(), root.getPlayerColorToPlay(), root.getWeights()[0], root.getWeights()[1], root.getWeights()[2], root.getWeights()[3]);
+        Heuristics HLeaf = new Heuristics(rollOutResult.getBoard(), root.getPlayerColorToPlay(), root.getWeights()[0], root.getWeights()[1], root.getWeights()[2]);
         HLeaf.valueFunction(rollOutResult.getBoard());
 
         Node tempNode = leaf;

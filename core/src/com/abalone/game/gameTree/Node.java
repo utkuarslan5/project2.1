@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
+    public static ArrayList<Turn> theListRemember = new ArrayList<>();
     private Board board;
     private List<Node> children;
     private Node parent;
@@ -19,8 +20,6 @@ public class Node {
     private int numberBlueBalls;
     private int numberPurpleBalls;
     private double[] weights;
-    public static ArrayList<Turn> theListRemember = new ArrayList<>();
-
     // MCTS Stuff
     private double winScore = 0;
     private int visitCount = 0;
@@ -35,9 +34,8 @@ public class Node {
         this.numberBlueBalls = board.getBlueHex().size();
         this.numberPurpleBalls = board.getPurpleHex().size();
         this.weights = heuristics.getWeights();
-        this.heuristics = new Heuristics(this.board, playerColorToPlay, weights[0], weights[1], weights[2], weights[3]);
+        this.heuristics = new Heuristics(this.board, playerColorToPlay, weights[0], weights[1], weights[2]);
         this.calculateHeuristicsValue();
-
 
 
         // setHeuristicsValue(heuristics.getValue());
@@ -60,17 +58,18 @@ public class Node {
             }
             // get every calculated turns for all hexes
             List<List<Turn>> allTurns = turnsFinder.getTurns();
-            if(theListRemember.size()>100){
+
+            if (theListRemember.size() > 100) {
                 theListRemember.remove(0);
             }
             try {
                 Color nextColor = (playerColorToPlay == Color.BLUE) ? Color.PURPLE : Color.BLUE;
                 for (List<Turn> ts : allTurns) {
                     for (Turn t : ts) {
-                        if(!doneBefore(t)) {
+                        if (!doneBefore(t)) {
                             Board newBoard = (Board) board.clone();
                             newBoard.move(t);
-                            if(newBoard.getPushPossible()) {
+                            if (newBoard.getPushPossible()) {
                                 Node newNode = new Node(newBoard, depthTree, depth + 1, t, nextColor, heuristics);
                                 this.addChild(newNode);
                             }
@@ -114,20 +113,20 @@ public class Node {
         return legal;
     }
 
-    public boolean doneBefore(Turn turn){
+    public boolean doneBefore(Turn turn) {
         if (turn != null) {
             List<Move> moveList = turn.getMovesList();
-            for(Turn t : theListRemember){
+            for (Turn t : theListRemember) {
                 if (turn.getTurnType() == 0 && t.getTurnType() == 0) {
                     int startt1 = t.getMovesList().get(0).getStart().getBall().getId();
                     int turns1 = moveList.get(0).getStart().getBall().getId();
                     int destt1 = t.getMovesList().get(0).getDestination().getBall().getId();
                     int turnd1 = moveList.get(0).getDestination().getBall().getId();
 
-                    if( startt1 == turns1 && destt1 == turnd1){
+                    if (startt1 == turns1 && destt1 == turnd1) {
                         return true;
                     }
-                }else if(turn.getTurnType() == 1 && t.getTurnType() == 1){
+                } else if (turn.getTurnType() == 1 && t.getTurnType() == 1) {
                     int startt1 = t.getMovesList().get(0).getStart().getBall().getId();
                     int turns1 = moveList.get(0).getStart().getBall().getId();
                     int destt1 = t.getMovesList().get(0).getDestination().getBall().getId();
@@ -138,10 +137,10 @@ public class Node {
                     int destt2 = t.getMovesList().get(1).getDestination().getBall().getId();
                     int turnd2 = moveList.get(1).getDestination().getBall().getId();
 
-                    if( startt1 == turns1 && destt1 == turnd1 && startt2 == turns2 && turnd2 == destt2){
+                    if (startt1 == turns1 && destt1 == turnd1 && startt2 == turns2 && turnd2 == destt2) {
                         return true;
                     }
-                }else if(turn.getTurnType() == 2 && t.getTurnType() == 2){
+                } else if (turn.getTurnType() == 2 && t.getTurnType() == 2) {
                     int startt1 = t.getMovesList().get(0).getStart().getBall().getId();
                     int turns1 = moveList.get(0).getStart().getBall().getId();
                     int destt1 = t.getMovesList().get(0).getDestination().getBall().getId();
@@ -157,7 +156,7 @@ public class Node {
                     int destt3 = t.getMovesList().get(2).getDestination().getBall().getId();
                     int turnd3 = moveList.get(2).getDestination().getBall().getId();
 
-                    if( startt1 == turns1 && destt1 == turnd1 && startt2 == turns2 && turnd2 == destt2 && startt3 == turns3 && turnd3 == destt3){
+                    if (startt1 == turns1 && destt1 == turnd1 && startt2 == turns2 && turnd2 == destt2 && startt3 == turns3 && turnd3 == destt3) {
                         return true;
                     }
                 }
@@ -199,13 +198,12 @@ public class Node {
         this.setHeuristicsValue(heuristics.getValue());
     }
 
+    public double getHeuristicsValue() {
+        return this.value;
+    }
 
     public void setHeuristicsValue(double value) {
         this.value = value;
-    }
-
-    public double getHeuristicsValue() {
-        return this.value;
     }
 
     public int getNumberBlueBalls() {
@@ -226,11 +224,11 @@ public class Node {
         return visitCount;
     }
 
-    public void incrementVisit(){
+    public void incrementVisit() {
         this.visitCount++;
     }
 
-    public void addScore(double score){
+    public void addScore(double score) {
         this.winScore += score;
     }
 
@@ -242,7 +240,7 @@ public class Node {
         return board;
     }
 
-    public void clearRememberedList(){
+    public void clearRememberedList() {
         theListRemember = new ArrayList<>();
     }
 

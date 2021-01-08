@@ -41,7 +41,7 @@ public class SimulatedAnnealing {
                 Node.theListRemember.add(firstMove);
                 initialState.move(firstMove);
                 initialState.setMovePerformed(false);
-                contender = new Heuristics(initialState, Color.PURPLE, weights[0], weights[1], weights[2], weights[3]);
+                contender = new Heuristics(initialState, Color.PURPLE, weights[0], weights[1], weights[2]);
                 Tree randomTree = new Tree(initialState, 2, com.abalone.game.utils.Color.PURPLE, contender);
                 MiniMax randomPlayer = new MiniMax(randomTree.getRoot(), 2, true, randomTree);
                 Turn secondMove = randomPlayer.getBestNode().getTurn();
@@ -58,16 +58,16 @@ public class SimulatedAnnealing {
 
             if (delta > 0) {
                 double[] weightsNew = contender.getWeights();
-                start = new Heuristics(initialState, Color.BLUE, weightsNew[0], weightsNew[1], weightsNew[2], weightsNew[3]);
+                start = new Heuristics(initialState, Color.BLUE, weightsNew[0], weightsNew[1], weightsNew[2]);
                 initialTree = new Tree(initialState, 2, Color.BLUE, start);
                 bestPlayer = new MiniMax(initialTree.getRoot(), 2, true, initialTree);
             } else {
                 if (Math.exp(delta / currentTemp) > Math.random()) {
                     double[] weightsNew = contender.getWeights();
-                    start = new Heuristics(initialState, Color.BLUE, weightsNew[0], weightsNew[1], weightsNew[2], weightsNew[3]);
+                    start = new Heuristics(initialState, Color.BLUE, weightsNew[0], weightsNew[1], weightsNew[2]);
                 } else {
                     double[] weightsNew = start.getWeights();
-                    start = new Heuristics(initialState, Color.BLUE, weightsNew[0], weightsNew[1], weightsNew[2], weightsNew[3]);
+                    start = new Heuristics(initialState, Color.BLUE, weightsNew[0], weightsNew[1], weightsNew[2]);
                 }
                 initialTree = new Tree(initialState, 2, Color.BLUE, start);
                 bestPlayer = new MiniMax(initialTree.getRoot(), 2, true, initialTree);
@@ -94,17 +94,15 @@ public class SimulatedAnnealing {
         double valueOne = (Math.random() * 2) - 1;
         double valueTwo = (Math.random() * 2) - 1;
         double valueThree = (Math.random() * 2) - 1;
-        double valueFour = (Math.random() * 5) - 6;
 
-        return new Heuristics(board, Color.BLUE, valueOne, valueTwo, valueThree, valueFour);
+        return new Heuristics(board, Color.BLUE, valueOne, valueTwo, valueThree);
     }
 
     public Heuristics alternateBest(Board board, Heuristics oldHeuristics) {
-        int dimension = (int) (Math.random() * 4);
+        int dimension = (int) (Math.random() * 3);
         double valueOneNew = oldHeuristics.getWeights()[0];
         double valueTwoNew = oldHeuristics.getWeights()[1];
         double valueThreeNew = oldHeuristics.getWeights()[2];
-        double valueFourNew = oldHeuristics.getWeights()[3];
         double change = (Math.random() * 0.45) - 0.225;
 
         if (dimension == 0) {
@@ -113,10 +111,8 @@ public class SimulatedAnnealing {
             valueTwoNew += change;
         } else if (dimension == 2) {
             valueThreeNew += change;
-        } else {
-            valueFourNew += change;
         }
 
-        return new Heuristics(board, Color.PURPLE, valueOneNew, valueTwoNew, valueThreeNew, valueFourNew);
+        return new Heuristics(board, Color.PURPLE, valueOneNew, valueTwoNew, valueThreeNew);
     }
 }

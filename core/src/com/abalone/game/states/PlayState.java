@@ -448,7 +448,7 @@ public class PlayState extends State {
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
         Heuristics heuristics;
 
-        heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -10, 10, -100);
+        heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -10, 5);
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
         if (AbaloneGame.bluePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
@@ -485,7 +485,7 @@ public class PlayState extends State {
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
         Heuristics heuristics;
 
-        heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 1, -10, 10, -5000);
+        heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 100, -10, 5);
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);

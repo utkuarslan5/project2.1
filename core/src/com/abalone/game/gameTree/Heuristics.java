@@ -13,18 +13,17 @@ public class Heuristics {
     private final Timestamp timestamp;
     private final Color playerColorToPlay;
     public final double value;
-    private double w1,w2,w3,w4;
+    private double w1,w2,w3;
     private double[] weights;
 
-    public Heuristics(Board current, Color playerColorToPlay, double w1, double w2, double w3, double w4) {
+    public Heuristics(Board current, Color playerColorToPlay, double w1, double w2, double w3) {
         this.current = current;
         this.timestamp = new Timestamp(System.currentTimeMillis());
         this.playerColorToPlay = playerColorToPlay;
         this.w1 = w1;
         this.w2 = w2;
         this.w3 = w3;
-        this.w4 = w4;
-        this.weights = new double[] {w1, w2, w3, w4};
+        this.weights = new double[] {w1, w2, w3};
         this.value = valueFunction(current);
     }
 
@@ -65,16 +64,15 @@ public class Heuristics {
         }
 
         // Number of balls  (the bigger the better, so + weight)
-        double h1 = w1 * count / 14;
+        double h1 = w1 * (count - enemyCount);
         // Total distance to the center (the smaller the better, so - weight)
         double h2 = w2 * (totalDistance / (count * 8.)); // 8 corresponds to the maximum distance to the center
         // Neighbors of the same color  (the bigger the better, so + weight)
         double h3 = w3 * countNeighboursOfEachBall / (6. * 14);
         // Enemy count (the smaller the better, so - weight)
-        double h4 = w4 * enemyCount / 14;
 
-        double value = h1 + h2 + h3 + h4;
-        System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   h4: %.2f   =   %.2f\n", h1, h2, h3, h4, value);
+        double value = h1 + h2 + h3;
+        //System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   h4: %.2f   =   %.2f\n", h1, h2, h3, h4, value);
 
         return value;
     }
