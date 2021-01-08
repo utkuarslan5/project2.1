@@ -242,6 +242,10 @@ public class Node {
         return board;
     }
 
+    public void clearRememberedList(){
+        theListRemember = new ArrayList<>();
+    }
+
     public double[] getWeights() {
         return weights;
     }

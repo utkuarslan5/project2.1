@@ -2,13 +2,16 @@ package com.abalone.game.states;
 
 import com.abalone.game.AbaloneGame;
 import com.abalone.game.gameTree.Heuristics;
+import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.Tree;
 import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.Board;
+import com.abalone.game.objects.Turn;
 import com.abalone.game.players.MiniMax;
 import com.abalone.game.players.NegaMax;
 import com.abalone.game.players.Player;
 import com.abalone.game.utils.AI;
+import com.abalone.game.utils.SimulatedAnnealing;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -181,22 +184,7 @@ public class ExperimentsState extends State {
                     System.out.println("Nr of games wanted : " + nrOfSimulations);
 
                     Board simulation = new Board();
-                    while (simulation.getBlueHex().size() > 8 && simulation.getPurpleHex().size() > 8) {
-                        Heuristics miniMaxH = new Heuristics(simulation, com.abalone.game.utils.Color.BLUE, valueOne_1, valueOne_2,
-                                valueOne_3, 1000);
-                        Tree miniMax = new Tree(simulation, 2, com.abalone.game.utils.Color.BLUE, miniMaxH);
-                        Player player = new MiniMax(miniMax.getRoot(), 2, true, miniMax);
-                        simulation.move(player.getBestNode().getTurn());
-                        simulation.setMovePerformed(false);
-                        Heuristics negaMaxH = new Heuristics(simulation, com.abalone.game.utils.Color.PURPLE, valueTwo_1, valueTwo_2,
-                                valueTwo_3, 1000);
-                        Tree negaMax = new Tree(simulation, 2, com.abalone.game.utils.Color.PURPLE, negaMaxH);
-                        Player player2 = new NegaMax(negaMax.getRoot(), 2, true, negaMax);
-                        simulation.move(player2.getBestNode().getTurn());
-                        simulation.setMovePerformed(false);
-                        System.out.println("MinMax Balls  :  " + simulation.getBlueHex().size());
-                        System.out.println("NegaMax Balls  :  " + simulation.getPurpleHex().size());
-                    }
+                    SimulatedAnnealing annealing = new SimulatedAnnealing();
                 }
             }
         };
