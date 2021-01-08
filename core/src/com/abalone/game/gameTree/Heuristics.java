@@ -48,7 +48,7 @@ public class Heuristics {
 
                     //For the cohesion we count every neighbour of each ball, and add these up
                     if(!hex.getNeighbors().isEmpty()) {
-                        for (int i = 0; i <= hex.getNeighbors().size(); i++) {
+                        for (Hex h : hex.getNeighbors()) {
                             countNeighboursOfEachBall += 1;
                         }
                     } else {
@@ -62,11 +62,11 @@ public class Heuristics {
         }
 
         // Number of balls  (the bigger the better, so + weight)
-        double h1 = w1 * count;
+        double h1 = w1 * count / 14;
         // Total distance to the center (the smaller the better, so - weight)
-        double h2 = w2 * (totalDistance / count);
+        double h2 = w2 * (totalDistance / (count * 8)); // 8 corresponds to the maximum distance to the center
         // Neighbors of the same color  (the bigger the better, so + weight)
-        double h3 = w3 * countNeighboursOfEachBall;
+        double h3 = w3 * countNeighboursOfEachBall / (6 * 14);
         // Enemy count (the smaller the better, so - weight)
         double h4 = w4 * enemyCount / 14;
 
