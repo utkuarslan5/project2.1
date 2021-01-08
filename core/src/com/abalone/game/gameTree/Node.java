@@ -204,4 +204,12 @@ public class Node {
     public Color getPlayerColorToPlay() {
         return playerColorToPlay;
     }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public double[] getWeights() {
+        return weights;
+    }
 }

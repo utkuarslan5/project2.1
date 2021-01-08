@@ -1,5 +1,6 @@
 package com.abalone.game.players;
 
+import com.abalone.game.gameTree.Heuristics;
 import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.Tree;
 
@@ -24,10 +25,12 @@ public class MCTS {
     private Node root;
     private int maxRuntimeMilliSec = 5000;
     private final int WIN_SCORE = 10;
+    private int maxDepth;
 
-    public MCTS(Tree tree){
+    public MCTS(Tree tree, int maxDepth){
         this.tree = tree;
         this.root = tree.getRoot();
+        this.maxDepth = maxDepth;
     }
 
     public Node findNextMove(){
@@ -66,7 +69,7 @@ public class MCTS {
 
     // STEP 3
     private Node simulation(Node leaf) {
-        while (!(leaf.getChildren() == null)){
+        for(int i = 0; i <= maxDepth; i++){
             leaf = simulationPolicy(leaf);
         }
         return leaf;
@@ -82,11 +85,29 @@ public class MCTS {
 
     // STEP 4
     private void backpropagate(Node leaf, Node rollOutResult) {
+
+        Heuristics HLeaf = new Heuristics(rollOutResult.getBoard(), root.getPlayerColorToPlay(), root.getWeights()[0], root.getWeights()[1], root.getWeights()[2], root.getWeights()[3]);
+        HLeaf.valueFunction(rollOutResult.getBoard());
+        Heuristics Hroot = new Heuristics(root.getBoard(), root.getPlayerColorToPlay(), root.getWeights()[0], root.getWeights()[1], root.getWeights()[2], root.getWeights()[3]);
+        Hroot.valueFunction(root.getBoard());
+
         Node tempNode = leaf;
+        boolean lastDone = false;
+        boolean win = false;
         while(tempNode != null){
             tempNode.incrementVisit();
-            if(tempNode.getPlayerColorToPlay().equals(this.root.getPlayerColorToPlay())){
+            if(tempNode.getPlayerColorToPlay().equals(this.root.getPlayerColorToPlay()) && win && lastDone){
                 tempNode.addScore(WIN_SCORE);
+            }
+            if(!tempNode.getPlayerColorToPlay().equals(this.root.getPlayerColorToPlay()) && !win && lastDone){
+                tempNode.addScore(WIN_SCORE);
+            }
+
+
+            if(HLeaf.getValue() >= Hroot.getValue() && !lastDone){
+                tempNode.addScore(WIN_SCORE);
+                lastDone = true;
+                win = true;
             }
             tempNode = tempNode.getParent();
         }
