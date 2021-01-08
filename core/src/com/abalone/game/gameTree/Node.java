@@ -60,14 +60,14 @@ public class Node {
             }
             // get every calculated turns for all hexes
             List<List<Turn>> allTurns = turnsFinder.getTurns();
-            if(theListRemember.size()>10){
+            if(theListRemember.size()>100){
                 theListRemember.remove(0);
             }
             try {
                 Color nextColor = (playerColorToPlay == Color.BLUE) ? Color.PURPLE : Color.BLUE;
                 for (List<Turn> ts : allTurns) {
                     for (Turn t : ts) {
-                        if(!doneBefore(t) && legalTurn(t)) {
+                        if(!doneBefore(t)) {
                             Board newBoard = (Board) board.clone();
                             newBoard.move(t);
                             if(newBoard.getPushPossible()) {
@@ -125,6 +125,39 @@ public class Node {
                     int turnd1 = moveList.get(0).getDestination().getBall().getId();
 
                     if( startt1 == turns1 && destt1 == turnd1){
+                        return true;
+                    }
+                }else if(turn.getTurnType() == 1 && t.getTurnType() == 1){
+                    int startt1 = t.getMovesList().get(0).getStart().getBall().getId();
+                    int turns1 = moveList.get(0).getStart().getBall().getId();
+                    int destt1 = t.getMovesList().get(0).getDestination().getBall().getId();
+                    int turnd1 = moveList.get(0).getDestination().getBall().getId();
+
+                    int startt2 = t.getMovesList().get(1).getStart().getBall().getId();
+                    int turns2 = moveList.get(1).getStart().getBall().getId();
+                    int destt2 = t.getMovesList().get(1).getDestination().getBall().getId();
+                    int turnd2 = moveList.get(1).getDestination().getBall().getId();
+
+                    if( startt1 == turns1 && destt1 == turnd1 && startt2 == turns2 && turnd2 == destt2){
+                        return true;
+                    }
+                }else if(turn.getTurnType() == 2 && t.getTurnType() == 2){
+                    int startt1 = t.getMovesList().get(0).getStart().getBall().getId();
+                    int turns1 = moveList.get(0).getStart().getBall().getId();
+                    int destt1 = t.getMovesList().get(0).getDestination().getBall().getId();
+                    int turnd1 = moveList.get(0).getDestination().getBall().getId();
+
+                    int startt2 = t.getMovesList().get(1).getStart().getBall().getId();
+                    int turns2 = moveList.get(1).getStart().getBall().getId();
+                    int destt2 = t.getMovesList().get(1).getDestination().getBall().getId();
+                    int turnd2 = moveList.get(1).getDestination().getBall().getId();
+
+                    int startt3 = t.getMovesList().get(2).getStart().getBall().getId();
+                    int turns3 = moveList.get(2).getStart().getBall().getId();
+                    int destt3 = t.getMovesList().get(2).getDestination().getBall().getId();
+                    int turnd3 = moveList.get(2).getDestination().getBall().getId();
+
+                    if( startt1 == turns1 && destt1 == turnd1 && startt2 == turns2 && turnd2 == destt2 && startt3 == turns3 && turnd3 == destt3){
                         return true;
                     }
                 }

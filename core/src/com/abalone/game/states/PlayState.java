@@ -447,13 +447,8 @@ public class PlayState extends State {
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
         Heuristics heuristics;
-        if(turnNumber < 20) {
-            heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -10, 10, -100);
-        }
-        else {
-            heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -10, 10, -1000);
-        }
 
+        heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -10, 10, -100);
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
         if (AbaloneGame.bluePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
@@ -477,7 +472,8 @@ public class PlayState extends State {
             System.out.println("Blue random");
             //tryRandomUntilWorks(false,true);
         }
-        this.turnNumber++;
+        //this.turnNumber++;
+
     }
 
     public void purpleAIplays() {
@@ -488,13 +484,8 @@ public class PlayState extends State {
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
         Heuristics heuristics;
-        if(turnNumber < 20) {
-            heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 1, -100, 10, -500);
-        }
-        else {
-            heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 1, -10, 10, -5000);
-        }
 
+        heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 1, -10, 10, -5000);
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
@@ -518,7 +509,7 @@ public class PlayState extends State {
             System.out.println("Purple random");
             //tryRandomUntilWorks(true, false);
         }
-        this.turnNumber++;
+        //this.turnNumber++;
     }
 
     public void alignSelection(Hex hex, Ball ball, int index) {
