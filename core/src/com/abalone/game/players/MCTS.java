@@ -52,7 +52,7 @@ public class MCTS {
             node = findBestUCT(node, node.getParent().getVisitCount());
         }
         // STEP 2
-        if(node.getChildren() == null) {
+        if(node.getChildren().size() == 0) {
             return node;
         } else {
             List<Node> unvisitedChilderen = new ArrayList<>();
