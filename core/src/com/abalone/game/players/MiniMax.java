@@ -2,7 +2,9 @@ package com.abalone.game.players;
 
 import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.Tree;
-import com.abalone.game.utils.Color;
+
+import java.util.Collections;
+import java.util.List;
 
 public class MiniMax extends Player {
 
@@ -35,13 +37,27 @@ public class MiniMax extends Player {
     }
 
     public Node minimax(Node currentNode, int depth, double alpha, double beta, boolean maximizingPlayer) {
+
+        /**
+        List<Node> theChildren = currentNode.getChildren();
+
+        if(theChildren.size() != 0) {
+            for (int i = 0; i < theChildren.size()-1; i++) {
+                if (theChildren.get(i).getHeuristicsValue() < theChildren.get(i + 1).getHeuristicsValue()) { //or the other way when it is > and not <
+                    Collections.swap(theChildren, i, i + 1);
+                }
+            }
+        }
+         // !!!!!!!!!! Replace currentNode.getChildren() in the if and else with theChildren to test it
+         */
+
         if (depth == 0) {
             return tree.getRoot();
         }
         Node bestNode = null;
         if (maximizingPlayer) {
             double value = -10000000;
-            for (Node child : currentNode.getChildren()) {
+            for (Node child : currentNode.getChildren()  /**insert theChildren here*/) {
                 if (child != null) {
                     double nodeValue = minimax(child, depth - 1, alpha, beta, false).getHeuristicsValue();
                     if (nodeValue > value) {
@@ -58,7 +74,7 @@ public class MiniMax extends Player {
 
         } else {
             double value = 10000000;
-            for (Node child : currentNode.getChildren()) {
+            for (Node child : currentNode.getChildren()  /**insert theChildren here*/) {
                 if (child != null) {
                     double nodeValue = minimax(child, depth - 1, alpha, beta, true).getHeuristicsValue();
                     if (nodeValue < value) {
