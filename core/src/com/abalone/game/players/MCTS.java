@@ -69,7 +69,10 @@ public class MCTS {
     // STEP 3
     private Node simulation(Node leaf) {
         for(int i = 0; i <= maxDepth; i++){
-            leaf = simulationPolicy(leaf);
+            if(leaf.getChildren().size() > 0) {
+                leaf = simulationPolicy(leaf);
+            }
+            else{continue;}
         }
         return leaf;
     }
