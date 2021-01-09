@@ -481,6 +481,7 @@ public class PlayState extends State {
         purpleFinished = false;
         System.out.println("purple playing");
         int depthTree = 2;
+        int MCTSdepth = 20;
         Player player;
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
@@ -494,7 +495,7 @@ public class PlayState extends State {
         } else if (AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
         } else { // if (AbaloneGame.purplePlayerAI == AI.MCTS)
-            player = new MCTS(tree, depthTree);
+            player = new MCTS(tree, MCTSdepth);
         }
 
         Turn turn = player.getBestNode().getTurn();
