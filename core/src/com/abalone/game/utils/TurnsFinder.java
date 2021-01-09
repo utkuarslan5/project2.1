@@ -201,7 +201,7 @@ public class TurnsFinder {
                     //System.out.println("Two ball push turn generated.");
                 }
             }
-            if(forceTypeThree >= 2 && ih != null && ihh != null && hex.getBall().getColor().equals(ih.getBall().getColor()) && hex.getBall().getColor().equals(ihh.getBall().getColor())){
+            if(forceTypeThree >= 1 && ih != null && ihh != null && hex.getBall().getColor().equals(ih.getBall().getColor()) && hex.getBall().getColor().equals(ihh.getBall().getColor())){
                 foundTurns.add(new Turn(hex));
                 foundTurns.get(foundTurns.size()-1).addMove(2,0,hex,h);
                 foundTurns.get(foundTurns.size()-1).addMove(2,0,ih,hex);
