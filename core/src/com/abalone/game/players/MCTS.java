@@ -36,11 +36,15 @@ public class MCTS extends Player {
 
         int endTime = (int) (System.currentTimeMillis() + maxRuntimeMilliSec);
 
+        System.out.println("Before while " + endTime);
+
         while(((int) System.currentTimeMillis() < endTime)) {
             Node leaf = select();
             Node rollOutResult = simulation(leaf);
             backpropagate(leaf, rollOutResult);
         }
+
+        System.out.println(bestChild(root).getWinScore() + "/" + bestChild(root).getVisitCount());
 
         return bestChild(root);
     }
