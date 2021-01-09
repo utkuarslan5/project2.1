@@ -24,7 +24,7 @@ public class MCTS extends Player {
 
     private Tree tree;
     private Node root;
-    private int maxRuntimeMilliSec = 5000;
+    private int maxRuntimeMilliSec = 500;
     private int maxDepth;
 
     public MCTS(Tree tree, int maxDepth){
@@ -55,7 +55,7 @@ public class MCTS extends Player {
     private Node select() {
         Node node = root;
         while (node.getChildren().size() != 0) {
-            node = findBestUCT(node, node.getParent().getVisitCount());
+            node = findBestUCT(node, root.getVisitCount());
         }
         // STEP 2
         if(node.getChildren().size() == 0) {
