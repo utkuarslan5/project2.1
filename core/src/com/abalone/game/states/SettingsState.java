@@ -248,6 +248,9 @@ public class SettingsState extends State {
                 case NEGAMAX:
                     AbaloneGame.bluePlayerAI = AI.NEGAMAX;
                     break;
+                case MCTS:
+                    AbaloneGame.bluePlayerAI = AI.MCTS;
+                    break;
             }
         }
         else {
@@ -266,6 +269,9 @@ public class SettingsState extends State {
                     break;
                 case NEGAMAX:
                     AbaloneGame.purplePlayerAI = AI.NEGAMAX;
+                    break;
+                case MCTS:
+                    AbaloneGame.purplePlayerAI = AI.MCTS;
                     break;
             }
         }
@@ -319,10 +325,13 @@ public class SettingsState extends State {
         switch ((String) blueAISelectBox.getSelected()) {
             case "Minimax":
                 value = AI.MINIMAX;
-            break;
+                break;
             case "Negamax":
                 value = AI.NEGAMAX;
-            break;
+                break;
+            case "MCTS":
+                value = AI.MCTS;
+                break;
             default:
                 value = AI.MINIMAX;
         }
@@ -337,6 +346,9 @@ public class SettingsState extends State {
                 break;
             case "Negamax":
                 value = AI.NEGAMAX;
+                break;
+            case "MCTS":
+                value = AI.MCTS;
                 break;
             default:
                 value = AI.MINIMAX;
