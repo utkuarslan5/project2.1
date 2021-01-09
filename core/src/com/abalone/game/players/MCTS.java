@@ -19,7 +19,7 @@ import java.util.*;
  *
  */
 
-public class MCTS {
+public class MCTS extends Player {
 
     private Tree tree;
     private Node root;
@@ -32,7 +32,7 @@ public class MCTS {
         this.maxDepth = maxDepth;
     }
 
-    public Node findNextMove(){
+    public Node getBestNode(){
 
         int endTime = (int) (System.currentTimeMillis() + maxRuntimeMilliSec);
 

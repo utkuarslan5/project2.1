@@ -113,9 +113,10 @@ public class SettingsState extends State {
         playerTypeChoices[0] = "Human";
         playerTypeChoices[1] = "AI";
 
-        String[] AIChoices = new String[2];
+        String[] AIChoices = new String[3];
         AIChoices[0] = "Minimax";
         AIChoices[1] = "Negamax";
+        AIChoices[2] = "MCTS";
 
         // Blue Player
         blueBall = new Image(new Texture("blue.png"));
@@ -145,6 +146,9 @@ public class SettingsState extends State {
                 break;
             case NEGAMAX:
                 blueAISelectBox.setSelected("Negamax");
+                break;
+            case MCTS:
+                blueAISelectBox.setSelected("MCTS");
                 break;
         }
 
@@ -176,6 +180,9 @@ public class SettingsState extends State {
                 break;
             case NEGAMAX:
                 purpleAISelectBox.setSelected("Negamax");
+                break;
+            case MCTS:
+                purpleAISelectBox.setSelected("MCTS");
                 break;
         }
 

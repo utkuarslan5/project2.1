@@ -6,6 +6,7 @@ import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.Tree;
 import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.*;
+import com.abalone.game.players.MCTS;
 import com.abalone.game.players.MiniMax;
 import com.abalone.game.players.NegaMax;
 import com.abalone.game.players.Player;
@@ -452,16 +453,15 @@ public class PlayState extends State {
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
         if (AbaloneGame.bluePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
-            //System.out.println(player.getBestNode().getTurn());
-            Turn turn = player.getBestNode().getTurn();
-            Node.theListRemember.add(turn);
-            board.move(turn);
         } else if (AbaloneGame.bluePlayerAI == AI.NEGAMAX) {
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
-            Turn turn = player.getBestNode().getTurn();
-            Node.theListRemember.add(turn);
-            board.move(turn);
+        } else { // if (AbaloneGame.bluePlayerAI == AI.MCTS) {
+            player = new MCTS(tree, depthTree);
         }
+
+        Turn turn = player.getBestNode().getTurn();
+        Node.theListRemember.add(turn);
+        board.move(turn);
 
         if (board.getMovePerformed()) {
             switchTurnPlayer();
@@ -489,17 +489,17 @@ public class PlayState extends State {
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
-            //System.out.println(player.getBestNode().getTurn());
-            Turn turn = player.getBestNode().getTurn();
-            Node.theListRemember.add(turn);
-            board.move(turn);
+
         } else if (AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
-            //System.out.println(player.getBestNode().getTurn());
-            Turn turn = player.getBestNode().getTurn();
-            Node.theListRemember.add(turn);
-            board.move(turn);
+        } else { // if (AbaloneGame.purplePlayerAI == AI.MCTS)
+            player = new MCTS(tree, depthTree);
         }
+
+        Turn turn = player.getBestNode().getTurn();
+        Node.theListRemember.add(turn);
+        board.move(turn);
+
         if (board.getMovePerformed()) {
             switchTurnPlayer();
             allDestinations.clear();
