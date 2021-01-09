@@ -3,6 +3,7 @@ package com.abalone.game.players;
 import com.abalone.game.gameTree.Heuristics;
 import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.Tree;
+import com.badlogic.gdx.math.Interpolation;
 
 import java.util.*;
 
@@ -33,6 +34,7 @@ public class MCTS extends Player {
     }
 
     public Node getBestNode(){
+        System.out.println("Start of method");
 
         int endTime = (int) (System.currentTimeMillis() + maxRuntimeMilliSec);
 
