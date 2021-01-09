@@ -177,6 +177,17 @@ public class Node {
         return children;
     }
 
+    public List<Node> getChildrenMCTS(Color c) {
+        if(children.size() == 0){
+            Tree newChildrenTree = new Tree(board, 1, c, heuristics);
+            List<Node> newChildren = newChildrenTree.getRoot().getChildren();
+            for(Node child : newChildren){
+                children.add(child);
+            }
+        }
+        return children;
+    }
+
     public Node getParent() {
         return parent;
     }
