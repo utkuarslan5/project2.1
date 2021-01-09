@@ -91,7 +91,7 @@ public class SimulatedAnnealing {
     }
 
     public Heuristics generateRandom(Board board) {
-        double valueOne = (Math.random() * 2) - 1;
+        double valueOne = 100;
         double valueTwo = (Math.random() * 2) - 1;
         double valueThree = (Math.random() * 2) - 1;
 
@@ -99,17 +99,15 @@ public class SimulatedAnnealing {
     }
 
     public Heuristics alternateBest(Board board, Heuristics oldHeuristics) {
-        int dimension = (int) (Math.random() * 3);
-        double valueOneNew = oldHeuristics.getWeights()[0];
+        int dimension = (int) (Math.random() * 2);
+        double valueOneNew = 100;
         double valueTwoNew = oldHeuristics.getWeights()[1];
         double valueThreeNew = oldHeuristics.getWeights()[2];
         double change = (Math.random() * 0.45) - 0.225;
 
         if (dimension == 0) {
-            valueOneNew += change;
-        } else if (dimension == 1) {
             valueTwoNew += change;
-        } else if (dimension == 2) {
+        } else if (dimension == 1) {
             valueThreeNew += change;
         }
 
