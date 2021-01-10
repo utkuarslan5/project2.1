@@ -17,28 +17,22 @@ public class Node {
     private Heuristics heuristics;
     private Turn turn;
     private Color playerColorToPlay;
-    private int numberBlueBalls;
-    private int numberPurpleBalls;
     private double[] weights;
     // MCTS Stuff
     private double winScore = 0;
     private int visitCount = 0;
 
 
-    public Node(Board board, int depthTree, int depth, Turn turn, Color playerColorToPlay, Heuristics heuristics) {
+    public Node(Board board, int depthTree, int depth, Turn turn, Color playerColorToPlay, Heuristics parentHeuristics) {
         this.board = board;
         this.depth = depth;
         this.turn = turn;
         this.playerColorToPlay = playerColorToPlay;
         this.children = new ArrayList();
-        this.numberBlueBalls = board.getBlueHex().size();
-        this.numberPurpleBalls = board.getPurpleHex().size();
-        this.weights = heuristics.getWeights();
+        this.weights = parentHeuristics.getWeights();
         this.heuristics = new Heuristics(this.board, playerColorToPlay, weights[0], weights[1], weights[2]);
         this.calculateHeuristicsValue();
 
-
-        // setHeuristicsValue(heuristics.getValue());
         if (depthTree > depth) {
             // If the depth of this node is even, this means it's the state of the board after a move of the human player
             // So we get the purple balls (balls of the AI) because it is the turn of the AI to play
@@ -62,6 +56,7 @@ public class Node {
             if (theListRemember.size() > 100) {
                 theListRemember.remove(0);
             }
+
             try {
                 Color nextColor = (playerColorToPlay == Color.BLUE) ? Color.PURPLE : Color.BLUE;
                 for (List<Turn> ts : allTurns) {
@@ -217,16 +212,7 @@ public class Node {
         this.value = value;
     }
 
-    public int getNumberBlueBalls() {
-        return numberBlueBalls;
-    }
-
-    public int getNumberPurpleBalls() {
-        return numberPurpleBalls;
-    }
-
     // MCTS Stuff
-
     public double getWinScore() {
         return winScore;
     }

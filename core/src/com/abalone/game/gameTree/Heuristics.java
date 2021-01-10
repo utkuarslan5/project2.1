@@ -69,7 +69,6 @@ public class Heuristics {
         double h2 = w2 * (totalDistance / (count * 8.)); // 8 corresponds to the maximum distance to the center
         // Neighbors of the same color  (the bigger the better, so + weight)
         double h3 = w3 * countNeighboursOfEachBall / (6. * 14);
-        // Enemy count (the smaller the better, so - weight)
 
         double value = h1 + h2 + h3;
         //System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   h4: %.2f   =   %.2f\n", h1, h2, h3, h4, value);

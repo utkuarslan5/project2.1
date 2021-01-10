@@ -15,8 +15,7 @@ public class Move {
 
     @Override
     public String toString() {
-        String r = "From " + start.toString();
-        r += " to " + destination.toString();
+        String r = "From " + start.toString() + " to " + destination.toString();
         return r;
     }
 

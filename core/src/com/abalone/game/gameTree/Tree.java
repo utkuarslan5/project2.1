@@ -7,7 +7,7 @@ public class Tree {
     private final Color playerColorToPlay;
     private final Node root;
 
-    public Tree(Board board, int depthTree, Color playerColorToPlay,Heuristics heuristics) {
+    public Tree(Board board, int depthTree, Color playerColorToPlay, Heuristics heuristics) {
         this.playerColorToPlay = playerColorToPlay;
         this.root = new Node(board, depthTree, 0, null, playerColorToPlay, heuristics);
     }

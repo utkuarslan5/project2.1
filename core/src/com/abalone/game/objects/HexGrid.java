@@ -38,7 +38,7 @@ public class HexGrid implements Cloneable {
                     x = col - half;
                 }
                 int z = row - half;
-                 System.out.println("Hex created with x " + x + " and z " + z);
+                // System.out.println("Hex created with x " + x + " and z " + z);
                 Hex newHex = new Hex(x, z);
                 if (iBall < 11 || (iBall >= 13 && iBall <= 15)) {
                     newHex.setBall(new Ball(Color.PURPLE,iBall));
