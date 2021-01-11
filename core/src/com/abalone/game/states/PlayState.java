@@ -455,7 +455,7 @@ public class PlayState extends State {
         blueFinished = false;
         System.out.println("blue playing");
         int depthTree = 2;
-        int MCTSdepth = 3;
+        int MCTSdepth = 5;
         Player player;
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
