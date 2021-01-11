@@ -26,7 +26,8 @@ public class MCTS extends Player {
     private Node root;
     private int maxRuntimeMilliSec = 5000;
     private int maxDepth;
-    private final double WIN_VALUE = 1;
+    private double WIN_VALUE = 1;
+    private int totalVisit = 0;
 
     public MCTS(Tree tree, int maxDepth){
         this.tree = tree;
@@ -35,19 +36,21 @@ public class MCTS extends Player {
     }
 
     public Node getBestNode(){
-        int endTime = (int) (System.currentTimeMillis() + maxRuntimeMilliSec);
+        Heuristics HRoot = new Heuristics(root.getBoard(), root.getPlayerColorToPlay(), root.getWeights()[0], root.getWeights()[1], root.getWeights()[2]);
+        HRoot.valueFunction(root.getBoard());
 
+        int endTime = (int) (System.currentTimeMillis() + maxRuntimeMilliSec);
         while(((int) System.currentTimeMillis() < endTime)) {
             Node leaf = select();
             Node rollOutResult = simulation(leaf);
             Heuristics HLeaf = new Heuristics(rollOutResult.getBoard(), root.getPlayerColorToPlay(), root.getWeights()[0], root.getWeights()[1], root.getWeights()[2]);
             HLeaf.valueFunction(rollOutResult.getBoard());
-            Heuristics HRoot = new Heuristics(root.getBoard(), root.getPlayerColorToPlay(), root.getWeights()[0], root.getWeights()[1], root.getWeights()[2]);
-            HRoot.valueFunction(rollOutResult.getBoard());
             double value = 0;
-            if(HLeaf.getValue() > HRoot.getValue()){
+            if(HLeaf.getValue() >= HRoot.getValue()){
+                WIN_VALUE = Math.abs(HLeaf.getValue() - HRoot.getValue());
                 value += WIN_VALUE;
             }
+            totalVisit++;
             backpropagate(leaf, value, 0);
         }
 
@@ -60,7 +63,7 @@ public class MCTS extends Player {
     private Node select() {
         Node node = root;
         while (node.getChildren().size() != 0) {
-            node = findBestUCT(node, root.getVisitCount(), root);
+            node = findBestUCT(node, totalVisit, root);
         }
         // STEP 2
         if(node.getChildrenMCTS(root.getPlayerColorToPlay()).size() == 0) {
@@ -73,7 +76,6 @@ public class MCTS extends Player {
                 }
             }
             int selected = (int)(Math.random() * unvisitedChilderen.size());
-            System.out.println(unvisitedChilderen.size());
             return unvisitedChilderen.get(selected);
         }
     }
@@ -99,25 +101,14 @@ public class MCTS extends Player {
 
     // STEP 4
     private void backpropagate(Node leaf, double value, int depth) {
-
-        /*
-        for(Node c : leaf.getChildren()){
-            if(c.getVisitCount() > 0){
-                System.out.println(depth + " " + c.getWinScore() + "/" + c.getVisitCount());
-            }
-        }
-        */
-
         if(leaf.getParent() != null){
             leaf.incrementVisit();
             if((leaf.getPlayerColorToPlay().equals(root.getPlayerColorToPlay()) && (value > 0)) || (!leaf.getPlayerColorToPlay().equals(root.getPlayerColorToPlay()) && (value <= 0))){
                 leaf.addScore(WIN_VALUE);
-                //System.out.println(depth + " ADDED VALUE");
             }
             backpropagate(leaf.getParent(), value, depth+1);
         }
 
-        //System.out.println("RETURN DEPTH = " + depth);
         return;
     }
 
@@ -131,8 +122,8 @@ public class MCTS extends Player {
 
     public static Node findBestUCT(Node node, int parentVisit, Node root) {
 
-        double bestValue = uctValue(parentVisit, node.getChildrenMCTS(root.getPlayerColorToPlay()).get(0).getWinScore(), node.getChildrenMCTS(root.getPlayerColorToPlay()).get(0).getVisitCount());
-        Node bestNode = node.getChildrenMCTS(root.getPlayerColorToPlay()).get(0);
+        double bestValue = -Double.MAX_VALUE;
+        Node bestNode = null;
 
         for(Node c : node.getChildrenMCTS(root.getPlayerColorToPlay())){
             double uctval = uctValue(parentVisit, c.getWinScore(), c.getVisitCount());
@@ -147,7 +138,7 @@ public class MCTS extends Player {
 
     private Node bestChild(Node root) {
         double bestValue = -Double.MAX_VALUE;
-        Node bestNode = root.getChildren().get(0);
+        Node bestNode = null;
         for(Node n : root.getChildren()){
             if(n.getVisitCount() != 0) {
                 if ((n.getWinScore() / n.getVisitCount()) >= bestValue) {

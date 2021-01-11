@@ -179,6 +179,7 @@ public class Node {
             List<Node> newChildren = newChildrenTree.getRoot().getChildren();
             for(Node child : newChildren){
                 children.add(child);
+                child.setParent(this);
             }
         }
         return children;
