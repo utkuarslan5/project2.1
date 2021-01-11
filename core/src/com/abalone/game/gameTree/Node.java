@@ -3,6 +3,7 @@ package com.abalone.game.gameTree;
 import com.abalone.game.objects.*;
 import com.abalone.game.utils.Color;
 import com.abalone.game.utils.TurnsFinder;
+import com.badlogic.gdx.ai.pfa.Heuristic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -185,6 +186,10 @@ public class Node {
 
     public Node getParent() {
         return parent;
+    }
+
+    public Heuristics getHeuristics() {
+        return heuristics;
     }
 
     public void setParent(Node parent) {

@@ -500,9 +500,9 @@ public class PlayState extends State {
 
         heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 100, -10, 5);
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
+
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
-
         } else if (AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
         } else { // if (AbaloneGame.purplePlayerAI == AI.MCTS)

@@ -53,8 +53,6 @@ public class Heuristics {
                                 countNeighboursOfEachBall += 1;
                             }
                         }
-                    } else {
-                        countNeighboursOfEachBall++;
                     }
                 }
                 else if (hex.getBall().getColor().equals(otherColor)){
