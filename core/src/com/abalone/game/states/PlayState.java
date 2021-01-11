@@ -55,7 +55,6 @@ public class PlayState extends State {
     private Tree tree;
     private boolean blueFinished;
     private boolean purpleFinished;
-    private boolean moveToDraw;
 
     private TextureRegionDrawable ballTextureRegionDrawableBlue;
     private TextureRegionDrawable ballTexturePressedRegionDrawableBlue;
@@ -73,8 +72,6 @@ public class PlayState extends State {
 
     @Override
     public void init() {
-        moveToDraw = false;
-
         blueFinished = true;
         purpleFinished = true;
         skin = new Skin(Gdx.files.internal("cloud-form/skin/cloud-form-ui.json"));
@@ -233,7 +230,6 @@ public class PlayState extends State {
                                 switchTurnPlayer();
                                 switchTurnPlayer();
                             }
-                            moveToDraw = true;
                         }
                     }
                 }
@@ -337,34 +333,27 @@ public class PlayState extends State {
             gsm.push(endState);
         }
 
-        if(!moveToDraw) {
-            if (bluePlayer.isChecked() && AbaloneGame.isBluePlayerAI && blueFinished) {
-                blueAIplays();
-                try
-                {
-                    Thread.sleep(200);
-                }
-                catch(InterruptedException ex)
-                {
-                    Thread.currentThread().interrupt();
-                }
-                System.out.println("blue stop playing");
+        if (bluePlayer.isChecked() && AbaloneGame.isBluePlayerAI && blueFinished) {
+            blueAIplays();
+            try
+            {
+                Thread.sleep(200);
             }
-            else if (purplePlayer.isChecked() && AbaloneGame.isPurplePlayerAI && purpleFinished) {
-                purpleAIplays();
-                try
-                {
-                    Thread.sleep(200);
-                }
-                catch(InterruptedException ex)
-                {
-                    Thread.currentThread().interrupt();
-                }
-                System.out.println("purple stop playing");
+            catch(InterruptedException ex)
+            {
+                Thread.currentThread().interrupt();
             }
         }
-        else {
-            moveToDraw = false;
+        else if (purplePlayer.isChecked() && AbaloneGame.isPurplePlayerAI && purpleFinished) {
+            purpleAIplays();
+            try
+            {
+                Thread.sleep(200);
+            }
+            catch(InterruptedException ex)
+            {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
@@ -484,7 +473,7 @@ public class PlayState extends State {
             System.out.println("Blue random");
             //tryRandomUntilWorks(false,true);
         }
-        this.turnNumber++;
+        //this.turnNumber++;
 
     }
 
@@ -522,7 +511,7 @@ public class PlayState extends State {
             System.out.println("Purple random");
             //tryRandomUntilWorks(true, false);
         }
-        this.turnNumber++;
+        //this.turnNumber++;
     }
 
     public void alignSelection(Hex hex, Ball ball, int index) {
