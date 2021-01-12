@@ -340,26 +340,26 @@ public class PlayState extends State {
         if(!moveToDraw) {
             if (bluePlayer.isChecked() && AbaloneGame.isBluePlayerAI && blueFinished) {
                 blueAIplays();
-                try
-                {
-                    Thread.sleep(200);
-                }
-                catch(InterruptedException ex)
-                {
-                    Thread.currentThread().interrupt();
-                }
+//                try
+//                {
+//                    Thread.sleep(200);
+//                }
+//                catch(InterruptedException ex)
+//                {
+//                    Thread.currentThread().interrupt();
+//                }
                 System.out.println("blue stop playing");
             }
             else if (purplePlayer.isChecked() && AbaloneGame.isPurplePlayerAI && purpleFinished) {
                 purpleAIplays();
-                try
-                {
-                    Thread.sleep(200);
-                }
-                catch(InterruptedException ex)
-                {
-                    Thread.currentThread().interrupt();
-                }
+//                try
+//                {
+//                    Thread.sleep(200);
+//                }
+//                catch(InterruptedException ex)
+//                {
+//                    Thread.currentThread().interrupt();
+//                }
                 System.out.println("purple stop playing");
             }
         }
@@ -502,9 +502,9 @@ public class PlayState extends State {
         heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 100, -10, 5);
         tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
         Tree MCTSTree = new Tree(this.board, 1, com.abalone.game.utils.Color.PURPLE, heuristics);
+
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
-
         } else if (AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
         } else { // if (AbaloneGame.purplePlayerAI == AI.MCTS)

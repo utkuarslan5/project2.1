@@ -17,33 +17,40 @@ public class Node {
     private double value;
     private Heuristics heuristics;
     private Turn turn;
-    private Color playerColorToPlay;
+    private Color maximizerColor;
     private double[] weights;
     // MCTS Stuff
     private double winScore = 0;
     private int visitCount = 0;
 
 
-    public Node(Board board, int depthTree, int depth, Turn turn, Color playerColorToPlay, Heuristics parentHeuristics) {
+    public Node(Board board, int depthTree, int depth, Turn turn, Color maximizerColor, Heuristics parentHeuristics) {
         this.board = board;
         this.depth = depth;
         this.turn = turn;
-        this.playerColorToPlay = playerColorToPlay;
+        this.maximizerColor = maximizerColor;
         this.children = new ArrayList();
         this.weights = parentHeuristics.getWeights();
-        this.heuristics = new Heuristics(this.board, playerColorToPlay, weights[0], weights[1], weights[2]);
+        this.heuristics = new Heuristics(this.board, maximizerColor, weights[0], weights[1], weights[2]);
         this.calculateHeuristicsValue();
 
         if (depthTree > depth) {
-            // If the depth of this node is even, this means it's the state of the board after a move of the human player
-            // So we get the purple balls (balls of the AI) because it is the turn of the AI to play
-            // Otherwise we take the blue balls because it is the turn of the human to play
-            List<Hex> hexes;
             TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
-            if (playerColorToPlay == Color.PURPLE) {
-                hexes = board.getPurpleHex();
+            List<Hex> hexes;
+            if (depth%2 == 0) {
+                if(maximizerColor == Color.PURPLE) {
+                    hexes = board.getPurpleHex();
+                }
+                else {
+                    hexes = board.getBlueHex();
+                }
             } else {
-                hexes = board.getBlueHex();
+                if(maximizerColor == Color.PURPLE) {
+                    hexes = board.getBlueHex();
+                }
+                else {
+                    hexes = board.getPurpleHex();
+                }
             }
 
             turnsFinder.clearTurns();
@@ -59,14 +66,13 @@ public class Node {
             }
 
             try {
-                Color nextColor = (playerColorToPlay == Color.BLUE) ? Color.PURPLE : Color.BLUE;
                 for (List<Turn> ts : allTurns) {
                     for (Turn t : ts) {
                         if (!doneBefore(t)) {
                             Board newBoard = (Board) board.clone();
                             newBoard.move(t);
                             if (newBoard.getPushPossible()) {
-                                Node newNode = new Node(newBoard, depthTree, depth + 1, t, nextColor, heuristics);
+                                Node newNode = new Node(newBoard, depthTree, depth + 1, t, maximizerColor, heuristics);
                                 this.addChild(newNode);
                             }
                         }
@@ -235,8 +241,8 @@ public class Node {
         this.winScore += score;
     }
 
-    public Color getPlayerColorToPlay() {
-        return playerColorToPlay;
+    public Color getMaximizerColor() {
+        return maximizerColor;
     }
 
     public Board getBoard() {
