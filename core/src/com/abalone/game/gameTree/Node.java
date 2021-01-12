@@ -32,25 +32,17 @@ public class Node implements Comparable<Node>{
         this.children = new ArrayList();
         this.weights = parentHeuristics.getWeights();
         this.heuristics = new Heuristics(this.board, maximizerColor, weights[0], weights[1], weights[2]);
-        this.calculateHeuristicsValue();
+        this.setHeuristicsValue(heuristics.getValue());
 
         if (depthTree > depth) {
             TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
             List<Hex> hexes;
-            if (depth%2 == 0) {
-                if(maximizerColor == Color.PURPLE) {
-                    hexes = board.getPurpleHex();
-                }
-                else {
-                    hexes = board.getBlueHex();
-                }
-            } else {
-                if(maximizerColor == Color.PURPLE) {
-                    hexes = board.getBlueHex();
-                }
-                else {
-                    hexes = board.getPurpleHex();
-                }
+
+            if(getPlayerColorToPlay() == Color.PURPLE) {
+                hexes = board.getPurpleHex();
+            }
+            else {
+                hexes = board.getBlueHex();
             }
 
             turnsFinder.clearTurns();
@@ -243,6 +235,25 @@ public class Node implements Comparable<Node>{
 
     public Color getMaximizerColor() {
         return maximizerColor;
+    }
+
+    public Color getPlayerColorToPlay() {
+        if (depth%2 == 0) {
+            if(maximizerColor == Color.PURPLE) {
+                return Color.PURPLE;
+            }
+            else {
+                return Color.BLUE;
+            }
+        } else {
+            if(maximizerColor == Color.PURPLE) {
+                return Color.BLUE;
+
+            }
+            else {
+                return Color.PURPLE;
+            }
+        }
     }
 
     public Board getBoard() {

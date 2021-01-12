@@ -462,13 +462,16 @@ public class PlayState extends State {
         Heuristics heuristics;
 
         heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -10, 5);
-        tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
-        Tree MCTSTree = new Tree(this.board, 1, com.abalone.game.utils.Color.BLUE, heuristics);
+
+
         if (AbaloneGame.bluePlayerAI == AI.MINIMAX) {
+            tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
         } else if (AbaloneGame.bluePlayerAI == AI.NEGAMAX) {
+            tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
         } else { // if (AbaloneGame.bluePlayerAI == AI.MCTS) {
+            Tree MCTSTree = new Tree(this.board, 1, com.abalone.game.utils.Color.BLUE, heuristics);
             player = new MCTS(MCTSTree, MCTSdepth);
         }
 
@@ -500,14 +503,15 @@ public class PlayState extends State {
         Heuristics heuristics;
 
         heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 100, -10, 5);
-        tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
-        Tree MCTSTree = new Tree(this.board, 1, com.abalone.game.utils.Color.PURPLE, heuristics);
 
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
+            tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
             player = new MiniMax(tree.getRoot(), depthTree, true, tree);
         } else if (AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
+            tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
             player = new NegaMax(tree.getRoot(), depthTree, true, tree);
         } else { // if (AbaloneGame.purplePlayerAI == AI.MCTS)
+            Tree MCTSTree = new Tree(this.board, 1, com.abalone.game.utils.Color.PURPLE, heuristics);
             player = new MCTS(MCTSTree, MCTSdepth);
         }
 

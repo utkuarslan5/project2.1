@@ -4,10 +4,12 @@ import com.abalone.game.utils.Color;
 
 public class Tree {
 
+    private final int depthTree;
     private final Color maximizerColor;
     private final Node root;
 
     public Tree(Board board, int depthTree, Color maximizerColor, Heuristics heuristics) {
+        this.depthTree = depthTree;
         this.maximizerColor = maximizerColor;
         this.root = new Node(board, depthTree, 0, null, maximizerColor, heuristics);
     }

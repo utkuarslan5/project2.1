@@ -2,53 +2,37 @@ package com.abalone.game.players;
 
 import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.Tree;
-
 import java.util.Collections;
 import java.util.List;
 
 public class MiniMax extends Player {
 
-    /**
-     * function minimax(node, depth, maximizingPlayer):
-     * if depth = 0 or node is a terminal node then
-     * return the heuristic value of node
-     * if maximizingPlayer then
-     * value := −∞
-     * for each child of node do
-     * value := max(value, minimax(child, depth − 1, FALSE))
-     * return value
-     * else (* minimizing player *)
-     * value := +∞
-     * for each child of node do
-     * value := min(value, minimax(child, depth − 1, TRUE))
-     * return value
-     **/
-
     private Node bestNode;
     private int depth;
     private boolean maximizingPlayer;
     private Tree tree;
+    double infinity = Double.POSITIVE_INFINITY;
 
     public MiniMax(Node currentNode, int depth, boolean maximizingPlayer, Tree tree) {
         this.depth = depth;
         this.maximizingPlayer = maximizingPlayer;
         this.tree = tree;
-        bestNode = minimax(currentNode, this.depth, -10000000, 10000000, this.maximizingPlayer);
+        bestNode = minimax(currentNode, this.depth, -infinity, infinity, this.maximizingPlayer);
     }
 
     public Node minimax(Node currentNode, int depth, double alpha, double beta, boolean maximizingPlayer) {
 
-        //Move ordering magic
         List<Node> theChildren = currentNode.getChildren();
         Collections.sort(theChildren,Collections.<Node>reverseOrder());
 
         if (depth == 0) {
             return tree.getRoot();
         }
+
         Node bestNode = null;
         if (maximizingPlayer) {
-            double value = -10000000;
-            for (Node child : currentNode.getChildren()  /**insert theChildren here*/) {
+            double value = -infinity;
+            for (Node child : theChildren) {
                 if (child != null) {
                     double nodeValue = minimax(child, depth - 1, alpha, beta, false).getHeuristicsValue();
                     if (nodeValue > value) {
@@ -64,8 +48,8 @@ public class MiniMax extends Player {
             return bestNode;
 
         } else {
-            double value = 10000000;
-            for (Node child : currentNode.getChildren()  /**insert theChildren here*/) {
+            double value = infinity;
+            for (Node child : theChildren) {
                 if (child != null) {
                     double nodeValue = minimax(child, depth - 1, alpha, beta, true).getHeuristicsValue();
                     if (nodeValue < value) {
