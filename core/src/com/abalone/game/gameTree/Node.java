@@ -32,7 +32,7 @@ public class Node implements Comparable<Node>{
         this.children = new ArrayList();
         this.weights = parentHeuristics.getWeights();
         this.heuristics = new Heuristics(this.board, maximizerColor, weights[0], weights[1], weights[2]);
-        this.calculateHeuristicsValue();
+        this.setHeuristicsValue(heuristics.getValue());
 
         if (depthTree > depth) {
             TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());

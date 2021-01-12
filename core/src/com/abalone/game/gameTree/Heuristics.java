@@ -74,24 +74,24 @@ public class Heuristics {
         double h3;
 
         if(maximizerColor == Color.PURPLE) {
-            // Number of balls  (the bigger the better, so + weight)
-            h1 = w1 * (countPurple - countBlue);
-            // Total distance to the center (the smaller the better, so - weight)
-            h2 = w2 * ((double)totalDistancePurple / (countPurple * 8)); // 8 corresponds to the maximum distance to the center
-            // Neighbors of the same color  (the bigger the better, so + weight)
-            h3 = w3 * ((double)totalNeighborsPurple / (6 * 14));
+            // Number of balls  (maximizer favors high value => + weight)
+            h1 = w1 * (countPurple - countBlue) / 14; // divided by 14 because 14 or -14 are the boundary of the range
+            // Total distance to the center (maximizer favors low value => - weight)
+            h2 = w2 * (((double)totalDistancePurple / (countPurple * 8)) - ((double)totalDistanceBlue / (countBlue * 8))); // 8 corresponds to the maximum distance to the center
+            // Neighbors of the same color  (maximizer favors high value => + weight)
+            h3 = w3 *((double)totalNeighborsPurple / (6 * 14));
         }
         else {
-            // Number of balls  (the bigger the better, so + weight)
-            h1 = w1 * (countBlue - countPurple);
-            // Total distance to the center (the smaller the better, so - weight)
-            h2 = w2 * ((double)totalDistanceBlue / (countBlue * 8)); // 8 corresponds to the maximum distance to the center
-            // Neighbors of the same color  (the bigger the better, so + weight)
+            // Number of balls  (maximizer favors high value => + weight)
+            h1 = w1 * (countBlue - countPurple) / 14; // divided by 14 because 14 or -14 are the boundary of the range
+            // Total distance to the center (maximizer favors low value => - weight)
+            h2 = w2 * (((double)totalDistanceBlue / (countBlue * 8)) - ((double)totalDistancePurple / (countPurple * 8))); // 8 corresponds to the maximum distance to the center
+            // Neighbors of the same color  (maximizer favors high value => + weight)
             h3 = w3 * ((double)totalNeighborsBlue / (6 * 14));
         }
 
         double value = h1 + h2 + h3;
-        //System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   h4: %.2f   =   %.2f\n", h1, h2, h3, h4, value);
+        // System.out.printf("h1: %.2f   h2: %.2f   h3: %.2f   =   %.2f\n", h1, h2, h3, value);
 
         return value;
     }
