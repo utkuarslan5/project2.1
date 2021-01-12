@@ -4,6 +4,9 @@ import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.Tree;
 import com.abalone.game.utils.Color;
 
+import java.util.Collections;
+import java.util.List;
+
 public class NegaMax extends Player {
     /*
     PSEUDO CODE FOR NORMAL:
@@ -28,6 +31,8 @@ public class NegaMax extends Player {
     }
 
     private Node negamax(Node currentNode, int depth, boolean maximizingPlayer, double alpha, double beta) {
+        List<Node> theChildren = currentNode.getChildren();
+        Collections.sort(theChildren,Collections.<Node>reverseOrder());
         if (depth == 0) {
             return tree.getRoot();
         }
