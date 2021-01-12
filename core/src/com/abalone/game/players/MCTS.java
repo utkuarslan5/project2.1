@@ -24,7 +24,7 @@ public class MCTS extends Player {
 
     private Tree tree;
     private Node root;
-    private int maxRuntimeMilliSec = 5000;
+    private int maxRuntimeMilliSec = 20000;
     private int maxDepth;
     private double WIN_VALUE = 1;
     private int totalVisit = 0;
@@ -36,18 +36,13 @@ public class MCTS extends Player {
     }
 
     public Node getBestNode(){
-        Heuristics HRoot = new Heuristics(root.getBoard(), root.getMaximizerColor(), root.getWeights()[0], root.getWeights()[1], root.getWeights()[2]);
-        HRoot.valueFunction(root.getBoard());
-
         int endTime = (int) (System.currentTimeMillis() + maxRuntimeMilliSec);
         while(((int) System.currentTimeMillis() < endTime)) {
             Node leaf = select();
             Node rollOutResult = simulation(leaf);
-            Heuristics HLeaf = new Heuristics(rollOutResult.getBoard(), root.getMaximizerColor(), root.getWeights()[0], root.getWeights()[1], root.getWeights()[2]);
-            HLeaf.valueFunction(rollOutResult.getBoard());
             double value = 0;
-            if(HLeaf.getValue() >= HRoot.getValue()){
-                WIN_VALUE = Math.abs(HLeaf.getValue() - HRoot.getValue());
+            if(rollOutResult.getHeuristicsValue() >= root.getHeuristicsValue()){
+                WIN_VALUE = Math.abs(rollOutResult.getHeuristicsValue() - root.getHeuristicsValue());
                 value += WIN_VALUE;
             }
             totalVisit++;
