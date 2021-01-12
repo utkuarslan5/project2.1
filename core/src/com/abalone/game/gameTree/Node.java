@@ -8,7 +8,7 @@ import com.badlogic.gdx.ai.pfa.Heuristic;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node {
+public class Node implements Comparable<Node>{
     public static ArrayList<Turn> theListRemember = new ArrayList<>();
     private Board board;
     private List<Node> children;
@@ -255,5 +255,11 @@ public class Node {
 
     public double[] getWeights() {
         return weights;
+    }
+
+    @Override
+    public int compareTo(Node node) {
+        return Double.compare(this.value, node.value);
+
     }
 }

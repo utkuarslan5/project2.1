@@ -38,18 +38,9 @@ public class MiniMax extends Player {
 
     public Node minimax(Node currentNode, int depth, double alpha, double beta, boolean maximizingPlayer) {
 
-        /**
+        //Move ordering magic
         List<Node> theChildren = currentNode.getChildren();
-
-        if(theChildren.size() != 0) {
-            for (int i = 0; i < theChildren.size()-1; i++) {
-                if (theChildren.get(i).getHeuristicsValue() < theChildren.get(i + 1).getHeuristicsValue()) { //or the other way when it is > and not <
-                    Collections.swap(theChildren, i, i + 1);
-                }
-            }
-        }
-         // !!!!!!!!!! Replace currentNode.getChildren() in the if and else with theChildren to test it
-         */
+        Collections.sort(theChildren,Collections.<Node>reverseOrder());
 
         if (depth == 0) {
             return tree.getRoot();
