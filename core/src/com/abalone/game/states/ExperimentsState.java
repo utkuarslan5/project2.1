@@ -7,6 +7,7 @@ import com.abalone.game.gameTree.Tree;
 import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.Board;
 import com.abalone.game.objects.Turn;
+import com.abalone.game.players.MCTS;
 import com.abalone.game.players.MiniMax;
 import com.abalone.game.players.NegaMax;
 import com.abalone.game.players.Player;
@@ -26,6 +27,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.ArrayList;
 
 public class ExperimentsState extends State {
     private SpriteBatch spriteBatch;
@@ -178,13 +181,46 @@ public class ExperimentsState extends State {
                     System.out.println("MiniMax VALUES ARE :  " + valueOne_1 + " " + valueOne_2 + " " + valueOne_3 + " " +
                             valueOne_4 + " " + valueOne_5);
                     System.out.println();
-                    System.out.println("NegaMax VALUES ARE :  " + valueTwo_1 + " " + valueTwo_2 + " " + valueTwo_3 + " " +
+                    System.out.println("MCTS VALUES ARE :  " + valueTwo_1 + " " + valueTwo_2 + " " + valueTwo_3 + " " +
                             valueTwo_4 + " " + valueTwo_5);
                     System.out.println();
                     System.out.println("Nr of games wanted : " + nrOfSimulations);
 
-                    Board simulation = new Board();
-                    SimulatedAnnealing annealing = new SimulatedAnnealing();
+                    for (int i = 0; i < nrOfSimulations; i++) {
+                        Board simulation = new Board();
+                        int turnsCounter = 0;
+                        while (simulation.getBlueHex().size() > 8 && simulation.getPurpleHex().size() > 8) {
+                            Heuristics miniMaxH = new Heuristics(simulation, com.abalone.game.utils.Color.BLUE, valueOne_1, valueOne_2,
+                                    valueOne_3);
+                            Tree miniMax = new Tree(simulation, 2, com.abalone.game.utils.Color.BLUE, miniMaxH);
+                            Player player = new MiniMax(miniMax.getRoot(), 2, true, miniMax);
+                            Turn firstMove = player.getBestNode().getTurn();
+                            simulation.move(firstMove);
+                            turnsCounter++;
+                            Node.theListRemember.add(firstMove);
+                            simulation.setMovePerformed(false);
+                            Heuristics mctsH = new Heuristics(simulation, com.abalone.game.utils.Color.PURPLE, valueTwo_1, valueTwo_2,
+                                    valueTwo_3);
+                            Tree mctsTree = new Tree(simulation, 1, com.abalone.game.utils.Color.PURPLE, mctsH);
+                            Player player2 = new MCTS(mctsTree, 5);
+                            Turn secondMove = player2.getBestNode().getTurn();
+                            simulation.move(secondMove);
+                            turnsCounter++;
+                            Node.theListRemember.add(secondMove);
+                            simulation.setMovePerformed(false);
+                        }
+                        Node.theListRemember = new ArrayList<>();
+                        int miniMaxScore = 14 - simulation.getPurpleHex().size();
+                        int mctsScore = 14 - simulation.getBlueHex().size();
+                        System.out.println();
+                        System.out.println("-------------------------------------------");
+                        System.out.println("GAME NUMBER " + (i+1) + " FINISHED WITH SCORE");
+                        System.out.println("MiniMax: " + miniMaxScore + " \nMCTS: " + mctsScore);
+                        System.out.println("Turns Counter : " + turnsCounter);
+                        System.out.println("-------------------------------------------");
+                        System.out.println();
+
+                    }
                 }
             }
         };
@@ -218,7 +254,7 @@ public class ExperimentsState extends State {
         spriteBatch.begin();
         experimentsFont.draw(spriteBatch, "Experiments Room", 330, 750);
         aiNameFont.draw(spriteBatch, "MiniMax", 295, 570);
-        aiNameFont.draw(spriteBatch, "NegaMax", 838, 570);
+        aiNameFont.draw(spriteBatch, "MCTS", 838, 570);
         spriteBatch.end();
     }
 

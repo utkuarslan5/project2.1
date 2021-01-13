@@ -24,7 +24,7 @@ public class MCTS extends Player {
 
     private Tree tree;
     private Node root;
-    private int maxRuntimeMilliSec = 20000;
+    private int maxRuntimeMilliSec = 1000;
     private int maxDepth;
     private double WIN_VALUE = 1;
     private int totalVisit = 0;
@@ -49,7 +49,7 @@ public class MCTS extends Player {
             backpropagate(leaf, value, 0);
         }
 
-        System.out.println(bestChild(root).getWinScore() + "/" + bestChild(root).getVisitCount());
+        //System.out.println(bestChild(root).getWinScore() + "/" + bestChild(root).getVisitCount());
 
         return bestChild(root);
     }
