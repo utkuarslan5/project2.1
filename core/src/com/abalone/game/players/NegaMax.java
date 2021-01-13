@@ -26,9 +26,10 @@ public class NegaMax extends Player {
 
         List<Node> theChildren = currentNode.getChildren();
         if(maximizingPlayer) {
-            Collections.sort(theChildren, Collections.<Node>reverseOrder());
-        }else{
             Collections.sort(theChildren);
+        }else{
+            Collections.sort(theChildren, Collections.<Node>reverseOrder());
+
         }
 
         if (depth == 0) {

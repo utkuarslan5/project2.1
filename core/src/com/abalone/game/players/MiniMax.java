@@ -31,7 +31,7 @@ public class MiniMax extends Player {
 
         Node bestNode = null;
         if (maximizingPlayer) {
-            Collections.sort(theChildren,Collections.<Node>reverseOrder());
+            Collections.sort(theChildren);
             double value = -infinity;
             for (Node child : theChildren) {
                 if (child != null) {
@@ -49,7 +49,8 @@ public class MiniMax extends Player {
             return bestNode;
 
         } else {
-            Collections.sort(theChildren);
+            Collections.sort(theChildren,Collections.<Node>reverseOrder());
+
             double value = infinity;
             for (Node child : theChildren) {
                 if (child != null) {
