@@ -23,7 +23,7 @@ public class MiniMax extends Player {
     public Node minimax(Node currentNode, int depth, double alpha, double beta, boolean maximizingPlayer) {
 
         List<Node> theChildren = currentNode.getChildren();
-        Collections.sort(theChildren,Collections.<Node>reverseOrder());
+
 
         if (depth == 0) {
             return tree.getRoot();
@@ -31,6 +31,7 @@ public class MiniMax extends Player {
 
         Node bestNode = null;
         if (maximizingPlayer) {
+            Collections.sort(theChildren,Collections.<Node>reverseOrder());
             double value = -infinity;
             for (Node child : theChildren) {
                 if (child != null) {
@@ -48,6 +49,7 @@ public class MiniMax extends Player {
             return bestNode;
 
         } else {
+            Collections.sort(theChildren);
             double value = infinity;
             for (Node child : theChildren) {
                 if (child != null) {

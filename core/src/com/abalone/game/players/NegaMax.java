@@ -25,7 +25,11 @@ public class NegaMax extends Player {
     private Node negamax(Node currentNode, int depth, boolean maximizingPlayer, double alpha, double beta) {
 
         List<Node> theChildren = currentNode.getChildren();
-        Collections.sort(theChildren,Collections.<Node>reverseOrder());
+        if(maximizingPlayer) {
+            Collections.sort(theChildren, Collections.<Node>reverseOrder());
+        }else{
+            Collections.sort(theChildren);
+        }
 
         if (depth == 0) {
             return tree.getRoot();
