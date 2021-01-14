@@ -36,6 +36,47 @@ public class Node implements Comparable<Node>{
         this.setHeuristicsValue(heuristics.getValue());
 
         System.out.println("DEPTH: " + depth + " --- " + value);
+
+        if (depthTree > depth) {
+            TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
+            List<Hex> hexes;
+
+            if(getPlayerColorToPlay() == Color.PURPLE) {
+                hexes = board.getPurpleHex();
+            }
+            else {
+                hexes = board.getBlueHex();
+            }
+
+            turnsFinder.clearTurns();
+            for (Hex hex : hexes) {
+                // calculate all turns for each hex
+                turnsFinder.findTurns(hex);
+            }
+            // get every calculated turns for all hexes
+            List<List<Turn>> allTurns = turnsFinder.getTurns();
+
+            if (theListRemember.size() > 100) {
+                theListRemember.remove(0);
+            }
+
+            try {
+                for (List<Turn> ts : allTurns) {
+                    for (Turn t : ts) {
+                        if (!doneBefore(t)) {
+                            Board newBoard = (Board) board.clone();
+                            newBoard.move(t);
+                            if (newBoard.getPushPossible()) {
+                                Node newNode = new Node(newBoard, depthTree, depth + 1, t, maximizerColor, heuristics);
+                                this.addChild(newNode);
+                            }
+                        }
+                    }
+                }
+            } catch (CloneNotSupportedException e) {
+                System.out.println("Clone exception");
+            }
+        }
     }
 
     public void addChild(Node child) {
@@ -130,46 +171,6 @@ public class Node implements Comparable<Node>{
     }
 
     public List<Node> getChildren() {
-        List<Node> children = new ArrayList();;
-
-        TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
-        List<Hex> hexes;
-
-        if(getPlayerColorToPlay() == Color.PURPLE) {
-            hexes = board.getPurpleHex();
-        }
-        else {
-            hexes = board.getBlueHex();
-        }
-
-        turnsFinder.clearTurns();
-        for (Hex hex : hexes) {
-            // calculate all turns for each hex
-            turnsFinder.findTurns(hex);
-        }
-        // get every calculated turns for all hexes
-        List<List<Turn>> allTurns = turnsFinder.getTurns();
-
-        if (theListRemember.size() > 100) {
-            theListRemember.remove(0);
-        }
-
-        try {
-            for (List<Turn> ts : allTurns) {
-                for (Turn t : ts) {
-                    if (!doneBefore(t)) {
-                        Board newBoard = (Board) board.clone();
-                        newBoard.move(t);
-                        if (newBoard.getPushPossible()) {
-                            Node newNode = new Node(newBoard, depthTree, depth + 1, t, maximizerColor, heuristics);
-                            children.add(newNode);
-                        }
-                    }
-                }
-            }
-        } catch (CloneNotSupportedException e) {
-            System.out.println("Clone exception");
-        }
         return children;
     }
 

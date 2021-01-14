@@ -456,7 +456,7 @@ public class PlayState extends State {
     public void blueAIplays() {
         blueFinished = false;
         System.out.println("blue playing");
-        int depthTree = 3;
+        int depthTree = 2;
         int MCTSdepth = 5;
         Player player;
 
@@ -496,7 +496,7 @@ public class PlayState extends State {
     public void purpleAIplays() {
         purpleFinished = false;
         System.out.println("purple playing");
-        int depthTree = 3;
+        int depthTree = 2;
         int MCTSdepth = 5;
         Player player;
 

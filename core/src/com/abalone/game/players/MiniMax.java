@@ -23,10 +23,7 @@ public class MiniMax extends Player {
     }
 
     public Node minimax(Node currentNode, int depth, double alpha, double beta, boolean maximizingPlayer) {
-        List<Node> theChildren = new ArrayList<Node>();
-        if (currentNode.getDepthTree() > currentNode.getDepth()) {
-            theChildren = currentNode.getChildren();
-        }
+        List<Node> theChildren = currentNode.getChildren();
 
         if (depth == 0) {
             return tree.getRoot();
