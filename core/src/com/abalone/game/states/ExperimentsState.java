@@ -193,7 +193,7 @@ public class ExperimentsState extends State {
                             Heuristics miniMaxH = new Heuristics(simulation, com.abalone.game.utils.Color.BLUE, valueOne_1, valueOne_2,
                                     valueOne_3);
                             Tree miniMax = new Tree(simulation, 2, com.abalone.game.utils.Color.BLUE, miniMaxH);
-                            Player player = new MiniMax(miniMax.getRoot(), 2, true, miniMax);
+                            Player player = new NegaMax(miniMax.getRoot(), 2, true, miniMax);
                             Turn firstMove = player.getBestNode().getTurn();
                             simulation.move(firstMove);
                             turnsCounter++;
@@ -215,7 +215,7 @@ public class ExperimentsState extends State {
                         System.out.println();
                         System.out.println("-------------------------------------------");
                         System.out.println("GAME NUMBER " + (i+1) + " FINISHED WITH SCORE");
-                        System.out.println("MiniMax: " + miniMaxScore + " \nMCTS: " + mctsScore);
+                        System.out.println("NegaMax: " + miniMaxScore + " \nMCTS: " + mctsScore);
                         System.out.println("Turns Counter : " + turnsCounter);
                         System.out.println("-------------------------------------------");
                         System.out.println();
