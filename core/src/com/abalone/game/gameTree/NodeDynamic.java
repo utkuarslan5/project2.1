@@ -8,11 +8,11 @@ import com.badlogic.gdx.ai.pfa.Heuristic;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node implements Comparable<Node> {
+public class NodeDynamic implements Comparable<NodeDynamic>{
     public static ArrayList<Turn> theListRemember = new ArrayList<>();
     private Board board;
-    private List<Node> children;
-    private Node parent;
+    private List<NodeDynamic> children;
+    private NodeDynamic parent;
     private int depth;
     private int depthTree;
     private double value;
@@ -24,7 +24,7 @@ public class Node implements Comparable<Node> {
     private double winScore = 0;
     private int visitCount = 0;
 
-    public Node(Board board, int depthTree, int depth, Turn turn, Color maximizerColor, Heuristics parentHeuristics) {
+    public NodeDynamic(Board board, int depthTree, int depth, Turn turn, Color maximizerColor, Heuristics parentHeuristics) {
         this.board = board;
         this.depth = depth;
         this.depthTree = depthTree;
@@ -35,49 +35,10 @@ public class Node implements Comparable<Node> {
         this.heuristics = new Heuristics(this.board, maximizerColor, weights[0], weights[1], weights[2]);
         this.setHeuristicsValue(heuristics.getValue());
 
-        if (depthTree > depth) {
-            TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
-            List<Hex> hexes;
-
-            if(getPlayerColorToPlay() == Color.PURPLE) {
-                hexes = board.getPurpleHex();
-            }
-            else {
-                hexes = board.getBlueHex();
-            }
-
-            turnsFinder.clearTurns();
-            for (Hex hex : hexes) {
-                // calculate all turns for each hex
-                turnsFinder.findTurns(hex);
-            }
-            // get every calculated turns for all hexes
-            List<List<Turn>> allTurns = turnsFinder.getTurns();
-
-            if (theListRemember.size() > 100) {
-                theListRemember.remove(0);
-            }
-
-            try {
-                for (List<Turn> ts : allTurns) {
-                    for (Turn t : ts) {
-                        if (!doneBefore(t)) {
-                            Board newBoard = (Board) board.clone();
-                            newBoard.move(t);
-                            if (newBoard.getPushPossible()) {
-                                Node newNode = new Node(newBoard, depthTree, depth + 1, t, maximizerColor, heuristics);
-                                this.addChild(newNode);
-                            }
-                        }
-                    }
-                }
-            } catch (CloneNotSupportedException e) {
-                System.out.println("Clone exception");
-            }
-        }
+        // System.out.println("DEPTH: " + depth + " --- " + value);
     }
 
-    public void addChild(Node child) {
+    public void addChild(NodeDynamic child) {
         child.setParent(this);
         this.children.add(child);
     }
@@ -160,31 +121,59 @@ public class Node implements Comparable<Node> {
         return false;
     }
 
-    public boolean isChildOf(Node child) {
+    public boolean isChildOf(NodeDynamic child) {
         return children.contains(child);
     }
 
-    public Node getChild(int i) {
+    public NodeDynamic getChild(int i) {
         return children.get(i);
     }
 
-    public List<Node> getChildren() {
-        return children;
-    }
+    public List<NodeDynamic> getChildren() {
+        List<NodeDynamic> children = new ArrayList();;
 
-    public List<Node> getChildrenMCTS(Color c) {
-        if(children.size() == 0){
-            Tree newChildrenTree = new Tree(board, 1, c, heuristics);
-            List<Node> newChildren = newChildrenTree.getRoot().getChildren();
-            for(Node child : newChildren){
-                children.add(child);
-                child.setParent(this);
+        TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
+        List<Hex> hexes;
+
+        if(getPlayerColorToPlay() == Color.PURPLE) {
+            hexes = board.getPurpleHex();
+        }
+        else {
+            hexes = board.getBlueHex();
+        }
+
+        turnsFinder.clearTurns();
+        for (Hex hex : hexes) {
+            // calculate all turns for each hex
+            turnsFinder.findTurns(hex);
+        }
+        // get every calculated turns for all hexes
+        List<List<Turn>> allTurns = turnsFinder.getTurns();
+
+        if (theListRemember.size() > 100) {
+            theListRemember.remove(0);
+        }
+
+        try {
+            for (List<Turn> ts : allTurns) {
+                for (Turn t : ts) {
+                    if (!doneBefore(t)) {
+                        Board newBoard = (Board) board.clone();
+                        newBoard.move(t);
+                        if (newBoard.getPushPossible()) {
+                            NodeDynamic newNode = new NodeDynamic(newBoard, depthTree, depth + 1, t, maximizerColor, heuristics);
+                            children.add(newNode);
+                        }
+                    }
+                }
             }
+        } catch (CloneNotSupportedException e) {
+            System.out.println("Clone exception");
         }
         return children;
     }
 
-    public Node getParent() {
+    public NodeDynamic getParent() {
         return parent;
     }
 
@@ -192,7 +181,7 @@ public class Node implements Comparable<Node> {
         return heuristics;
     }
 
-    public void setParent(Node parent) {
+    public void setParent(NodeDynamic parent) {
         this.parent = parent;
     }
 
@@ -274,7 +263,7 @@ public class Node implements Comparable<Node> {
     }
 
     @Override
-    public int compareTo(Node node) {
+    public int compareTo(NodeDynamic node) {
         return Double.compare(this.value, node.value);
 
     }

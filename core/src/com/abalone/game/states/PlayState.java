@@ -3,13 +3,11 @@ package com.abalone.game.states;
 import com.abalone.game.AbaloneGame;
 import com.abalone.game.gameTree.Heuristics;
 import com.abalone.game.gameTree.Node;
+import com.abalone.game.gameTree.NodeDynamic;
 import com.abalone.game.gameTree.Tree;
 import com.abalone.game.managers.GameStateManager;
 import com.abalone.game.objects.*;
-import com.abalone.game.players.MCTS;
-import com.abalone.game.players.MiniMax;
-import com.abalone.game.players.NegaMax;
-import com.abalone.game.players.Player;
+import com.abalone.game.players.*;
 import com.abalone.game.utils.AI;
 import com.abalone.game.utils.TurnsFinder;
 import com.badlogic.gdx.Gdx;
@@ -456,27 +454,29 @@ public class PlayState extends State {
     public void blueAIplays() {
         blueFinished = false;
         System.out.println("blue playing");
-        int depthTree = 2;
+        int depthTree = 3;
         int MCTSdepth = 5;
-        Player player;
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
         Heuristics heuristics;
-
         heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -10, 5);
 
+        Turn turn;
         if (AbaloneGame.bluePlayerAI == AI.MINIMAX) {
-            tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
-            player = new MiniMax(tree.getRoot(), depthTree, true, tree);
+            NodeDynamic node = new NodeDynamic(this.board, depthTree, 0, null, com.abalone.game.utils.Color.BLUE, heuristics);
+            PlayerDynamic player = new MiniMax(node, depthTree, true);
+            turn = player.getBestNode().getTurn();
         } else if (AbaloneGame.bluePlayerAI == AI.NEGAMAX) {
             tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
-            player = new NegaMax(tree.getRoot(), depthTree, true, tree);
+            Player player = new NegaMax(tree.getRoot(), depthTree, true, tree);
+            turn = player.getBestNode().getTurn();
+
         } else { // if (AbaloneGame.bluePlayerAI == AI.MCTS) {
             Tree MCTSTree = new Tree(this.board, 1, com.abalone.game.utils.Color.BLUE, heuristics);
-            player = new MCTS(MCTSTree, MCTSdepth);
+            Player player = new MCTS(MCTSTree, MCTSdepth);
+            turn = player.getBestNode().getTurn();
         }
 
-        Turn turn = player.getBestNode().getTurn();
         Node.theListRemember.add(turn);
         board.move(turn);
 
@@ -498,25 +498,26 @@ public class PlayState extends State {
         System.out.println("purple playing");
         int depthTree = 2;
         int MCTSdepth = 5;
-        Player player;
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
         Heuristics heuristics;
-
         heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 100, -10, 5);
 
+        Turn turn;
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
-            tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
-            player = new MiniMax(tree.getRoot(), depthTree, true, tree);
+            NodeDynamic node = new NodeDynamic(this.board, depthTree, 0, null, com.abalone.game.utils.Color.PURPLE, heuristics);
+            PlayerDynamic player = new MiniMax(node, depthTree, true);
+            turn = player.getBestNode().getTurn();
         } else if (AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
             tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
-            player = new NegaMax(tree.getRoot(), depthTree, true, tree);
+            Player player = new NegaMax(tree.getRoot(), depthTree, true, tree);
+            turn = player.getBestNode().getTurn();
         } else { // if (AbaloneGame.purplePlayerAI == AI.MCTS)
             Tree MCTSTree = new Tree(this.board, 1, com.abalone.game.utils.Color.PURPLE, heuristics);
-            player = new MCTS(MCTSTree, MCTSdepth);
+            Player player = new MCTS(MCTSTree, MCTSdepth);
+            turn = player.getBestNode().getTurn();
         }
 
-        Turn turn = player.getBestNode().getTurn();
         Node.theListRemember.add(turn);
         board.move(turn);
 
