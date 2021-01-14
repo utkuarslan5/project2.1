@@ -38,10 +38,6 @@ public class Node implements Comparable<Node>{
         System.out.println("DEPTH: " + depth + " --- " + value);
     }
 
-    public List<Node> getLouis() {
-        return this.children;
-    }
-
     public void addChild(Node child) {
         child.setParent(this);
         this.children.add(child);
