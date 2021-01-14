@@ -14,6 +14,7 @@ public class Node implements Comparable<Node>{
     private List<Node> children;
     private Node parent;
     private int depth;
+    private int depthTree;
     private double value;
     private Heuristics heuristics;
     private Turn turn;
@@ -23,10 +24,10 @@ public class Node implements Comparable<Node>{
     private double winScore = 0;
     private int visitCount = 0;
 
-
     public Node(Board board, int depthTree, int depth, Turn turn, Color maximizerColor, Heuristics parentHeuristics) {
         this.board = board;
         this.depth = depth;
+        this.depthTree = depthTree;
         this.turn = turn;
         this.maximizerColor = maximizerColor;
         this.children = new ArrayList();
@@ -34,46 +35,11 @@ public class Node implements Comparable<Node>{
         this.heuristics = new Heuristics(this.board, maximizerColor, weights[0], weights[1], weights[2]);
         this.setHeuristicsValue(heuristics.getValue());
 
-        if (depthTree > depth) {
-            TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
-            List<Hex> hexes;
+        System.out.println("DEPTH: " + depth + " --- " + value);
+    }
 
-            if(getPlayerColorToPlay() == Color.PURPLE) {
-                hexes = board.getPurpleHex();
-            }
-            else {
-                hexes = board.getBlueHex();
-            }
-
-            turnsFinder.clearTurns();
-            for (Hex hex : hexes) {
-                // calculate all turns for each hex
-                turnsFinder.findTurns(hex);
-            }
-            // get every calculated turns for all hexes
-            List<List<Turn>> allTurns = turnsFinder.getTurns();
-
-            if (theListRemember.size() > 100) {
-                theListRemember.remove(0);
-            }
-
-            try {
-                for (List<Turn> ts : allTurns) {
-                    for (Turn t : ts) {
-                        if (!doneBefore(t)) {
-                            Board newBoard = (Board) board.clone();
-                            newBoard.move(t);
-                            if (newBoard.getPushPossible()) {
-                                Node newNode = new Node(newBoard, depthTree, depth + 1, t, maximizerColor, heuristics);
-                                this.addChild(newNode);
-                            }
-                        }
-                    }
-                }
-            } catch (CloneNotSupportedException e) {
-                System.out.println("Clone exception");
-            }
-        }
+    public List<Node> getLouis() {
+        return this.children;
     }
 
     public void addChild(Node child) {
@@ -168,6 +134,46 @@ public class Node implements Comparable<Node>{
     }
 
     public List<Node> getChildren() {
+        List<Node> children = new ArrayList();;
+
+        TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
+        List<Hex> hexes;
+
+        if(getPlayerColorToPlay() == Color.PURPLE) {
+            hexes = board.getPurpleHex();
+        }
+        else {
+            hexes = board.getBlueHex();
+        }
+
+        turnsFinder.clearTurns();
+        for (Hex hex : hexes) {
+            // calculate all turns for each hex
+            turnsFinder.findTurns(hex);
+        }
+        // get every calculated turns for all hexes
+        List<List<Turn>> allTurns = turnsFinder.getTurns();
+
+        if (theListRemember.size() > 100) {
+            theListRemember.remove(0);
+        }
+
+        try {
+            for (List<Turn> ts : allTurns) {
+                for (Turn t : ts) {
+                    if (!doneBefore(t)) {
+                        Board newBoard = (Board) board.clone();
+                        newBoard.move(t);
+                        if (newBoard.getPushPossible()) {
+                            Node newNode = new Node(newBoard, depthTree, depth + 1, t, maximizerColor, heuristics);
+                            children.add(newNode);
+                        }
+                    }
+                }
+            }
+        } catch (CloneNotSupportedException e) {
+            System.out.println("Clone exception");
+        }
         return children;
     }
 
@@ -201,6 +207,10 @@ public class Node implements Comparable<Node>{
 
     public int getDepth() {
         return depth;
+    }
+
+    public int getDepthTree() {
+        return depthTree;
     }
 
     public void calculateHeuristicsValue() {

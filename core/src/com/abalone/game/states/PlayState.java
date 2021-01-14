@@ -26,6 +26,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -454,7 +456,7 @@ public class PlayState extends State {
     public void blueAIplays() {
         blueFinished = false;
         System.out.println("blue playing");
-        int depthTree = 2;
+        int depthTree = 3;
         int MCTSdepth = 5;
         Player player;
 
@@ -462,7 +464,6 @@ public class PlayState extends State {
         Heuristics heuristics;
 
         heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -10, 5);
-
 
         if (AbaloneGame.bluePlayerAI == AI.MINIMAX) {
             tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
@@ -495,7 +496,7 @@ public class PlayState extends State {
     public void purpleAIplays() {
         purpleFinished = false;
         System.out.println("purple playing");
-        int depthTree = 2;
+        int depthTree = 3;
         int MCTSdepth = 5;
         Player player;
 

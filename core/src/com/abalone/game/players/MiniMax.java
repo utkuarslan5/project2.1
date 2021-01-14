@@ -2,6 +2,8 @@ package com.abalone.game.players;
 
 import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.Tree;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,9 +23,10 @@ public class MiniMax extends Player {
     }
 
     public Node minimax(Node currentNode, int depth, double alpha, double beta, boolean maximizingPlayer) {
-
-        List<Node> theChildren = currentNode.getChildren();
-
+        List<Node> theChildren = new ArrayList<Node>();
+        if (currentNode.getDepthTree() > currentNode.getDepth()) {
+            theChildren = currentNode.getChildren();
+        }
 
         if (depth == 0) {
             return tree.getRoot();
