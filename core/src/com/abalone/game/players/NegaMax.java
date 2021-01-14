@@ -33,7 +33,7 @@ public class NegaMax extends Player {
         }
 
         if (depth == 0) {
-            return tree.getRoot();
+            return currentNode;
         }
 
         Node bestNode = null;

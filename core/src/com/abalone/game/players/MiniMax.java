@@ -26,7 +26,7 @@ public class MiniMax extends Player {
         List<Node> theChildren = currentNode.getChildren();
 
         if (depth == 0) {
-            return tree.getRoot();
+            return currentNode;
         }
 
         Node bestNode = null;

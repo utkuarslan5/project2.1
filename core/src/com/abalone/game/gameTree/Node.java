@@ -35,8 +35,6 @@ public class Node implements Comparable<Node>{
         this.heuristics = new Heuristics(this.board, maximizerColor, weights[0], weights[1], weights[2]);
         this.setHeuristicsValue(heuristics.getValue());
 
-        System.out.println("DEPTH: " + depth + " --- " + value);
-
         if (depthTree > depth) {
             TurnsFinder turnsFinder = new TurnsFinder(board.getHexGrid());
             List<Hex> hexes;
