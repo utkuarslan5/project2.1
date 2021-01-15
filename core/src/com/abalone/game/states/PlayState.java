@@ -25,7 +25,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -454,7 +453,7 @@ public class PlayState extends State {
     public void blueAIplays() {
         blueFinished = false;
         System.out.println("blue playing");
-        int depthTree = 3;
+        int depthTree = 2;
         int MCTSdepth = 5;
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
@@ -464,7 +463,7 @@ public class PlayState extends State {
         Turn turn;
         if (AbaloneGame.bluePlayerAI == AI.MINIMAX) {
             NodeDynamic node = new NodeDynamic(this.board, depthTree, 0, null, com.abalone.game.utils.Color.BLUE, heuristics);
-            PlayerDynamic player = new MiniMax(node, depthTree, true);
+            PlayerDynamic player = new MiniMax(node, depthTree, true,false,5000,this.board);
             turn = player.getBestNode().getTurn();
         } else if (AbaloneGame.bluePlayerAI == AI.NEGAMAX) {
             tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
@@ -478,6 +477,7 @@ public class PlayState extends State {
         }
 
         Node.theListRemember.add(turn);
+        NodeDynamic.theListRemember2.add(turn);
         board.move(turn);
 
         if (board.getMovePerformed()) {
@@ -506,7 +506,7 @@ public class PlayState extends State {
         Turn turn;
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             NodeDynamic node = new NodeDynamic(this.board, depthTree, 0, null, com.abalone.game.utils.Color.PURPLE, heuristics);
-            PlayerDynamic player = new MiniMax(node, depthTree, true);
+            PlayerDynamic player = new MiniMax(node, depthTree, true,true,5000,this.board);
             turn = player.getBestNode().getTurn();
         } else if (AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
             tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
@@ -519,6 +519,7 @@ public class PlayState extends State {
         }
 
         Node.theListRemember.add(turn);
+        NodeDynamic.theListRemember2.add(turn);
         board.move(turn);
 
         if (board.getMovePerformed()) {

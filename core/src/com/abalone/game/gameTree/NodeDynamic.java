@@ -3,13 +3,12 @@ package com.abalone.game.gameTree;
 import com.abalone.game.objects.*;
 import com.abalone.game.utils.Color;
 import com.abalone.game.utils.TurnsFinder;
-import com.badlogic.gdx.ai.pfa.Heuristic;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NodeDynamic implements Comparable<NodeDynamic>{
-    public static ArrayList<Turn> theListRemember = new ArrayList<>();
+    public static ArrayList<Turn> theListRemember2 = new ArrayList<>();
     private Board board;
     private List<NodeDynamic> children;
     private NodeDynamic parent;
@@ -70,7 +69,7 @@ public class NodeDynamic implements Comparable<NodeDynamic>{
     public boolean doneBefore(Turn turn) {
         if (turn != null) {
             List<Move> moveList = turn.getMovesList();
-            for (Turn t : theListRemember) {
+            for (Turn t : theListRemember2) {
                 if (turn.getTurnType() == 0 && t.getTurnType() == 0) {
                     int startt1 = t.getMovesList().get(0).getStart().getBall().getId();
                     int turns1 = moveList.get(0).getStart().getBall().getId();
@@ -148,8 +147,8 @@ public class NodeDynamic implements Comparable<NodeDynamic>{
         // get every calculated turns for all hexes
         List<List<Turn>> allTurns = turnsFinder.getTurns();
 
-        if (theListRemember.size() > 100) {
-            theListRemember.remove(0);
+        if (theListRemember2.size() > 100) {
+            theListRemember2.remove(0);
         }
 
         try {
@@ -253,7 +252,7 @@ public class NodeDynamic implements Comparable<NodeDynamic>{
     }
 
     public void clearRememberedList() {
-        theListRemember = new ArrayList<>();
+        theListRemember2 = new ArrayList<>();
     }
 
     public double[] getWeights() {
