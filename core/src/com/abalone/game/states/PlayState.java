@@ -25,7 +25,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -454,7 +453,7 @@ public class PlayState extends State {
     public void blueAIplays() {
         blueFinished = false;
         System.out.println("blue playing");
-        int depthTree = 3;
+        int depthTree = 2;
         int MCTSdepth = 5;
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
@@ -478,6 +477,7 @@ public class PlayState extends State {
         }
 
         Node.theListRemember.add(turn);
+        NodeDynamic.theListRemember2.add(turn);
         board.move(turn);
 
         if (board.getMovePerformed()) {
@@ -519,6 +519,7 @@ public class PlayState extends State {
         }
 
         Node.theListRemember.add(turn);
+        NodeDynamic.theListRemember2.add(turn);
         board.move(turn);
 
         if (board.getMovePerformed()) {
