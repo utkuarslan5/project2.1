@@ -24,8 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -337,7 +335,7 @@ public class PlayState extends State {
             gsm.push(endState);
         }
 
-        if(!moveToDraw) {
+        if (!moveToDraw) {
             if (bluePlayer.isChecked() && AbaloneGame.isBluePlayerAI && blueFinished) {
                 blueAIplays();
 //                try
@@ -349,8 +347,7 @@ public class PlayState extends State {
 //                    Thread.currentThread().interrupt();
 //                }
                 System.out.println("blue stop playing");
-            }
-            else if (purplePlayer.isChecked() && AbaloneGame.isPurplePlayerAI && purpleFinished) {
+            } else if (purplePlayer.isChecked() && AbaloneGame.isPurplePlayerAI && purpleFinished) {
                 purpleAIplays();
 //                try
 //                {
@@ -362,8 +359,7 @@ public class PlayState extends State {
 //                }
                 System.out.println("purple stop playing");
             }
-        }
-        else {
+        } else {
             moveToDraw = false;
         }
     }
@@ -464,7 +460,7 @@ public class PlayState extends State {
         Turn turn;
         if (AbaloneGame.bluePlayerAI == AI.MINIMAX) {
             NodeDynamic node = new NodeDynamic(this.board, depthTree, 0, null, com.abalone.game.utils.Color.BLUE, heuristics);
-            PlayerDynamic player = new MiniMax(node, depthTree, true);
+            PlayerDynamic player = new MiniMax(node, depthTree, true, false, 5000, this.board);
             turn = player.getBestNode().getTurn();
         } else if (AbaloneGame.bluePlayerAI == AI.NEGAMAX) {
             tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.BLUE, heuristics);
@@ -506,7 +502,7 @@ public class PlayState extends State {
         Turn turn;
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             NodeDynamic node = new NodeDynamic(this.board, depthTree, 0, null, com.abalone.game.utils.Color.PURPLE, heuristics);
-            PlayerDynamic player = new MiniMax(node, depthTree, true);
+            PlayerDynamic player = new MiniMax(node, depthTree, true, true, 5000, this.board);
             turn = player.getBestNode().getTurn();
         } else if (AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
             tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
@@ -601,11 +597,11 @@ public class PlayState extends State {
         }
     }
 
-    public void tryRandomUntilWorks(boolean p, boolean b){
+    public void tryRandomUntilWorks(boolean p, boolean b) {
         List<Hex> hexes = null;
-        if(p) {
+        if (p) {
             hexes = board.getPurpleHex();
-        }else if(b){
+        } else if (b) {
             hexes = board.getBlueHex();
         }
         TurnsFinder generator = new TurnsFinder(board.getHexGrid());
@@ -615,9 +611,9 @@ public class PlayState extends State {
         }
         List<List<Turn>> turns = generator.getTurns();
         if (turns.size() > 0) {
-            int i = (int) ((turns.size()-1) * Math.random());
-            int j = (int) ((turns.get(i).size()-1) * Math.random());
-            if(turns.get(i).size()!=0) {
+            int i = (int) ((turns.size() - 1) * Math.random());
+            int j = (int) ((turns.get(i).size() - 1) * Math.random());
+            if (turns.get(i).size() != 0) {
                 board.move(turns.get(i).get(j));
             }
             if (board.getMovePerformed()) {
@@ -625,17 +621,16 @@ public class PlayState extends State {
                 switchTurnPlayer();
                 allDestinations.clear();
                 board.setMovePerformed(false);
-                if(p){
+                if (p) {
                     purpleFinished = true;
-                }else{
+                } else {
                     blueFinished = true;
                 }
 
-            }else{
-                tryRandomUntilWorks(p,b);
+            } else {
+                tryRandomUntilWorks(p, b);
             }
-        }
-        else{
+        } else {
             System.out.println("you shouldn't see this");
         }
     }
