@@ -475,6 +475,29 @@ public class Board implements Cloneable {
         this.pushPossible = pushPossible;
     }
 
+    public String getKey() {
+        List<Hex> list = this.getHexGrid().getHexList();
+        String key = "";
+        Character c = ' ';
+        for(Hex h : list) {
+            Ball ball = h.getBall();
+            switch (ball.getColor()) {
+                case BLANK:
+                    c = 'W';
+                    break;
+                case BLUE:
+                    c = 'B';
+                    break;
+                case PURPLE:
+                    c = 'P';
+                    break;
+
+            }
+            key = key + c;
+        }
+        return key;
+    }
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         Board clonedBoard = (Board) super.clone();

@@ -34,8 +34,6 @@ public class NodeDynamic implements Comparable<NodeDynamic>{
         this.weights = parentHeuristics.getWeights();
         this.heuristics = new Heuristics(this.board, maximizerColor, weights[0], weights[1], weights[2]);
         this.setHeuristicsValue(heuristics.getValue());
-
-        // System.out.println("DEPTH: " + depth + " --- " + value);
     }
 
     public void addChild(NodeDynamic child) {
