@@ -36,18 +36,18 @@ public class SimulatedAnnealing {
                 rootNode = new NodeDynamic(initialState, 2, 0, null, Color.BLUE, start);
                 bestPlayer = new MiniMax(rootNode, 2, true, false, 0, initialState);
                 Turn firstMove = bestPlayer.getBestNode().getTurn();
-                Node.theListRemember.add(firstMove);
+                NodeDynamic.theListRemember2.add(firstMove);
                 initialState.move(firstMove);
                 initialState.setMovePerformed(false);
                 contender = new Heuristics(initialState, Color.PURPLE, weights[0], weights[1], weights[2]);
                 NodeDynamic randomRootNode = new NodeDynamic(initialState, 2, 0, null, com.abalone.game.utils.Color.PURPLE, contender);
                 MiniMax randomPlayer = new MiniMax(randomRootNode, 2, true, false, 0, initialState);
                 Turn secondMove = randomPlayer.getBestNode().getTurn();
-                Node.theListRemember.add(secondMove);
+                NodeDynamic.theListRemember2.add(secondMove);
                 initialState.move(secondMove);
                 initialState.setMovePerformed(false);
             }
-            Node.theListRemember = new ArrayList<>();
+            NodeDynamic.theListRemember2 = new ArrayList<>();
             double bestScore = 14 - initialState.getPurpleHex().size();
             double opponentScore = 14 - initialState.getBlueHex().size();
             double delta = opponentScore - bestScore;
@@ -82,7 +82,6 @@ public class SimulatedAnnealing {
         System.out.println("Heuristics value 1 : " + weights[0]);
         System.out.println("Heuristics value 2 : " + weights[1]);
         System.out.println("Heuristics value 3 : " + weights[2]);
-        System.out.println("Heuristics value 4 : " + weights[3]);
         System.out.println();
     }
 
@@ -99,7 +98,7 @@ public class SimulatedAnnealing {
         double valueOneNew = 100;
         double valueTwoNew = oldHeuristics.getWeights()[1];
         double valueThreeNew = oldHeuristics.getWeights()[2];
-        double change = (Math.random() * 0.45) - 0.225;
+        double change = (Math.random() * 0.35) - 0.175;
 
         if (dimension == 0) {
             valueTwoNew += change;

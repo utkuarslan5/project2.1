@@ -33,7 +33,7 @@ public class MiniMax extends PlayerDynamic {
 
     public NodeDynamic minimax(NodeDynamic currentNode, int depth, double alpha, double beta, boolean maximizingPlayer) {
         long timeNow = System.currentTimeMillis();
-        if (timeNow > endTime) {
+        if (timeNow > endTime && this.iterativeDeepening) {
             this.timeOut = true;
             return bestNode;
         }
