@@ -50,7 +50,8 @@ public class MiniMax extends PlayerDynamic {
 
         NodeDynamic bestNode = null;
         if (maximizingPlayer) {
-            Collections.sort(theChildren);
+            Collections.sort(theChildren, Collections.<NodeDynamic>reverseOrder());
+
             double value = -infinity;
             for (NodeDynamic child : theChildren) {
                 if (child != null) {
@@ -68,7 +69,7 @@ public class MiniMax extends PlayerDynamic {
             return bestNode;
 
         } else {
-            Collections.sort(theChildren, Collections.<NodeDynamic>reverseOrder());
+            Collections.sort(theChildren);
 
             double value = infinity;
             for (NodeDynamic child : theChildren) {

@@ -25,7 +25,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PlayState extends State {
@@ -331,6 +333,10 @@ public class PlayState extends State {
             lostBalls[6 + lostP - 1].setVisible(true);
         }
         if (lostP == 6 || lostB == 6) {
+            System.out.println(("Purple Lost: " + lostP));
+            System.out.println(("Blue Lost: " + lostB));
+            System.out.println(("Turn number: " + turnNumber));
+
             State endState = new EndState(gsm);
             gsm.pop();
             gsm.push(endState);
@@ -454,7 +460,7 @@ public class PlayState extends State {
         blueFinished = false;
         System.out.println("blue playing");
         int depthTree = 3;
-        int MCTSdepth = 5;
+        int MCTSdepth = 2;
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
         Heuristics heuristics;
