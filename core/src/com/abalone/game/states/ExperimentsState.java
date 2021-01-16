@@ -202,7 +202,7 @@ public class ExperimentsState extends State {
                             Heuristics mctsH = new Heuristics(simulation, com.abalone.game.utils.Color.PURPLE, valueTwo_1, valueTwo_2,
                                     valueTwo_3);
                             Tree mctsTree = new Tree(simulation, 1, com.abalone.game.utils.Color.PURPLE, mctsH);
-                            Player player2 = new MCTS(mctsTree, 5);
+                            Player player2 = new MCTS(mctsTree, 5,5000,0.5);
                             Turn secondMove = player2.getBestNode().getTurn();
                             simulation.move(secondMove);
                             turnsCounter++;
