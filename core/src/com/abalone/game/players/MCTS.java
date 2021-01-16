@@ -24,15 +24,18 @@ public class MCTS extends Player {
 
     private Tree tree;
     private Node root;
-    private int maxRuntimeMilliSec = 5000;
+    private int maxRuntimeMilliSec;
+    private double constant;
     private int maxDepth;
     private double WIN_VALUE = 1;
     private int totalVisit = 0;
 
-    public MCTS(Tree tree, int maxDepth){
+    public MCTS(Tree tree, int maxDepth,int maxRuntimeMilliSec,double constant){
         this.tree = tree;
         this.root = tree.getRoot();
         this.maxDepth = maxDepth;
+        this.constant = constant;
+        this.maxRuntimeMilliSec = maxRuntimeMilliSec;
     }
 
     public Node getBestNode(){
@@ -49,7 +52,7 @@ public class MCTS extends Player {
             backpropagate(leaf, value, 0);
         }
 
-        System.out.println(bestChild(root).getWinScore() + "/" + bestChild(root).getVisitCount());
+        //System.out.println(bestChild(root).getWinScore() + "/" + bestChild(root).getVisitCount());
 
         return bestChild(root);
     }
@@ -58,7 +61,7 @@ public class MCTS extends Player {
     private Node select() {
         Node node = root;
         while (node.getChildren().size() != 0) {
-            node = findBestUCT(node, totalVisit, root);
+            node = findBestUCT(node, totalVisit, root,this.constant);
         }
         // STEP 2
         if(node.getChildrenMCTS(root.getPlayerColorToPlay()).size() == 0) {
@@ -108,20 +111,20 @@ public class MCTS extends Player {
     }
 
 
-    public static double uctValue(int totalVisitOfParent, double winScore, int nodeVisit) {
+    public static double uctValue(int totalVisitOfParent, double winScore, int nodeVisit,double constant) {
         if (nodeVisit == 0) {
             return Integer.MAX_VALUE;
         }
-        return ((double) winScore / (double) nodeVisit) + 2 * Math.sqrt(Math.log(totalVisitOfParent) / (double) nodeVisit);
+        return ((double) winScore / (double) nodeVisit) + constant * Math.sqrt(Math.log(totalVisitOfParent) / (double) nodeVisit);
     }
 
-    public static Node findBestUCT(Node node, int parentVisit, Node root) {
+    public static Node findBestUCT(Node node, int parentVisit, Node root,double constant) {
 
         double bestValue = -Double.MAX_VALUE;
         Node bestNode = null;
 
         for(Node c : node.getChildrenMCTS(root.getPlayerColorToPlay())){
-            double uctval = uctValue(parentVisit, c.getWinScore(), c.getVisitCount());
+            double uctval = uctValue(parentVisit, c.getWinScore(), c.getVisitCount(),constant);
             if(uctval >= bestValue){
                 bestNode = c;
                 bestValue = uctval;
@@ -143,6 +146,14 @@ public class MCTS extends Player {
             }
         }
         return bestNode;
+    }
+
+    public double getConstant() {
+        return constant;
+    }
+
+    public int getMaxDepth() {
+        return maxDepth;
     }
 
 }

@@ -3,9 +3,12 @@ package com.abalone.game.utils;
 import com.abalone.game.gameTree.Heuristics;
 import com.abalone.game.gameTree.Node;
 import com.abalone.game.gameTree.NodeDynamic;
+import com.abalone.game.gameTree.Tree;
 import com.abalone.game.objects.Board;
 import com.abalone.game.objects.Turn;
+import com.abalone.game.players.MCTS;
 import com.abalone.game.players.MiniMax;
+import com.abalone.game.players.Player;
 
 import java.util.ArrayList;
 
@@ -15,97 +18,108 @@ public class SimulatedAnnealing {
     }
 
     public void run() {
-        int tempMax = 1000;
+        int tempMax = 300;
         Board initialState = new Board();
-        Heuristics start = generateRandom(initialState);
-        NodeDynamic rootNode = new NodeDynamic(initialState, 2, 0, null, Color.BLUE, start);
-        MiniMax bestPlayer = new MiniMax(rootNode, 2, true, false, 0, initialState);
+        Heuristics start = new Heuristics(initialState, com.abalone.game.utils.Color.BLUE, 100, -0.878, 0.1435);
+        Tree MCTSTree = new Tree(initialState, 1, Color.BLUE, start);
+        MCTS bestPlayer = generateRandom(MCTSTree);
+        double bestConstant = bestPlayer.getConstant();
+        int bestDepth = bestPlayer.getMaxDepth();
 
         System.out.println("---- SIMULATED ANNEALING START ----");
-        System.out.println("---- INITIAL WEIGHTS -----");
-        printWeights(start);
+        System.out.println("---- INITIAL BOT -----");
+        printBot(bestPlayer);
         double coolingRatio = 0.03;
         double currentTemp = tempMax;
 
         while (currentTemp > 1) {
-            System.out.println("---- CURRENT BEST ----");
-            printWeights(start);
-            Heuristics contender = alternateBest(initialState, start);
-            double[] weights = contender.getWeights();
-            while (initialState.getBlueHex().size() > 8 && initialState.getPurpleHex().size() > 8) {
-                rootNode = new NodeDynamic(initialState, 2, 0, null, Color.BLUE, start);
-                bestPlayer = new MiniMax(rootNode, 2, true, false, 0, initialState);
-                Turn firstMove = bestPlayer.getBestNode().getTurn();
-                NodeDynamic.theListRemember2.add(firstMove);
+            System.out.println("---- CURRENT BEST BOT ----");
+            printBot(bestPlayer);
+            MCTS contender = alternateBest(initialState, bestPlayer);
+            double contenderConstant = contender.getConstant();
+            int contenderDepth = contender.getMaxDepth();
+            int turnsCounter = 0;
+            Heuristics contenderH = new Heuristics(initialState, Color.PURPLE, 100, -0.878, 0.1435);
+            while (initialState.getBlueHex().size() > 8 && initialState.getPurpleHex().size() > 8 && turnsCounter < 120) {
+                start = new Heuristics(initialState, com.abalone.game.utils.Color.BLUE, 100, -0.878, 0.1435);
+                MCTSTree = new Tree(initialState, 1, Color.BLUE, start);
+                Player bestNow = new MCTS(MCTSTree, bestDepth, 1000, bestConstant);
+                Turn firstMove = bestNow.getBestNode().getTurn();
+                Node.theListRemember.add(firstMove);
                 initialState.move(firstMove);
+                turnsCounter++;
                 initialState.setMovePerformed(false);
-                contender = new Heuristics(initialState, Color.PURPLE, weights[0], weights[1], weights[2]);
-                NodeDynamic randomRootNode = new NodeDynamic(initialState, 2, 0, null, com.abalone.game.utils.Color.PURPLE, contender);
-                MiniMax randomPlayer = new MiniMax(randomRootNode, 2, true, false, 0, initialState);
-                Turn secondMove = randomPlayer.getBestNode().getTurn();
-                NodeDynamic.theListRemember2.add(secondMove);
+                contenderH = new Heuristics(initialState, Color.PURPLE, 100, -0.878, 0.1435);
+                Tree contenderTree = new Tree(initialState, 1, Color.PURPLE, contenderH);
+                Player contenderNow = new MCTS(contenderTree, contenderDepth, 1000, contenderConstant);
+                Turn secondMove = contenderNow.getBestNode().getTurn();
+                Node.theListRemember.add(secondMove);
                 initialState.move(secondMove);
+                turnsCounter++;
                 initialState.setMovePerformed(false);
             }
-            NodeDynamic.theListRemember2 = new ArrayList<>();
-            double bestScore = 14 - initialState.getPurpleHex().size();
-            double opponentScore = 14 - initialState.getBlueHex().size();
-            double delta = opponentScore - bestScore;
-
+            Node.theListRemember = new ArrayList<>();
+            double bestScore = start.valueFunction(initialState);
+            double opponentScore = contenderH.valueFunction(initialState);
+            double delta = (opponentScore - bestScore) * 6;
+            System.out.println("delta" + delta);
             initialState = new Board();
 
             if (delta > 0) {
-                double[] weightsNew = contender.getWeights();
-                start = new Heuristics(initialState, Color.BLUE, weightsNew[0], weightsNew[1], weightsNew[2]);
-                rootNode = new NodeDynamic(initialState, 2, 0, null, Color.BLUE, start);
-                bestPlayer = new MiniMax(rootNode, 2, true, false, 0, initialState);
+                System.out.println("The new bot was better !");
+                bestDepth = contenderDepth;
+                bestConstant = contenderConstant;
+                bestPlayer = new MCTS(MCTSTree,bestDepth,1000,bestConstant);
             } else {
                 if (Math.exp(delta / currentTemp) > Math.random()) {
-                    double[] weightsNew = contender.getWeights();
-                    start = new Heuristics(initialState, Color.BLUE, weightsNew[0], weightsNew[1], weightsNew[2]);
-                } else {
-                    double[] weightsNew = start.getWeights();
-                    start = new Heuristics(initialState, Color.BLUE, weightsNew[0], weightsNew[1], weightsNew[2]);
+                    System.out.println(Math.exp(delta / currentTemp));
+                    System.out.println("Worse,but accept!");
+                    bestDepth = contenderDepth;
+                    bestConstant = contenderConstant;
                 }
-                rootNode = new NodeDynamic(initialState, 2, 0, null, Color.BLUE, start);
-                bestPlayer = new MiniMax(rootNode, 2, true, false, 0, initialState);
+                System.out.println("Keep the old one!");
+                bestPlayer = new MCTS(MCTSTree,bestDepth,1000,bestConstant);
             }
             currentTemp *= 1 - coolingRatio;
         }
-        System.out.println("---- BEST WEIGHTS ----");
-        printWeights(start);
+        System.out.println("---- BEST Bot ----");
+        printBot(bestPlayer);
     }
 
-    public void printWeights(Heuristics temp) {
-        double[] weights = temp.getWeights();
+    public void printBot(MCTS bot) {
         System.out.println();
-        System.out.println("Heuristics value 1 : " + weights[0]);
-        System.out.println("Heuristics value 2 : " + weights[1]);
-        System.out.println("Heuristics value 3 : " + weights[2]);
+        System.out.println("Tree Depth: " + bot.getMaxDepth());
+        System.out.println("Constant Value: " + bot.getConstant());
         System.out.println();
     }
 
-    public Heuristics generateRandom(Board board) {
-        double valueOne = 100;
-        double valueTwo = (Math.random() * 2) - 1;
-        double valueThree = (Math.random() * 2) - 1;
+    public MCTS generateRandom(Tree tree) {
+        double treeDepth = (Math.random() * 5) + 1;
+        double constantValue = (Math.random() * 1.8);
 
-        return new Heuristics(board, Color.BLUE, valueOne, valueTwo, valueThree);
+        return new MCTS(tree, (int) treeDepth, 10000, constantValue);
     }
 
-    public Heuristics alternateBest(Board board, Heuristics oldHeuristics) {
-        int dimension = (int) (Math.random() * 2);
-        double valueOneNew = 100;
-        double valueTwoNew = oldHeuristics.getWeights()[1];
-        double valueThreeNew = oldHeuristics.getWeights()[2];
-        double change = (Math.random() * 0.35) - 0.175;
-
-        if (dimension == 0) {
-            valueTwoNew += change;
-        } else if (dimension == 1) {
-            valueThreeNew += change;
+    public MCTS alternateBest(Board board, MCTS bestBot) {
+        int oldTreeDepth = bestBot.getMaxDepth();
+        double constant = bestBot.getConstant();
+        int newDepth = oldTreeDepth;
+        double newConstant = constant;
+        if (Math.random() < 0.50) {
+            int change;
+            if (Math.random() < 0.50) {
+                change = -1;
+            } else {
+                change = 1;
+            }
+            newDepth = oldTreeDepth + change;
+        } else {
+            double change = (Math.random() * 0.5) - 0.25;
+            newConstant = constant + change;
         }
+        Heuristics newH = new Heuristics(board, Color.PURPLE, 100, -0.878, 0.1435);
+        Tree tree = new Tree(board, 1, Color.PURPLE, newH);
 
-        return new Heuristics(board, Color.PURPLE, valueOneNew, valueTwoNew, valueThreeNew);
+        return new MCTS(tree, newDepth, 10000, newConstant);
     }
 }

@@ -453,12 +453,12 @@ public class PlayState extends State {
     public void blueAIplays() {
         blueFinished = false;
         System.out.println("blue playing");
-        int depthTree = 2;
+        int depthTree = 3;
         int MCTSdepth = 5;
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
         Heuristics heuristics;
-        heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -10, 5);
+        heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.BLUE, 100, -0.878, 0.1435);
 
         Turn turn;
         if (AbaloneGame.bluePlayerAI == AI.MINIMAX) {
@@ -472,7 +472,7 @@ public class PlayState extends State {
 
         } else { // if (AbaloneGame.bluePlayerAI == AI.MCTS) {
             Tree MCTSTree = new Tree(this.board, 1, com.abalone.game.utils.Color.BLUE, heuristics);
-            Player player = new MCTS(MCTSTree, MCTSdepth);
+            Player player = new MCTS(MCTSTree, MCTSdepth,5000,1);
             turn = player.getBestNode().getTurn();
         }
 
@@ -496,17 +496,17 @@ public class PlayState extends State {
     public void purpleAIplays() {
         purpleFinished = false;
         System.out.println("purple playing");
-        int depthTree = 2;
-        int MCTSdepth = 5;
+        int depthTree = 3;
+        int MCTSdepth = 2;
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
         Heuristics heuristics;
-        heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 100, -10, 5);
+        heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 100, -10, 0.1);
 
         Turn turn;
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {
             NodeDynamic node = new NodeDynamic(this.board, depthTree, 0, null, com.abalone.game.utils.Color.PURPLE, heuristics);
-            PlayerDynamic player = new MiniMax(node, depthTree, true,true,5000,this.board);
+            PlayerDynamic player = new MiniMax(node, depthTree, true,false,5000,this.board);
             turn = player.getBestNode().getTurn();
         } else if (AbaloneGame.purplePlayerAI == AI.NEGAMAX) {
             tree = new Tree(this.board, depthTree, com.abalone.game.utils.Color.PURPLE, heuristics);
@@ -514,7 +514,7 @@ public class PlayState extends State {
             turn = player.getBestNode().getTurn();
         } else { // if (AbaloneGame.purplePlayerAI == AI.MCTS)
             Tree MCTSTree = new Tree(this.board, 1, com.abalone.game.utils.Color.PURPLE, heuristics);
-            Player player = new MCTS(MCTSTree, MCTSdepth);
+            Player player = new MCTS(MCTSTree, MCTSdepth,5000,0.4);
             turn = player.getBestNode().getTurn();
         }
 
