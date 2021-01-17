@@ -40,32 +40,6 @@ public class NodeDynamic implements Comparable<NodeDynamic>{
         this.children.add(child);
     }
 
-    public boolean legalTurn(Turn currentTurn) {
-        boolean legal = true;
-        if (currentTurn != null) {
-            List<Move> moveList = currentTurn.getMovesList();
-            if (currentTurn.getTurnType() == 0) {
-                if (moveList.get(0).getStart().getBall().getColor().isBlank() || !moveList.get(0).getDestination().getBall().getColor().isBlank()) {
-                    legal = false;
-                }
-            } else if (currentTurn.getTurnType() == 1) {
-                Ball start1 = moveList.get(0).getStart().getBall();
-                Ball start2 = moveList.get(1).getStart().getBall();
-                if (!(start1.getColor() == start2.getColor())) {
-                    legal = false;
-                }
-            } else {
-                Ball start1 = moveList.get(0).getStart().getBall();
-                Ball start2 = moveList.get(1).getStart().getBall();
-                Ball start3 = moveList.get(2).getStart().getBall();
-                if (!(start1.getColor() == start2.getColor()) || !(start2.getColor() == start3.getColor())) {
-                    legal = false;
-                }
-            }
-        }
-        return legal;
-    }
-
     public boolean doneBefore(Turn turn) {
         if (turn != null) {
             List<Move> moveList = turn.getMovesList();
@@ -118,13 +92,6 @@ public class NodeDynamic implements Comparable<NodeDynamic>{
         return false;
     }
 
-    public boolean isChildOf(NodeDynamic child) {
-        return children.contains(child);
-    }
-
-    public NodeDynamic getChild(int i) {
-        return children.get(i);
-    }
 
     public List<NodeDynamic> getChildren() {
         List<NodeDynamic> children = new ArrayList();;
@@ -205,23 +172,6 @@ public class NodeDynamic implements Comparable<NodeDynamic>{
 
     public void setHeuristicsValue(double value) {
         this.value = value;
-    }
-
-    // MCTS Stuff
-    public double getWinScore() {
-        return winScore;
-    }
-
-    public int getVisitCount() {
-        return visitCount;
-    }
-
-    public void incrementVisit() {
-        this.visitCount++;
-    }
-
-    public void addScore(double score) {
-        this.winScore += score;
     }
 
     public Color getMaximizerColor() {

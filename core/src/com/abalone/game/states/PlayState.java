@@ -459,7 +459,7 @@ public class PlayState extends State {
     public void blueAIplays() {
         blueFinished = false;
         System.out.println("blue playing");
-        int depthTree = 3;
+        int depthTree = 2;
         int MCTSdepth = 2;
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
@@ -507,7 +507,7 @@ public class PlayState extends State {
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
         Heuristics heuristics;
-        heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 100, -10, 0.1);
+        heuristics = new Heuristics(this.board, com.abalone.game.utils.Color.PURPLE, 100, -0.878, 0.1435);
 
         Turn turn;
         if (AbaloneGame.purplePlayerAI == AI.MINIMAX) {

@@ -16,11 +16,6 @@ public class HexGrid implements Cloneable {
         hexList = generateHex();
     }
 
-    public HexGrid(ArrayList<Hex> hexList) {
-        //debugging
-        if (hexList == this.hexList) System.out.println("*Grids are same");
-        this.hexList = hexList;
-    }
 
     private List<Hex> generateHex() {
         List<Hex> temp = new ArrayList<>();
@@ -53,16 +48,6 @@ public class HexGrid implements Cloneable {
             }
         }
 
-        /*
-        //Neighbors functionality check
-        System.out.println(temp.size());
-        List<Hex> neighbors = temp.get(30).getNeighbors();
-        for(int i = 0; i < neighbors.size(); i++){
-            Hex tempHex = temp.get(30).getNeighbors().get(i);
-            System.out.println("The hex 30 has neighbors " + tempHex.getX() +
-                    tempHex.getZ() );
-        }
-        */
         return temp;
     }
 
