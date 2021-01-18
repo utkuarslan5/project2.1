@@ -8,7 +8,6 @@ import java.util.List;
 
 import static com.abalone.game.utils.Color.BLANK;
 
-// TODO: add a configuration file of the board and game's initial conditions
 public class HexGrid implements Cloneable {
     private List<Hex> hexList = new ArrayList<>();
 

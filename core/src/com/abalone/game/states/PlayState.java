@@ -157,7 +157,6 @@ public class PlayState extends State {
         ballTextureRegionDrawableBlankDark = new TextureRegionDrawable(new Texture(Gdx.files.internal("blankdark.png")));
         ballTexturePressedRegionDrawableBlankDark = new TextureRegionDrawable(new Texture(Gdx.files.internal("blankdark.png")));
 
-        // TODO: adapt the loop and conditions to the the hexgrid (and not the temporary array)
         ArrayList<Hex> hexList = (ArrayList<Hex>) board.getHexGrid().getHexList();
         ballButtons = new ImageButton[61];
         for (int iHex = 0; iHex < hexList.size(); iHex++) {
@@ -288,7 +287,6 @@ public class PlayState extends State {
         lostP = 14 - board.getPurpleHex().size();
 
         ArrayList<Ball> selectedList = board.getSelected();
-        //assert selectedList != null;
 
         // doesn't allow more than 3 balls to be selected
         if (selectedList.size() > 3) {
@@ -345,26 +343,10 @@ public class PlayState extends State {
         if(!moveToDraw) {
             if (bluePlayer.isChecked() && AbaloneGame.isBluePlayerAI && blueFinished) {
                 blueAIplays();
-//                try
-//                {
-//                    Thread.sleep(200);
-//                }
-//                catch(InterruptedException ex)
-//                {
-//                    Thread.currentThread().interrupt();
-//                }
                 System.out.println("blue stop playing");
             }
             else if (purplePlayer.isChecked() && AbaloneGame.isPurplePlayerAI && purpleFinished) {
                 purpleAIplays();
-//                try
-//                {
-//                    Thread.sleep(200);
-//                }
-//                catch(InterruptedException ex)
-//                {
-//                    Thread.currentThread().interrupt();
-//                }
                 System.out.println("purple stop playing");
             }
         }
@@ -491,10 +473,8 @@ public class PlayState extends State {
             allDestinations.clear();
             board.setMovePerformed(false);
             blueFinished = true;
-        } else {
-            System.out.println("Blue random");
-            //tryRandomUntilWorks(false,true);
         }
+
         this.turnNumber++;
 
     }
@@ -502,7 +482,7 @@ public class PlayState extends State {
     public void purpleAIplays() {
         purpleFinished = false;
         System.out.println("purple playing");
-        int depthTree = 3;
+        int depthTree = 2;
         int MCTSdepth = 2;
 
         // POSSIBILITY TO CHANGE HEURISTICS BASED ON THE TURN NUMBER (more steps can be added with elseif)
@@ -533,10 +513,8 @@ public class PlayState extends State {
             allDestinations.clear();
             board.setMovePerformed(false);
             purpleFinished = true;
-        } else {
-            System.out.println("Purple random");
-            //tryRandomUntilWorks(true, false);
         }
+
         this.turnNumber++;
     }
 
@@ -605,45 +583,6 @@ public class PlayState extends State {
                 board.removeBall(ball);
                 ballButtons[index].setChecked(false);
             }
-        }
-    }
-
-    public void tryRandomUntilWorks(boolean p, boolean b){
-        List<Hex> hexes = null;
-        if(p) {
-            hexes = board.getPurpleHex();
-        }else if(b){
-            hexes = board.getBlueHex();
-        }
-        TurnsFinder generator = new TurnsFinder(board.getHexGrid());
-        generator.clearTurns();
-        for (Hex hex : hexes) {
-            generator.findTurns(hex);
-        }
-        List<List<Turn>> turns = generator.getTurns();
-        if (turns.size() > 0) {
-            int i = (int) ((turns.size()-1) * Math.random());
-            int j = (int) ((turns.get(i).size()-1) * Math.random());
-            if(turns.get(i).size()!=0) {
-                board.move(turns.get(i).get(j));
-            }
-            if (board.getMovePerformed()) {
-                System.out.println("moved");
-                switchTurnPlayer();
-                allDestinations.clear();
-                board.setMovePerformed(false);
-                if(p){
-                    purpleFinished = true;
-                }else{
-                    blueFinished = true;
-                }
-
-            }else{
-                tryRandomUntilWorks(p,b);
-            }
-        }
-        else{
-            System.out.println("you shouldn't see this");
         }
     }
 

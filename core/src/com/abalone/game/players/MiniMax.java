@@ -99,15 +99,13 @@ public class MiniMax extends PlayerDynamic {
         int currentDepth = 1;
         this.timeOut = false;
         while (System.currentTimeMillis() < endTime) {
-            System.out.println("blalal");
             NodeDynamic root = new NodeDynamic(currentBoard, currentDepth, 0, null, this.root.getMaximizerColor(), this.root.getHeuristics());
             NodeDynamic currentNode = minimax(root, currentDepth, -infinity, infinity, maximizingPlayer);
             currentDepth++;
-            System.out.println("blalal33");
             if (timeOut) {
-                System.out.println("timeout");
                 break;
             } else {
+                System.out.println("Solution found at depth: " + (currentDepth - 1));
                 bestNode = currentNode;
             }
         }

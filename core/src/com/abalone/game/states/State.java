@@ -7,7 +7,6 @@ public abstract class State {
 
     protected State(GameStateManager ourGsm) {
         this.gsm = ourGsm;
-        //init();
     }
 
     public abstract void init();

@@ -52,8 +52,6 @@ public class MCTS extends Player {
             backpropagate(leaf, value, 0);
         }
 
-        //System.out.println(bestChild(root).getWinScore() + "/" + bestChild(root).getVisitCount());
-
         return bestChild(root);
     }
 

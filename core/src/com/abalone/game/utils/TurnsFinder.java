@@ -24,7 +24,6 @@ public class TurnsFinder {
 
     public List<Turn> findTurns(Hex hex){
 
-        // System.out.println("BASE HEX " + hex.toString());
 
         if(hex.getBall().getColor().isBlank()){
             return null;
@@ -213,15 +212,6 @@ public class TurnsFinder {
 
         }
 
-        /*
-        for(Turn t : foundTurns){
-            for(Move m : t.getMovesList()){
-                if(!m.getStart().getBall().getColor().equals(t.getColor())){
-                    System.out.println("FUCK");
-                }
-            }
-        }
-        */
 
         turns.add(foundTurns);
         return foundTurns;
